@@ -32,7 +32,7 @@
 \RequirePackage{etoolbox}
 \RequirePackage{xparse}
 \newbool{nolistspace}
-\newbool{chapteroneline}
+%\newbool{chapteroneline}
 \newbool{listtoc}
 \newbool{toctoc}
 \newbool{parskip}
@@ -44,7 +44,7 @@
 \DeclareOption{nohyperref}{\boolfalse{hyperrefsupport}}
 \DeclareOption{nolistspacing}{\booltrue{nolistspace}}
 \DeclareOption{liststotoc}{\booltrue{listtoc}}
-\DeclareOption{chapterinoneline}{\booltrue{chapteroneline}}
+%\DeclareOption{chapterinoneline}{\booltrue{chapteroneline}}
 \DeclareOption{toctotoc}{\booltrue{toctoc}}
 \DeclareOption{parskip}{\booltrue{parskip}}
 \DeclareOption{headsepline}{\booltrue{headsepline}}
@@ -69,13 +69,16 @@
 	{\parindent \z@ \chapteralign \normalfont
 		\ifnum \c@secnumdepth >\m@ne
 		\if@mainmatter
-		\ifbool{chapteroneline}{%
-			\chapterfont \mdtChapapp\thechapter\autodot\enspace
-		}{%
-			\chapterprefixfont \@chapapp\space \thechapter
-			\par\nobreak
-			\chapterinbetweenskip
-		}%
+		%\ifbool{chapteroneline}{%
+		% These commented lines have two effects:
+		% 1. Removed Chapter # from chpa
+			\chapterfont \mdtChapapp \thechapter\autodot\enspace
+		%	 \chapterfont \mdtChapapp \thechapter
+		%}{%
+		%	\chapterprefixfont \@chapapp\space \thechapter
+		%	\par\nobreak
+		%	\chapterinbetweenskip
+		%}%
 		\fi
 		\fi
 		\interlinepenalty\@M%
@@ -383,7 +386,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 	\checktoopen
 	\tttypeout{\abstractname}
 	#1%added to be able to have abstract more than one page long
-	\thispagestyle{empty}
+	% \thispagestyle{empty}
 	\begin{center}
 		{\normalsize \MakeUppercase{\univname} \par}% University name in capitals
 		\bigskip
@@ -468,7 +471,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 		}
 }{
 	\newcommand\dedicatory[1]{
-		\checktoopen
+		\checktoopen % New command to move content to the next page which prints to the next odd page if twosided mode is active  
 		\tttypeout{Dedicatory}
 		\null\vfil
 		\thispagestyle{plain}
