@@ -3,9 +3,13 @@
 %----------------------------------------------------------------------------------------
 
 \begin{abstract}
-% LC - 181 words
+% LC - 181 words - https://wordcounter.net/
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-The Thesis Abstract is written here (and usually kept to just this page). The page is kept centered vertically so can expand into the blank space above the title too\ldots
+Convolutional Neural Networks are currently state-of-the-art in supervised image classification tasks, used in both \textit{pipelined} (TODO: find better definition) and \textit{end-to-end} architectures, the former relying on a fusion of image and sensor data the latter on images alone, to determine steering and movement output.  
+However, CNNs have been shown to lack robustness when given noisy images, in some cases a single pixel change is known to output labels that for humans would have been obviously the same as the denoised version.
+As deep learning models, be it CNNs, RNNs or Deep RL rely increasingly on image to solve computer vision for robotics problems in general, and for self-driving cars in particular, it is important to evaluate the effect of random noise on images used by such models.
+As many manufacturers have expressed interest in developing self-driving cars, it is important to gauge the effect of noise such as rain on the performance of the self-driving models.
+
 \begin{itemize}
     % Project guidance report
     % https://moodle.city.ac.uk/course/view.php?id=34280
@@ -17,6 +21,6 @@ The Thesis Abstract is written here (and usually kept to just this page). The pa
 
 \lipsum[1] \\[2.0cm]
 
-\textbf{Keywords:} autonomous vehicles, convolutional neural networks, rain
+\textbf{Keywords:} autonomous vehicles, convolutional neural networks, rain, random image noise
 
 \end{abstract}
