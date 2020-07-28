@@ -360,7 +360,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 	\DeclareDocumentEnvironment{abstract}{ O{\null\vfill} }{
 		\checktoopen
 		\tttypeout{\abstractname}
-		#1%added to be able to have abstract more than one page long
+		%added to be able to have abstract more than one page long
 		\thispagestyle{plain}
 		\begin{center}
 			{\normalsize \MakeUppercase{\univname} \par}% University name in capitals

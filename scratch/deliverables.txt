@@ -1,0 +1,97 @@
+Thank you Daniel.
+
+It is good to see that you've identified a selection of suitable data sets and network models to consider/compare and 
+
+contrast.
+
+Compare - what is similar
+Constrast - what is different
+
+Suggest you list specific tasks next with their deliverables. It is probably a good idea to separate the experiments 
+
+where rain and reflections, etc are added to the data from the use of mechanical turk.
+
+The above tasks can be as specific as: train AlexNet, edit the data to add reflections, test AlexNet on the modified 
+
+data, etc. As for "deliverable" consider what would be the output of each task.
+
+Task list
+
+Hi Artur,
+
+Attached is deliverables first draft. The general workflow I have at the moment is train model on data, test model on simulator. Shall we arrange a time to discuss?
+
+Daniel
+
+On the task of training networks, editing data and testing, as far as I can visualise the output, this can be done without the use of simulator, where we have a steering angle ground truth, edit the data to add reflections, etc, and compare the new output steering angle, though that approach would not involve the simulator.
+
+
+
+
+NVIDIA network.
+
+Datasets:
+
+D1 Udacity - Real World
+D2 UnitySim1 - Data obtained from simulator
+D3 Udacity + UnitySim1 - Real world and simulator combined
+D4 Ford Mechanical Turk - Dry and Rainy images from Ford dataset
+
+Testing simulator environments
+S1 UnitySim1Dry 
+S2 UnitySim2Wet1
+S3 UnitySim3Wet2
+
+Networks:
+
+N1 Vanilla NVIDIA, 
+N2 AlexNet 
+N3 VGGNet
+N5 InceptionNet 
+N5 ResNet
+
+Deliverables:
+
+NmMn Network m Model n
+NmRp Network m Result p
+
+Testing Environment: AWS Ubuntu 18.04 GPU, Python + Keras/Tensorflow, Unity 3D
+
+Training Environment: Intel Cloud, Ubuntu 16.04 GPU
+
+Tasks	Network/Model	Data	Deliverable
+
+Train 	N1 		D1   	N1M1
+Test	N1M1		D4	N1R1  
+Test	N1M1		D5	N1R2
+Test	N1M1		D6	N1R3
+ 
+Train 	N1		D2   	N1M2
+Test	N1M2		D4	N1R4  
+Test	N1M2		D5	N1R5
+Test	N1M2		D6	N1R6
+
+Train 	N1 		D3   	N1M3
+Test	N1M3		D4	N1R7  
+Test	N1M3		D5	N1R8
+Test	N1M3		D6	N1R9
+
+2. Test NVIDIA on track with unmodified data.
+3. Test NVIDIA on track with modified data.
+4. Train NVIDIA network on dataset 2.
+5. Test NVIDIA on track with unmodified data.
+6. Test NVIDIA on track with modified data.
+7. Train NVIDIA network on dataset 3.
+8. Test NVIDIA on track with unmodified data.
+9. Test NVIDIA on track with modified data.
+
+We train the entire
+We use transfer learning, training only the last section part of the network consisting on a fully connected multilayer 
+
+perceptron.
+
+
+
+1. Transfer learing Alexnet
+
+Dataset	Training
