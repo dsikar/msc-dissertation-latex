@@ -5,3 +5,11 @@ Reread the MSc Project Guidance Document (https://moodle.city.ac.uk/mod/resource
 Examined audi dataset preview from https://www.a2d2.audi/a2d2/en/download.html trying to work out how to map images to steering angles. Have been in touch with Dr. Mahmud, on the the authors of Audi papers with respect to aforementioned mapping.
 
 Managed ok. Timestamp is in TIA format. For every .png image there is a corresponding .json file with image timestamp information. All steering angles are provided in a single file containing bus signals, such that the reading taken at the time nearest to a given image may be considered the desired steering angle. A few random images were examined, consisting of urban scenes and not adequate as the vehicle is driving through a city circuit, where no inferences are made about vision, road geometry and steering.
+
+03.08.2020
+
+Downloading Ford Dataset - need to unpack and look at rosbag data to infer steering angles (algorithm to be written). 
+Amazon mechanical turk taps into this data, to find rainy sections.
+See https://avdata.ford.com/downloads/default.aspx
+
+Structuring report Introduction and Objective based on Chammas 2019, using wordcounts and reference counts as a base.
