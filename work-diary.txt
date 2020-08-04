@@ -13,3 +13,17 @@ Amazon mechanical turk taps into this data, to find rainy sections.
 See https://avdata.ford.com/downloads/default.aspx
 
 Structuring report Introduction and Objective based on Chammas 2019, using wordcounts and reference counts as a base.
+
+We need to make a start asap on the Unity testing circuits (x3), that will effectively generate our data. We also need to make a start asap on the NVIDIA vanilla model, be it in PyTorch or Keras/Tensorflow, and get training and testing this model while we develop the alternative models.
+
+Good-to-have would be an AWS training/testing instance, depending on costs.
+
+04.08.2020
+
+Replied to email from supervisor, suggesting a write-up be made of preliminary results, which may be re-used in report (thesis). I'll aim to get that over by end of August. A lot to do i.e. create tracks, create models generate data (see next entry).
+
+Watched Tawn Kramer's intro video to Unity x Tensorflow self driving setup. Model trained on 100 GB of data - https://www.youtube.com/watch?v=e0AFMilaeMI
+
+Flow chart, diagram generating software. I am looking, considering Gimp, Inkscape. Also found Dia, which looks promissing.
+
+
