@@ -10,7 +10,8 @@ The ILSVRC ran from 2011 to 2017 (TBC). Up till 2011, winning entries were desig
 
 The general trend from 2012, where more winning ConvNet architectures won the competition in the following years, the trend was smaller receptive window size and smaller stride in the first convolutional layer, smaller filters and testing the networks over the whole image over multiple scales. VGG increased the depth of previous architectures, and used smaller 3x3 filters in all layers.
 
-VGGNet uses 224x224 RGB images as inputs. RGB values are mean-centered (mean subtracted from each RGB value). In all convolution layers, filters are 3x3 and stride = 1. 
+VGGNet uses 224x224 RGB images as inputs. RGB values are mean-centered (mean subtracted from each RGB value). In all convolution layers, filters are 3x3 and stride = 1. Max-pooling is used after some of the convolutional layers, over 2x2 pixel windows, with stride 2.  
 
+Stopped at 2.1, pg. 2
 
 \end{document}
