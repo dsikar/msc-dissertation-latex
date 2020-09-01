@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage{titlesec}
+\begin{document}
+
+\section{VGG}
+
+The authors in designing VGG evaluated the effect of increasing network depth (number of layers) while using relatively small 3x3 convolution filters, finding that by doing, depth could be increased to 16-19 layers, in the context of the ImageNet Challenge.
+
+The ILSVRC ran from 2011 to 2017 (TBC). Up till 2011, winning entries were designed using MLP (multiple layer neuron) architectures, consisting on a number of fully connected layers, followed by one output layer. Since 2012 (Krizhevsky et al, 2012) winning entries have been designed using convolutional neural network architectures.  
+
+The general trend from 2012, where more winning ConvNet architectures won the competition in the following years, the trend was smaller receptive window size and smaller stride in the first convolutional layer, smaller filters and testing the networks over the whole image over multiple scales. VGG increased the depth of previous architectures, and used smaller 3x3 filters in all layers.
+
+VGGNet uses 224x224 RGB images as inputs. RGB values are mean-centered (mean subtracted from each RGB value). In all convolution layers, filters are 3x3 and stride = 1. 
+
+
+\end{document}

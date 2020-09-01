@@ -8,4 +8,71 @@ This chapter describes in detail the methods for whatever activities were necess
 Report in this chapter what you did, not what you produced or found as a 
 result (which goes under Results).  
   
-Note: only use the word ‘methodology’ if you know what it means!
+Note: only use the word ‘methodology’ if you know what it means!  
+
+Explain:  
+\begin{itemize}
+    \item Convolution
+    \item pre-processing
+    \item Kernel/filter size
+    \item Stride
+    \item padding
+    \item activation function
+    \item Loss function
+    \item optimisers
+\end{itemize}
+
+Maybe cite goodfellow once and do a joblot on items.
+
+\section{Datasets}
+What datasets we used and what data was gathered
+
+\subsection{Data Augmentation}
+Describe was additional transformations was performed to enlarge dataset - maybe a discussion that more data is good? With references.
+
+
+\section{Deep Convolutional Neural Network Models}
+
+Description of different network architectures used, noting what modifications were required.  
+
+\textbf{Discussion on the number of parameters required given size of dataset.}  
+We also need a discussion on deep regression models as suggested by \cite{lathuilire2018comprehensive}. This is the main difference between the NVIDIA and additional models, the NVIDIA model is a regression model while the models we compare and contrast with NVIDIA are classification models built specifically for the ILSVC  competitiion.
+
+\subsection{ResNet}
+
+Discuss the concept of "residuals". ResNet makes use of skip-connections (spelling), these "network architecture
+designs (e.g., skip connections) produce loss functions that train easier", producing smoother loss surfaces (\cite{li2017visualizing})  
+The "Degradation problem itself stems from the fact that it is easier to learn 0 than to learn 1"   https://www.youtube.com/watch?v=jio04YvgraU
+"if an identity mapping were optimal, it would be easier to push the residual to zero than to fit an identity mapping by a stack of nonlinear layers" \cite{he2015deep}.  
+Explain what variation A, B or C we will be using (zero padding, weights * x, etc.  
+"Essemble" of ResNets was used.  
+18 layers seems to be a threshold, beyond that, training becomes difficult. Skip connections make deeper networks, i.e. networks with more layers, easier to train compared to networks without skip connections.  
+Another wording, deeper neural networks (i.e. layer count equal or greater than 20) become increasingly difficult to train, generating poorer accuracy than deep networks with less than 20 layers. This is known as "degradation problem" (citation needed). Skip connections make deeper architectures easier to train, by smoothing the loss function.
+
+\subsection{GoogleLeNet}
+
+This network (\cite{szegedy2014going}) was the winning entry in the ILSVCC 2014 Classification Challenge. It uses the LeNet-5 (\cite{Lecun98gradient-basedlearning}) model as a starting point, following the now traditional design of ConvNets with the addition of \textit{Inception} modules as introduced by \cite{lin2013network} in the \textit{Network in Network} model.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\columnwidth]{Figures/InceptionModules.png}
+ \caption{Inception naive (left) and dimension reduction model (right)}
+ \label{fig:inception_modules}
+\end{figure}
+
+The designers of the GoogleLeNet architecture state that power and memory use is important to consider and aim to keep a computation budget of 1.5 billion multiply adds at inference time such that the resulting model could be used in practice at a reasonable cost.
+
+The architecture contains 22 layers where all
+
+
+
+\subsection{Training}
+
+We might want to add that training was done on AWS GPUs following   
+https://aws.amazon.com/blogs/machine-learning/train-deep-learning-models-on-gpus-using-amazon-ec2-spot-instances/  
+
+
+\section{Evalutation}
+This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
+
+

@@ -26,4 +26,106 @@ Watched Tawn Kramer's intro video to Unity x Tensorflow self driving setup. Mode
 
 Flow chart, diagram generating software. I am looking, considering Gimp, Inkscape. Also found Dia, which looks promissing.
 
+25.08.2020
+
+** Ran on both camber and devcloud:
+
+To generate models.
+
+1. clone git repo:
+
+$ git clone https://github.com/dsikar/sdsandbox.git
+
+2. Copy data
+
+$ scp devcloud:~/git/sdsandbox/dataset/autogen_track.tar.gz
+
+3. Unpack data to ~/git/sdsandbox/dataset/log
+
+4. Change directory to src and run
+
+$ python train.py --model=../outputs/camber_model_4.h5
+
+Notes:
+
+Camber fails with error "Error occurred when finalizing GeneratorDataset iterator: Cancelled: Operation was cancelled"
+
+** Our main task w.r.t. models is adapt additional models (i.e. in addition to NVIDIA model) to become regression models, as the non-NVIDIA architectures are defined as classification models where the last layer will tipically be a 1000-way output (with softmax?) drawing the "winner" from a distribution (discuss).
+
+We found this article lathuilire2018comprehensive (added to dissertation.bib) with a discussion about deep regression models.
+
+28/29.08.202
+
+** Still ruminating over GoogleLeNet article. Pressing issue now is get models trained and tested on basic setup, i.e., Unity 3D generated images and steering angles. we have a head start in Tawn Kraemer's code (train.py) and other implementations.  
+
+The link trail:
+
+One Udacity alumni:
+https://towardsdatascience.com/deep-learning-for-self-driving-cars-7f198ef4cfa2
+did a good write-up, reported problems and cites this repo as the salvation:
+https://github.com/hminle/car-behavioral-cloning-with-pytorch/
+who in turn was inspired by this repo:
+https://github.com/naokishibuya/car-behavioral-cloning
+Naoki did a good write-up here:
+https://medium.com/@naokishibuya/introduction-to-udacity-self-driving-car-simulator-4d78198d301d
+
+Tasks (one of two, better the two, but at least one):
+1. Get the unity 3D data we have to work with naoki's model - medium difficulty
+2. Get Naoki's model to work with Tawn's setup - better but potentially hard, as a large library needs to travel across.
+https://github.com/tawnkramer/sdsandbox
+Let's start with 1. ... 21:26...
+
+We need to check if image sizes are compatible, or what kind of adjustment needs to be made...
+
+Later, need to assess what is the minimum steering angle required, and the quantisation, i.e. precision. Currently angle tipically is 0.09035701304674149
+
+Tawn Kraemer angle in radians	Angle in degrees
+0.09035701304674149		5.1770754969996453099
+
+If we use 0.09, we get 5.15662, which is pretty dawn close.
+If we use 0.1, we get 5.72958. Which is not ideal but gives
+us an idea of what we could do with binning these values.
+
+We will need to look at angle values as a whole, to decide. 
+The hypothesis is that angles will not vary a hell of a lot.
+
+Naoki's model seems to spend most of the time between +- 2 degrees.
+going as far as +-8 degrees, with two decimal placess, so about 1600
+discrete values, though that could probably be reduced a lot, if say
+we allow changes in 1/3 of a degree, that would be 48 values total,
+with the majority around 12 values (4 * 3 ~ +- 2).
+
+So basically we would be looking at converting and truncating, i.e.
+convert 0.09035701304674149 to 5.1770754969996453099 and
+truncate 5.17, or round, TBD.
+
+And jumping ahead, here is a tutorial on adding rain to Unity 3D through "particles"
+
+https://www.youtube.com/watch?v=Ax3WNI-3C60
+
+Another good one, maybe better - simpler, parts 1 and 2
+https://www.youtube.com/watch?v=VN6RzRQ-SWU
+https://www.youtube.com/watch?v=8inqJf4aNH0
+
+Spome pointers
+https://www.youtube.com/watch?v=YHHVCqoNuEY
+
+29/30/31.08.2020
+
+We looked at Andrew Ng's videos on ConvNets and also read and annotated the GoogleLeNet (Inception) paper. 
+
+We now have under 3 months to deliver first draft and under 4 months to deliver dissertation. We need to start thinking about downsizing project if we do not get some results by the end of this month, e.g. one or two nets only, no evaluation on circuit, just on steering angles.
+
+01.09.2020
+
+We looked at the VGG paper and wrote some notes.
+
+
+
+
+
+
+
+
+
 

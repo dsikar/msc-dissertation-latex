@@ -1,0 +1,16 @@
+We need to clarify the concept of convolution.
+
+Many online links, including Stanford's CNN course:
+https://cs231n.github.io/convolutional-networks/
+Seem to confuse convolution with dot product of a kernel and a "receptive field" when in reality, convolution and dot product are not the same operation. 
+From the Stanford cs231 course:
+
+"CONV layer will compute the output of neurons that are connected to local regions in the input, each computing a dot product between their weights and a small region they are connected to in the input volume. This may result in volume such as [32x32x12] if we decided to use 12 filters."
+
+Ok, clarified it here:
+
+https://stats.stackexchange.com/questions/335321/in-a-convolutional-neural-network-cnn-when-convolving-the-image-is-the-opera/
+
+
+
+
