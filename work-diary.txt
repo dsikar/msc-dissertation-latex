@@ -120,6 +120,70 @@ We now have under 3 months to deliver first draft and under 4 months to deliver 
 
 We looked at the VGG paper and wrote some notes.
 
+06.09.2020
+
+We tried to install tensorflow and keras on RPI zero W without success, so trying to compile from source. Also tried on Ubuntu 16.04 without success, both procedures as outlines in:
+
+https://www.tensorflow.org/lite/guide/build_rpi
+
+Notes on the AWS Ubuntu build. We had to allocate extra space to the volume (up from 8 to 20GB) then on the instance (t2.micro):
+
+   42  lsblk
+   43  sudo growpart /dev/xvda 1
+   44  lsblk
+   45  df -h
+   46  sudo resize2fs /dev/xvda1
+   47  df -h
+
+We used a docker container:
+
+   22  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+   23  sudo apt-key fingerprint 0EBFCD88
+   24  sudo add-apt-repository    "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   25     $(lsb_release -cs) \
+   26     stable"
+   27  sudo apt-get update
+   28  sudo apt-get install docker-ce docker-ce-cli containerd.io
+   29  apt-cache madison docker-ce
+   30  sudo docker run hello-world
+   31  sudo systemctl status docker
+   32  sudo usermod -aG docker ubuntu
+
+Downloaded the recommended image:
+
+   50  docker pull tensorflow/tensorflow:latest-devel
+
+then ran docker:
+
+   57  docker run -it tensorflow/tensorflow:latest-devel
+
+We tried to cross-compile in the docker image (is this the right jargon) and ran into problems.
+
+NB to exit docker:
+
+$ exit
+
+To get shell of running container:
+
+$ docker exec -it <mycontainer> bash
+
+To list images:
+
+$ docker images
+
+To list running images:
+
+$ docker ps -a
+
+To commit:
+
+$ docker commit <image id> name (I think)
+
+To kill a running image:
+
+$ docker kill <image id>
+
+
 
 
 
