@@ -183,13 +183,56 @@ To kill a running image:
 
 $ docker kill <image id>
 
+Some online notes on docker:
 
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04
 
+Wrt cross-compiling tensorflow lite, this link looks promissing:
+https://www.tensorflow.org/install/source_rpi#python-3.7
 
+Started running on EC2 instance but ran out of space, having already increased volume size under 6 hours ago so fell foul of AWS rules and had to halt for the night.
 
+Need now, once more space is allocated, rerun from tensorflow_src directory:
 
+$ tensorflow/tools/ci_build/ci_build.sh PI-PYTHON37 tensorflow/tools/ci_build/pi/build_raspberry_pi.sh PI_ONE
 
+Also, this linked page:
+https://www.tensorflow.org/install/pip
 
+Had a wheel I don't think I've tried, so maybe tomorrow:
 
+Raspberry PI (CPU-only)
+Python 3, Pi0 or Pi1	https://storage.googleapis.com/tensorflow/raspberrypi/tensorflow-2.3.0-cp35-none-linux_armv6l.whl
 
+07.09.2020
 
+Trying again to build a tensorflow wheel for RPI Zero. Running t3.medium (4GB memory) with 40GB.
+
+Installed as previous log entry, starting with:
+
+$ sudo apt-get update
+$ sudo apt-get install build-essential
+
+Then docker as per notes, then cloned tensorflow into tensorflow_src, and from that directory ran:
+
+$ sudo tensorflow/tools/ci_build/ci_build.sh PI-PYTHON37 \
+> tensorflow/tools/ci_build/pi/build_raspberry_pi.sh PI_ONE
+
+Previous install from this morning got stuck and bricked instance, so starting again. Failing this, we will look at building a Ubuntu 16.04 cross compiler box tomorrow and taking it from there.
+
+Added a virtual environment to the pi zero as per:
+https://www.tensorflow.org/install/pip#raspberry-pi
+
+Note, when finished:
+
+(venv) $ deactivate  # don't exit until you're done using TensorFlow
+
+Inside the virtual environment we then ran:
+
+wget https://github.com/lhelontra/tensorflow-on-arm/releases/download/v2.2.0/tensorflow-2.2.0-cp37-none-linux_armv6l.whl
+
+And then
+
+$ pip install tensorflow-2.2.0-cp37-none-linux_armv6l.whl
+
+That installed tensorflow ok, keras also in, (about 12 hours' work), though both are very slow. TODO read Adrian Rosenbrook's notes on increasing virtual memory or something like that. We are stopping the ubuntu build but might still be worth pursuing tensorflow lite build for inference only.
