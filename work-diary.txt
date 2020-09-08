@@ -107,7 +107,7 @@ Another good one, maybe better - simpler, parts 1 and 2
 https://www.youtube.com/watch?v=VN6RzRQ-SWU
 https://www.youtube.com/watch?v=8inqJf4aNH0
 
-Spome pointers
+Some pointers
 https://www.youtube.com/watch?v=YHHVCqoNuEY
 
 29/30/31.08.2020
@@ -236,3 +236,31 @@ And then
 $ pip install tensorflow-2.2.0-cp37-none-linux_armv6l.whl
 
 That installed tensorflow ok, keras also in, (about 12 hours' work), though both are very slow. TODO read Adrian Rosenbrook's notes on increasing virtual memory or something like that. We are stopping the ubuntu build but might still be worth pursuing tensorflow lite build for inference only.
+
+TODO Run tensorflow lite inference to see if it flies.
+
+08.09.2020
+
+Failed build on Ubuntu 18.04 tensorflow branch 2.3 and master:
+
+1. build-essential
+2. Installed docker
+3. Cloned tensorflow
+4. Ran sudo tensorflow/tools/ci_build/ci_build.sh PI-PYTHON37 tensorflow/tools/ci_build/pi/build_raspberry_pi.sh PI_ONE
+
+** Tried to build tensorflow lite...
+
+https://www.tensorflow.org/lite/guide/build_rpi
+
+Failed. As things stand, we were unable to cross compile on 1. AWS, 2. 16 core, 32 GB memory Ubuntu 18.04 and natively on RPI Zero.
+
+Looks like we will not be able to run tensorflow lite on pi zero:
+
+There are some examples on tensorflow website for (presumed) desktop:
+
+# loading 
+https://www.tensorflow.org/lite/guide/inference#load_and_run_a_model_in_python
+# running
+https://github.com/tensorflow/examples/tree/master/lite/examples/image_classification/raspberry_pi
+
+
