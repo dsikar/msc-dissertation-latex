@@ -237,7 +237,7 @@ $ pip install tensorflow-2.2.0-cp37-none-linux_armv6l.whl
 
 That installed tensorflow ok, keras also in, (about 12 hours' work), though both are very slow. TODO read Adrian Rosenbrook's notes on increasing virtual memory or something like that. We are stopping the ubuntu build but might still be worth pursuing tensorflow lite build for inference only.
 
-TODO Run tensorflow lite inference to see if it flies.
+TODO Run tensorflow lite inference to see if it flies. DONE! Inference ran ok on raspberry pi zero w. Need to document plus address previous TODO.
 
 08.09.2020
 
@@ -252,7 +252,7 @@ Failed build on Ubuntu 18.04 tensorflow branch 2.3 and master:
 
 https://www.tensorflow.org/lite/guide/build_rpi
 
-Failed. As things stand, we were unable to cross compile on 1. AWS, 2. 16 core, 32 GB memory Ubuntu 18.04 and natively on RPI Zero.
+Failed. As things stand, we were unable to cross compile on 1. AWS, 2. 16 core, 32 GB memory Ubuntu 18.04 and natively on RPI Zero. TODO try with Ubuntu 16.04 as this is referenced in the docs.
 
 Looks like we will not be able to run tensorflow lite on pi zero:
 
@@ -262,5 +262,24 @@ There are some examples on tensorflow website for (presumed) desktop:
 https://www.tensorflow.org/lite/guide/inference#load_and_run_a_model_in_python
 # running
 https://github.com/tensorflow/examples/tree/master/lite/examples/image_classification/raspberry_pi
+
+12.09.2020
+
+Big TODO left from this week, NEED to document tensorflow running on pi zero w.
+
+Tasks for the day:
+
+1. Read up on the donkey car simulator (Tawn Kramer) as documented on Donkey Car:
+http://docs.donkeycar.com/guide/simulator/
+
+2. Look at building a dev machine on AWS. NB We have a physical machine (Ubuntu 18.04) but could do with a cloud version for agility.
+
+3. Read up on Amazon SageMaker group truth w.r.t. labelling rainy/dry images from self-driving datasets.
+
+Week beginning 14.09.2020
+
+1. Looks into ROS (robot operating system) and unpacking steering angles from Udacity dataset
+
+2. Look at implementing Clear Grasp algorithm - unrelated to dissertation but some overlap with ROS which may be synergetic.
 
 
