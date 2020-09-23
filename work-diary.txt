@@ -252,7 +252,7 @@ Failed build on Ubuntu 18.04 tensorflow branch 2.3 and master:
 
 https://www.tensorflow.org/lite/guide/build_rpi
 
-Failed. As things stand, we were unable to cross compile on 1. AWS, 2. 16 core, 32 GB memory Ubuntu 18.04 and natively on RPI Zero. TODO try with Ubuntu 16.04 as this is referenced in the docs.
+Failed. As things stand, we were unable to cross compile on 1. AWS, 2. 16 core, 32 GB memory Ubuntu 18.04 and natively on RPI Zero. TODO try with Ubuntu 16.04 as this is referenced in the docs. DONE Tried 16.04 AMI, no luck.
 
 Looks like we will not be able to run tensorflow lite on pi zero:
 
@@ -274,6 +274,9 @@ http://docs.donkeycar.com/guide/simulator/
 
 2. Look at building a dev machine on AWS. NB We have a physical machine (Ubuntu 18.04) but could do with a cloud version for agility.
 
+There is prior work on Ubuntu/Unity/EC2/GPU in:
+https://towardsdatascience.com/how-to-run-unity-on-amazon-cloud-or-without-monitor-3c10ce022639
+
 3. Read up on Amazon SageMaker group truth w.r.t. labelling rainy/dry images from self-driving datasets.
 
 Week beginning 14.09.2020
@@ -281,5 +284,16 @@ Week beginning 14.09.2020
 1. Looks into ROS (robot operating system) and unpacking steering angles from Udacity dataset
 
 2. Look at implementing Clear Grasp algorithm - unrelated to dissertation but some overlap with ROS which may be synergetic.
+
+14.09.2020
+
+1. Installed Ubuntu Desktop on AWS EC2 Instance following:
+https://ubuntu.com/tutorials/ubuntu-desktop-aws#5-connecting-to-ubuntu-desktop
+
+23.09.2020
+
+Found article on deep regression, as this is one approach we could use - the other being binning steering angles (classification) and continuing to use same models with fewer classes, which could prove easier to implement.
+
+https://arxiv.org/pdf/1803.08450.pdf
 
 
