@@ -296,4 +296,32 @@ Found article on deep regression, as this is one approach we could use - the oth
 
 https://arxiv.org/pdf/1803.08450.pdf
 
+2020.10.07
+
+0817h - 0917h session
+
+Looking into rosbag file formats, downloading udacity data and processing data such that each frame will have a known steering angle.
+
+We had previously downloaded all torrents as listed on the udacity github page:
+https://github.com/udacity/self-driving-car/tree/master/datasets
+
+We decompressed and examined one torrent file. It decompressed to a center/ directory with labelled with a frame id, a final_example.csv with frame ids and steering angles in a comma separated file and a HMB_3_release.bag (assumed) rosbag file - to be studied.
+
+$ tar xvf Ch2_001.tar.gz
+$ head final_example.csv 
+$ ls center/ | wc -l
+$ at final_example.csv | wc -l
+
+Dealing with rosbag files:
+http://wiki.ros.org/Bags
+http://wiki.ros.org/ROS/Tutorials/Recording%20and%20playing%20back%20data
+http://wiki.ros.org/rosbag/Commandline
+http://wiki.ros.org/rosbag/Tutorials/reading%20msgs%20from%20a%20bag%20file
+
+
+
+
+
+
+
 
