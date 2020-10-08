@@ -328,10 +328,18 @@ http://wiki.ros.org/Installation/Ubuntu
 NB installed "melodic" distro:
 $ sudo apt install ros-melodic-desktop-full
 
-Installed ok. Stopped at:
+Installed ok. Started tutorial
+http://wiki.ros.org/ROS/Tutorials/Recording%20and%20playing%20back%20data
+
+Stopped at:
 2.1 Recording all published topics
 
-Pick up from 2. to resume.
+1545h -1616 session
+
+Recorded and played back ok. Now looking at:
+http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file
+
+
 
 
 
