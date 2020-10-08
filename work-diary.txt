@@ -305,7 +305,7 @@ Looking into rosbag file formats, downloading udacity data and processing data s
 We had previously downloaded all torrents as listed on the udacity github page:
 https://github.com/udacity/self-driving-car/tree/master/datasets
 
-We decompressed and examined one torrent file. It decompressed to a center/ directory with labelled with a frame id, a final_example.csv with frame ids and steering angles in a comma separated file and a HMB_3_release.bag (assumed) rosbag file - to be studied.
+We decompressed and examined one torrent file. Once decompressed, we found a center/ directory with images named after the frame ids e.g. <frame id>.jpg, a final_example.csv with frame ids and steering angles in a comma separated file and a HMB_3_release.bag (assumed) rosbag file - to be studied.
 
 $ tar xvf Ch2_001.tar.gz
 $ head final_example.csv 
@@ -318,6 +318,20 @@ http://wiki.ros.org/ROS/Tutorials/Recording%20and%20playing%20back%20data
 http://wiki.ros.org/rosbag/Commandline
 http://wiki.ros.org/rosbag/Tutorials/reading%20msgs%20from%20a%20bag%20file
 
+2020.10.08
+
+0820h - 0932h session
+
+Installed ROS Noetic following:
+http://wiki.ros.org/Installation/Ubuntu
+
+NB installed "melodic" distro:
+$ sudo apt install ros-melodic-desktop-full
+
+Installed ok. Stopped at:
+2.1 Recording all published topics
+
+Pick up from 2. to resume.
 
 
 
