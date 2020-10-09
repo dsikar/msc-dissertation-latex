@@ -339,6 +339,18 @@ Stopped at:
 Recorded and played back ok. Now looking at:
 http://wiki.ros.org/ROS/Tutorials/reading%20msgs%20from%20a%20bag%20file
 
+2020.10.09
+
+Continuing with reading messages, we are examining the bag file contained in Ch2_001.tar.gz
+
+wiki.ros.org - domain name expired 10:01h
+
+Looking at NVIDIA CNN with udacity images and steering angles
+
+
+
+
+
 
 
 
