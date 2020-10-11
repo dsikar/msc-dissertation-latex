@@ -3,7 +3,7 @@
 
 \label{Intro} 
 
-Introduction and Objectives: This chapter should set the scene for the reader. It must outline the background to the problem, give your reasons for the choice of project, and identify the project’s beneficiaries. Your objectives need to be precisely stated, together with the tests that will show, at the end of the project, that they have been met (or not been met). You need also to outline your methods in broad terms, along with y work plan with sufficient detail to show how you planned to meet the objectives. Outline any major changes of goals or methods that happened during the project. Finally, outline the structure of the report, showing how it fits together.
+%%% Introduction and Objectives: This chapter should set the scene for the reader. It must outline the background to the problem, give your reasons for the choice of project, and identify the project’s beneficiaries. Your objectives need to be precisely stated, together with the tests that will show, at the end of the project, that they have been met (or not been met). You need also to outline your methods in broad terms, along with y work plan with sufficient detail to show how you planned to meet the objectives. Outline any major changes of goals or methods that happened during the project. Finally, outline the structure of the report, showing how it fits together.
 
 %-----------------------------------
 %	BACKGROUND
@@ -12,14 +12,59 @@ Introduction and Objectives: This chapter should set the scene for the reader. I
 \section{Background}
 
 Chammas - 503 words, 7 references
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt. Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac risus convallis pellentesque.
+% references
+% 1. Self driving robot with Mainframe processor
+% 2. European investment, Dickmans
+% 3. Carnegie Melon
+% 4. Darpa
+% 5. Dave
+% 6. NVIDIA
+
+% Paragraph 1
+% The goal of self driving cars...
+% Self-driving cars are a difficult problem to solve...
+
+% Paragraph 2
+% With advances in deep learning, training algorithms and computational power...
+%% Research question
+%% Given the above, how reliable are self-driving cars relying on end-to-end ConvNets in the rain?
+%% This project builds on something or other, uses natural and synthetic datasets
+
+%% Practical goal
+ The ultimate goal of self-driving cars is to transport people from one place to another without any help from a driver (\cite{s20092544}).
+ %% Public health perspective
+ From a public health perspective, the overarching
+goal of autonomous vehicles is to
+transform the current approach
+to automotive safety from reducing injuries after collisions to
+ complete collision prevention (\cite{Fleetwood_2017}).
+%% Business models
+Autonomous vehicles fleets allow for new shared autonomous mobility business models 
+\cite{riggs2019business}
+Shared autonomous electric vehicle (SAEVs) fleets (\cite{loeb2019fleet}. Shared Autonomous Vehicles (SAVs) have gained significant public interest as a possible less expensive, safer and more efficient version of today’s transportation networking companies (TNCs) and taxis.
+
+%% Perceived superiority of AV systems
+This perceived superiority to human drivers is attributed to high-performance computing that allows AVs to process, learn from and adjust their guidance systems according
+to changes in external conditions at much faster rates than the typical human driver, and it
+is supplemented with vehicle-to-vehicle (V2 V) and vehicle-to-infrastructure (V2I) communication, allowing AVs to learn from other vehicles (\cite{west2016moving}).
+
+%% Ethical issues - maybe leave to discussion and further work
+safety, liability, privacy, cybersecurity, and industry risks \cite{Taeihagh_2018}
+
+%% Sensor fusion approach
+From an interaction, of the vehicle with the travelled path, perspective there are two approaches: the multi-sensor pipeline approach as implemented by \cite{7808418}, 
+
+%% End to end approach
+and the end to end learning approach as implemented by \cite{bojarski2016end}, training a convolutional neural network to map raw pixels from a single front-facing camera directly to steering commands.
 
 %-----------------------------------
 %	AIMS AND OBJECTIVES
 %-----------------------------------
 \section{Aims and Objectives}
 
-Chammas - 165 words, no references
+% Chammas - 165 words, no references
+
+The main aim of this project is to determine through a series of experiments how reliable are self driving cars in the rain.
 
 Nunc posuere quam at lectus tristique eu ultrices augue venenatis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aliquam erat volutpat. Vivamus sodales tortor eget quam adipiscing in vulputate ante ullamcorper. Sed eros ante, lacinia et sollicitudin et, aliquam sit amet augue. In hac habitasse platea dictumst.
 
@@ -57,6 +102,20 @@ Morbi rutrum odio eget arcu adipiscing sodales. Aenean et purus a est pulvinar p
 
 \section{Structure of the Report}
 
-Chammas - 324 words, no references
-
+% Chammas - 324 words, no references
+The remaining report is structured as follows:
+\begin{itemize}
+    \item[--] Chapter 2 provides the critical context, project motivation, methods used, literature survey and analysis. It outlines the current state of research with autonomous vehicles deep neural networks, including ConvNets.
+    \item[--] Chapter 3 describes in detail the data and neural network architectures used
+    \item[--] Chapter 4 describes the results obtained
+    \item[--] Chapter 5 provides a discussion
+    \item[--] Chapter 6 provides an evaluation
+    \item[--] Appendix A contains the RPMI 363 project proposal
+    \item[--] Appendix C contains
+    \item[--] Appendix D contains
+    \item[--] Appendix E contains
+    \item[--] Appendix F contains
+    \item[--] Appendix G contains
+    \item[--] Additional files have been submitted in the project submission area. These include python source code, unity source code, latex source code, images, URL of online repositories and URLs for data sources used.
+\end{itemize}
 Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
