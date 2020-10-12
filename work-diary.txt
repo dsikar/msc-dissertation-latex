@@ -436,6 +436,11 @@ Rerunning training to save history. Preliminary conclusion, need A LOT more data
 
 Rerunning unity models on both camber and devcloud to compare training times on both platforms.
 
+Job run on camber - africa node:
+started job: 201012.162307.266
+finished job: 201012.184213.014
+2h20m approx. to complete
+
 
 
 
