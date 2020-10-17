@@ -441,6 +441,14 @@ started job: 201012.162307.266
 finished job: 201012.184213.014
 2h20m approx. to complete
 
+2020.10.12
+
+When dealing with adapting the neural network architectures to a regression problem, another possibility that could be examined is binning the steering angles, thus not changing the classification nature of the classic image classification deep neural networks.
+
+2020.10.16
+
+Ideally should find a set of metrics similar to "A Survey on Performance Metrics for Object-Detection Algorithms." and applied to self driving.
+
 
 
 
