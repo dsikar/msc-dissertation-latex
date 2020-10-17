@@ -93,34 +93,47 @@ DOI = {10.3390/s20092544}
 }
 
 %% Sensor fusion approach for self driving
-@INPROCEEDINGS{7808418,  author={A. {Mecocci} and M. {Shahar} and P. {Ericsson} and S. {Piccand} and I. {Ravyse} and T. {Llewellyn} and D. {Di Censo}},  booktitle={2016 IEEE SENSORS},   title={Sensors fusion paradigm for smart interactions between driver and vehicle},   year={2016},  volume={},  number={},  pages={1-3},}
+
 
 %% End-to-end approach for self driving
-@article{Reference1,
-	Abstract = {We have developed an enhanced Littrow configuration extended cavity diode laser (ECDL) that can be tuned without changing the direction of the output beam. The output of a conventional Littrow ECDL is reflected from a plane mirror fixed parallel to the tuning diffraction grating. Using a free-space Michelson wavemeter to measure the laser wavelength, we can tune the laser over a range greater than 10 nm without any alteration of alignment.},
-	Author = {C. J. Hawthorn and K. P. Weber and R. E. Scholten},
-	Journal = {Review of Scientific Instruments},
-	Month = {12},
-	Number = {12},
-	Numpages = {3},
-	Pages = {4477--4479},
-	Title = {Littrow Configuration Tunable External Cavity Diode Laser with Fixed Direction Output Beam},
-	Volume = {72},
-	Url = {http://link.aip.org/link/?RSI/72/4477/1},
+
 	Year = {2001}}
 
-@article{Reference3,
-	Abstract = {Operating a laser diode in an extended cavity which provides frequency-selective feedback is a very effective method of reducing the laser's linewidth and improving its tunability. We have developed an extremely simple laser of this type, built from inexpensive commercial components with only a few minor modifications. A 780~nm laser built to this design has an output power of 80~mW, a linewidth of 350~kHz, and it has been continuously locked to a Doppler-free rubidium transition for several days.},
-	Author = {A. S. Arnold and J. S. Wilson and M. G. Boshier and J. Smith},
-	Journal = {Review of Scientific Instruments},
-	Month = {3},
-	Number = {3},
-	Numpages = {4},
-	Pages = {1236--1239},
-	Title = {A Simple Extended-Cavity Diode Laser},
-	Volume = {69},
-	Url = {http://link.aip.org/link/?RSI/69/1236/1},
-	Year = {1998}}
+%%%%%%%%%%%%%
+%% CONTEXT %%
+%%%%%%%%%%%%%
+
+@article{hornik1989multilayer,
+  title={Multilayer feedforward networks are universal approximators.},
+  author={Hornik, Kurt and Stinchcombe, Maxwell and White, Halbert and others},
+  journal={Neural networks},
+  volume={2},
+  number={5},
+  pages={359--366},
+  year={1989}
+}
+
+@article{cybenko1989approximation,
+  title={Approximation by superpositions of a sigmoidal function},
+  author={Cybenko, George},
+  journal={Mathematics of control, signals and systems},
+  volume={2},
+  number={4},
+  pages={303--314},
+  year={1989},
+  publisher={Springer}
+}
+
+%% Imagenet
+@inproceedings{deng2009imagenet,
+  title={Imagenet: A large-scale hierarchical image database},
+  author={Deng, Jia and Dong, Wei and Socher, Richard and Li, Li-Jia and Li, Kai and Fei-Fei, Li},
+  booktitle={2009 IEEE conference on computer vision and pattern recognition},
+  pages={248--255},
+  year={2009},
+  organization={Ieee}
+}
+
 
 @article{Reference2,
 	Abstract = {We present a review of the use of diode lasers in atomic physics with an extensive list of references. We discuss the relevant characteristics of diode lasers and explain how to purchase and use them. We also review the various techniques that have been used to control and narrow the spectral outputs of diode lasers. Finally we present a number of examples illustrating the use of diode lasers in atomic physics experiments. Review of Scientific Instruments is copyrighted by The American Institute of Physics.},
@@ -142,16 +155,6 @@ DOI = {10.3390/s20092544}
 
 %% Discussion
 
-%% RESNET
-%% v1
-@misc{he2015deep,
-    title={Deep Residual Learning for Image Recognition},
-    author={Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
-    year={2015},
-    eprint={1512.03385},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
-}
 
 %% v2
 %% "With batch normalization before every layer"
@@ -166,7 +169,7 @@ DOI = {10.3390/s20092544}
     primaryClass={cs.CV}
 }
 
-%%
+%% Visualising
 
 @misc{li2017visualizing,
     title={Visualizing the Loss Landscape of Neural Nets},
@@ -176,8 +179,6 @@ DOI = {10.3390/s20092544}
     archivePrefix={arXiv},
     primaryClass={cs.LG}
 }
-
-%% ALEXNET
 
 %% NVIDIA
 @misc{bojarski2016end,
@@ -189,10 +190,26 @@ DOI = {10.3390/s20092544}
       primaryClass={cs.CV}
 }
 
+%% ALEXNET
+@inproceedings{krizhevsky2012imagenet,
+  title={Imagenet classification with deep convolutional neural networks},
+  author={Krizhevsky, Alex and Sutskever, Ilya and Hinton, Geoffrey E},
+  booktitle={Advances in neural information processing systems},
+  pages={1097--1105},
+  year={2012}
+}
+
 %% VGG
+@misc{simonyan2015deep,
+      title={Very Deep Convolutional Networks for Large-Scale Image Recognition}, 
+      author={Karen Simonyan and Andrew Zisserman},
+      year={2015},
+      eprint={1409.1556},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 
 %% GOOGLELENET - INCEPTION
-
 @misc{szegedy2014going,
     title={Going Deeper with Convolutions},
     author={Christian Szegedy and Wei Liu and Yangqing Jia and Pierre Sermanet and Scott Reed and Dragomir Anguelov and Dumitru Erhan and Vincent Vanhoucke and Andrew Rabinovich},
@@ -202,8 +219,43 @@ DOI = {10.3390/s20092544}
     primaryClass={cs.CV}
 }
 
-    %% LeNet-5
+%% RESNET
+@misc{he2015deep,
+      title={Deep Residual Learning for Image Recognition}, 
+      author={Kaiming He and Xiangyu Zhang and Shaoqing Ren and Jian Sun},
+      year={2015},
+      eprint={1512.03385},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV}
+}
 
+%% One pixel attacks
+@article{Su_2019,
+   title={One Pixel Attack for Fooling Deep Neural Networks},
+   volume={23},
+   ISSN={1941-0026},
+   url={http://dx.doi.org/10.1109/TEVC.2019.2890858},
+   DOI={10.1109/tevc.2019.2890858},
+   number={5},
+   journal={IEEE Transactions on Evolutionary Computation},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Su, Jiawei and Vargas, Danilo Vasconcellos and Sakurai, Kouichi},
+   year={2019},
+   month={Oct},
+   pages={828–841}
+}
+
+%% Problems pointed out with massive deep neural networks
+@misc{zhang2017understanding, 
+      title={Understanding deep learning requires rethinking generalization}, 
+      author={Chiyuan Zhang and Samy Bengio and Moritz Hardt and Benjamin Recht and Oriol Vinyals},
+      year={2017},
+      eprint={1611.03530},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
+
+%% Gradient descent
 @INPROCEEDINGS{Lecun98gradient-basedlearning,
     author = {Yann Lecun and Léon Bottou and Yoshua Bengio and Patrick Haffner},
     title = {Gradient-based learning applied to document recognition},
@@ -241,9 +293,7 @@ DOI = {10.3390/s20092544}
 
 %% Audi dataset https://www.a2d2.audi/a2d2/en/download.html
 @article{geyer2020a2d2,
-
 title={{A2D2: Audi Autonomous Driving Dataset}},
-
 author={Jakob Geyer and Yohannes Kassahun and Mentar Mahmudi and Xavier Ricou and Rupesh Durgesh and Andrew S. Chung and Lorenz Hauswald and Viet Hoang Pham and Maximilian M{\"u}hlegg and Sebastian Dorn and Tiffany Fernandez and Martin J{\"a}nicke and Sudesh Mirashi and Chiragkumar Savani and Martin Sturm and Oleksandr Vorobiov and Martin Oelker and Sebastian Garreis and Peter Schuberth},
 year={2020},
 eprint={2004.06320},
@@ -251,6 +301,30 @@ archivePrefix={arXiv},
 primaryClass={cs.CV},
 url = {https://www.a2d2.audi}
 }
+
+%% Ford Multi-AV Seasonal Dataset
+@article{agarwal2020ford,
+  title={Ford Multi-AV Seasonal Dataset},
+  author={Agarwal, Siddharth and Vora, Ankit and Pandey, Gaurav and Williams, Wayne and Kourous, Helen and McBride, James},
+  journal={arXiv preprint arXiv:2003.07969},
+  year={2020}
+}
+
+%% KITTI dataset
+@article{geiger2013vision,
+  title={Vision meets robotics: The kitti dataset},
+  author={Geiger, Andreas and Lenz, Philip and Stiller, Christoph and Urtasun, Raquel},
+  journal={The International Journal of Robotics Research},
+  volume={32},
+  number={11},
+  pages={1231--1237},
+  year={2013},
+  publisher={Sage Publications Sage UK: London, England}
+}
+
+%% Udacity
+%% Missing quote - create one and refer to wikipedia datasets
+%% https://github.com/udacity/self-driving-car/tree/master/datasets
 
 @misc{ torrentCite,
     author = "{Wikipedia contributors}",
@@ -275,4 +349,20 @@ url = {https://www.a2d2.audi}
    year={2020},
    month={Sep},
    pages={2065–2081}
+}
+
+%%%%%%%%%%%%%
+%% METHODS %%
+%%%%%%%%%%%%%
+
+%% ROS Robot Operating System
+@inproceedings{quigley2009ros,
+  title={ROS: an open-source Robot Operating System},
+  author={Quigley, Morgan and Conley, Ken and Gerkey, Brian and Faust, Josh and Foote, Tully and Leibs, Jeremy and Wheeler, Rob and Ng, Andrew Y},
+  booktitle={ICRA workshop on open source software},
+  volume={3},
+  number={3.2},
+  pages={5},
+  year={2009},
+  organization={Kobe, Japan}
 }

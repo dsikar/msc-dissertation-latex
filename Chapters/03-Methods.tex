@@ -10,7 +10,14 @@ result (which goes under Results).
   
 Note: only use the word ‘methodology’ if you know what it means!  
 
-LC - 14 pages
+% LC - 14 pages
+
+\subsection{Digital Images}
+Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
+
+\subsection{Data pre-processing}
+Prior to presenting pixel colour channel values to the network, a number of pre-processing steps have become standard with neural network classifiers and regressors applied to computer vision.
+
 
 Explain:  
 \begin{itemize}
@@ -22,6 +29,8 @@ Explain:
     \item activation function
     \item Loss function
     \item optimisers
+    \item Back-propagation
+    % on this topic, a lot to cite, from Paul Werbos' PhD thesis "Beyond Regression: New Tools for Prediction and Analysis in the Behavioural Sciences, through Rummelhart et al. and LeCunn et al.
 \end{itemize}
 
 Maybe cite goodfellow once and do a joblot on items.  
@@ -102,5 +111,9 @@ https://aws.amazon.com/blogs/machine-learning/train-deep-learning-models-on-gpus
 
 \section{Evalutation}
 This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
+
+%% Udacity
+%% see https://arxiv.org/pdf/1912.05440.pdf
+%% for discussion on using rmse as error metric
 
 

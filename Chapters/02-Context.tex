@@ -11,9 +11,49 @@ It is important to demonstrate scholarship, i.e. the ability to read about a sub
   
 You should demonstrate that you understand what you have read by providing some analysis or commentary in view of the goals of your project: it is not enough simply to provide summaries of what you have read. References should be cited following the Harvard Referencing Style. You must also explain, both in this chapter and, as appropriate, in others, how the results of the studies to which you make reference inform your project work. To gain a passing grade, your report MUST demonstrate adequate engagement with academic literature and any other sources necessary for the work to be well informed.  
 
-Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a n x m x c matrix, where n is the height, m is the width and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images.  
+% The story we want to tell
+% End to end learning - what does it mean
+% Describe pipelined methods, contrast and compare to end to end methods
 
-Maybe a bit of history on SVM, HOG, SURF, etc.  
+% Datasets and the importance of large public datasets for deep learning
+% Synthetic datasets - how these become important as data can be difficult and costly to acquire
+
+%% Prior methods used in image classification, using manual feature extraction
+
+% What is end to end learning?
+The properties of multilayer feedforward neural networks as function approximators has been studied extensively, especially in the 1980's . \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available. while (\cite{cybenko1989approximation}) demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than adeterministic relation between input and target. (\cite{hornik1989multilayer}) state their results do not address the issue of how many units are needed to attain a  given degree of approximation.  
+
+
+
+% Maybe a bit of history on SVM, HOG, SURF, etc. Perhaps best in introduction, like how this was a step, where manual feature extraction was used, then came end to end applied to computer vision problems.
+
+% Intro explain term "end to end" - move to intro
+
+% Context - successes in deep convolutional neural networks applied to computer vision problems
+
+% 2. Imagenet - large public dataset \cite{deng2009imagenet}
+
+% 3. Alexnet - 
+% 4. VGG - \cite{simonyan2015deep}
+% 5. RESNET \cite{he2015deep}
+% 6. Inception \cite{szegedy2014going}
+
+% Then NVIDIA uses a deep convolutional neural networks architecture for end to end driving, i.e. image (raw pixels) in, vehicle control out.
+
+% 1. NVIDIA end to end \cite{bojarski2016end}, DAVE2
+
+% 7. \cite{Su_2019} 
+% 8. \cite{zhang2017understanding}
+
+%% However, these networks do have weaknesses, as demonstrated by \cite{Su_2019} in the form of one pixel attacks.
+% \cite{zhang2017understanding} % demonstrated that simple depth two neural networks already have perfect finite sample expressivity as soon as the number of parameters exceeds the number of data points as it usually does in practice
+%% Such examples question the robustness of deep convolutional neural networks. Especially in the context of one pixel attacks, when small addition of random noise causes the model to completely misinterpret the results, raising questions about generalisation, overfitting and robustness of the deep neural network architectures described.
+
+%% Datasets
+%% 9. Audi dataset https://www.a2d2.audi/a2d2/en/download.html
+% \cite{geyer2020a2d2},
+%% 10. Ford Multi-AV Seasonal Dataset
+% \cite{agarwal2020ford}
 
 Maybe a bit on how synthetic datasets are used in other domains e.g. https://arxiv.org/pdf/1910.02550.pdf "ClearGrasp:
 3D Shape Estimation of Transparent Objects for Manipulation" use of Blender. See section "Learning from synthetic data"
