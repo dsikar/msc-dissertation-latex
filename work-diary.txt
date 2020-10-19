@@ -450,6 +450,37 @@ When dealing with adapting the neural network architectures to a regression prob
 Ideally should find a set of metrics similar to "A Survey on Performance Metrics for Object-Detection Algorithms." and applied to self driving.
 
 
+2020.10.17
+
+Need to pull our socks up now, just over two months to go, we are behind schedule. On the menu for tomorrow, set download job on camber and devcloud to download udacity data available via HTTP links.
+
+2020.10.18
+
+Downloaded everything that could be downloaded to camber, minus Ford TBC and Udacity torrents TBC. 
+Got a few citations (about 20 over the weekend), mainly covering Context section - other works I have seen would have from 40 to 60 citations.
+Now looking at the models, need to get these work for regression, or use classification and binning, with bins covering ranges. This could be a "major contribution" of this work, if the models show any gains in training and/or predicting over deep learning regression models.
+This is a reference of implementing deep networks with 
+
+Keras:https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
+
+Before going to bed, we need to get a couple of jobs running, one on devcloud (Unity3D data), one on camber (Udacity real life data), and save the history.
+
+We need to start making note of every model run. Something in the lines of
+Environment Network Data    Output model    Output History  Date/Time (UTC)     Training time
+Devcloud    NVIDIA  Unity3D dc-nvidia-u3d   001-history     2020-10-18 2117h    10h23m
+Camber      NVIDIA  Udc-1   dc-nvidia-u3d   002-history     2020-10-18 2125h    5h23m
+
+Also, need to start saving models and history to google cloud, and make available to examiners.
+
+2020.10.19
+
+TODOS 
+1. Finish downloading Udacity data
+2. Download Ford AV dataset
+3. 
+
+
+
 
 
 
