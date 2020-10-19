@@ -40,9 +40,19 @@ Our NVIDIA architecture is very similar to the one proposed by Bojarski et al. 2
 \section{Datasets}
 What datasets we used and what data was gathered
 
+\subsection{Ford AV Dataset}
+% Get details from https://avdata.ford.com/downloads/default.aspx
+The Ford Autonomous Vehicle is a 
+% angle from IMU
+From % https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
+Applanix (\cite{Applanix}) is a professional-grade, compact,fully  integrated,  turnkey  position  and  orientation  system combining a differential GPS, an inertial measurement unit(IMU)  rated  with  1$^{\circ}$ of  drift  per  hour,  and  a  1024-count wheel encoder to measure the relative position, orientation,velocity,  angular  rate  and  acceleration  estimates  of  the vehicle. The Ford AV data set provides the 6-DOF pose (6DOF pose estimation of objects is the task of estimating the coordinates (X, Y,Z) and rotation angles (Yaw, Pitch and Roll) of an object with respect to a previously established reference coordinate system. (\cite{7005077} ) estimates obtained by integrating the (linear) acceleration and (angular) velocity.
+% Note, Ford av authors discussion https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
+% IEEE on 6DOF estimation from IMU discussion https://ieeexplore.ieee.org/document/7005077
+
 % on converting GPS and IMU measurements to steering angles, see
 % http://www.robesafe.uah.es/personal/roberto.arroyo/docs/Almazan13iv.pdf
 % We might use a similar technique, time allowing
+
 
 \subsection{Data Augmentation}
 Describe was additional transformations was performed to enlarge dataset - maybe a discussion that more data is good? With references.

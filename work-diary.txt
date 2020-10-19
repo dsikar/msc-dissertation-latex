@@ -477,7 +477,15 @@ Also, need to start saving models and history to google cloud, and make availabl
 TODOS 
 1. Finish downloading Udacity data
 2. Download Ford AV dataset
-3. 
+
+We have not finished the Udacity data, so that will rollover to the next week. Ford AV dataset is big, with one sample compressed file, and 24 compressed files of interest, decompressing to 12 image directories and 12 rosbag files, from which we should be able to extract steering angle as, according to authors, "in our data set we provide the 6-DOF pose estimates obtained by integrating the acceleration and velocity.".
+
+For the spare hours during the week focus should be on describing datasets, and trying to establish if steering angle can be obtained from all. We have determined that is the case for Udacity/Unity3D (synthetic), Udacity, Audi and Ford. So Kitti needs to be confirmed. 
+
+Confirmed, kitti files do have yaw, the heading in radians, which raises the important point that all angle values must be in the same measurement.
+
+Also, we need to structure the data repository. One possibility is have it as a separate repo, with all data files ignored, and only the download scripts committed. Such that once cloned, scripts can be run and data downloaded. Then symlink created to code directory so models may be trained.
+
 
 
 
