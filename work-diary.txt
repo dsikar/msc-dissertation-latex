@@ -486,6 +486,24 @@ Confirmed, kitti files do have yaw, the heading in radians, which raises the imp
 
 Also, we need to structure the data repository. One possibility is have it as a separate repo, with all data files ignored, and only the download scripts committed. Such that once cloned, scripts can be run and data downloaded. Then symlink created to code directory so models may be trained.
 
+/msc-dissertation-data
+    README 
+    /udacity
+        download_script.sh
+        README
+        # any further scripts e.g. extract steering angles
+    /unity
+    /audi
+    /ford
+    /kitti
+    /mechanical-turk
+
+2020.10.20
+
+Create template download directory
+$ git clone https://github.com/dsikar/msc-dissertation-data.git
+
+
 
 
 
