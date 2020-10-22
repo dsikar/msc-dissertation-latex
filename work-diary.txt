@@ -503,6 +503,16 @@ Also, we need to structure the data repository. One possibility is have it as a 
 Create template download directory
 $ git clone https://github.com/dsikar/msc-dissertation-data.git
 
+2020.10.21
+
+Set up new Ubuntu 20.04 workstation
+
+2020.10.22 
+
+Downloading datasets to new workstation
+
+This should give us 3 environments with reasonable bandwidth to work with. Home environment is low bandwith and now good for downloading data.
+
 
 
 
