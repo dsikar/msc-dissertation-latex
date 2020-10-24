@@ -1,3 +1,9 @@
+%% Referencing
+%% See https://www.bibtex.com/e/entry-types/
+%% for Complete list of BibTeX entry types [with examples] - BibTeX.com
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% INTRODUCTION AND OBJECTIVES %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -303,6 +309,7 @@ url = {https://www.a2d2.audi}
 }
 
 %% Ford Multi-AV Seasonal Dataset
+%% Download URL https://avdata.ford.com/downloads/default.aspx
 @article{agarwal2020ford,
   title={Ford Multi-AV Seasonal Dataset},
   author={Agarwal, Siddharth and Vora, Ankit and Pandey, Gaurav and Williams, Wayne and Kourous, Helen and McBride, James},
@@ -322,7 +329,7 @@ url = {https://www.a2d2.audi}
   pages={1-8}
   }
  
-%
+%% FORD DATA IMU
 @online{Applanix,
     author = {Applanix},
     title = {Applanix POS LV},
@@ -331,7 +338,6 @@ url = {https://www.a2d2.audi}
     urldate = {2020}
 }
  
-
 %% KITTI dataset
 @article{geiger2013vision,
   title={Vision meets robotics: The kitti dataset},
@@ -362,6 +368,59 @@ abstract= {
 superseded= {},
 terms= {}
 }
+
+%% START Public computer vision datasets w.r.t. advances in computer vision fostered by availability of public data
+
+%% Human action and activity recognition
+@article{chaquet2013survey,
+  title={A survey of video datasets for human action and activity recognition},
+  author={Chaquet, Jose M and Carmona, Enrique J and Fern{\'a}ndez-Caballero, Antonio},
+  journal={Computer Vision and Image Understanding},
+  volume={117},
+  number={6},
+  pages={633--659},
+  year={2013},
+  publisher={Elsevier}
+}
+
+%% Agriculture 
+@article{lu2020survey,
+  title={A survey of public datasets for computer vision tasks in precision agriculture},
+  author={Lu, Yuzhen and Young, Sierra},
+  journal={Computers and Electronics in Agriculture},
+  volume={178},
+  pages={105760},
+  year={2020},
+  publisher={Elsevier}
+}
+
+%% Hand pose estimation
+@article{li2019survey,
+  title={A survey on 3D hand pose estimation: Cameras, methods, and datasets},
+  author={Li, Rui and Liu, Zhenyu and Tan, Jianrong},
+  journal={Pattern Recognition},
+  volume={93},
+  pages={251--272},
+  year={2019},
+  publisher={Elsevier}
+}
+%% Kaggle
+@misc{kaggle_2020,
+    title={Kaggle: Your Machine Learning and Data Science Community},
+    url={https://www.kaggle.com/},
+    urldate={2020-10-24}
+}
+%% Jupyter Notebook
+@misc{JupyterNotebook2020,
+    title={Jupyter Notebook, 2020},
+    url={https://www.kaggle.com/},
+    urldate={2020-10-24}
+}
+
+ 
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% SYNTHETIC DATASETS %%
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -471,7 +530,7 @@ url = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-perf
 % Deep learning with Python
 
 
-@misc{ torrentCite,
+@misc{torrentCite,
     author = "{Wikipedia contributors}",
     title = "Torrent file",
     year = "2020",
@@ -510,4 +569,18 @@ url = {http://papers.neurips.cc/paper/9015-pytorch-an-imperative-style-high-perf
   pages={5},
   year={2009},
   organization={Kobe, Japan}
+}
+
+%% Development environments %%
+
+%% NB the misc entry type will generate "Intel, 2020" inline and in bibliography:
+%% Intel (2020).A Development Sandbox for Data Center to Edge Workloads.https://software.intel.com/content/www/us/en/develop/tools/devcloud.html. Accessed: 2020-07-06.
+
+% Intel DevCloud
+@misc{IntelDevCloud2020,
+  title        = "A Development Sandbox for Data Center to Edge Workloads",
+  author       = "{Intel}",
+  howpublished = "\url{https://software.intel.com/content/www/us/en/develop/tools/devcloud.html}",
+  year         = 2020,
+  note         = "Accessed: 2020-07-06"
 }

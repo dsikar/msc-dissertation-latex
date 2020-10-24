@@ -513,6 +513,44 @@ Downloading datasets to new workstation
 
 This should give us 3 environments with reasonable bandwidth to work with. Home environment is low bandwith and now good for downloading data.
 
+2020.10.24
+
+Data tidy up day. Creating download directory structure on camber and devcloud. Downloading ROSBAG file with IMU steering angle equivalent for Ford.
+
+The sample rosbag was extracted ok from .tar.gz file. Two other compressed files from the V2 dataset were extracted, resulting in errors similar to:
+
+1501819953297253.png
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+tar: Error is not recoverable: exiting now
+
+The assumption is because this was a multi-file download, as soon as the quota was exceeded, all downloads were interrupted. Another attempt will be made for a single file.
+
+Persisting issues when downloading on Intel DevCloud, while decompressing:
+
+$ tar xvf 2017-08-04-V2-Log1-Center.tar.gz
+
+(...)
+1501819952451885.png
+1501819952620940.png
+1501819952790009.png
+1501819952959089.png
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+
+Comparing files extracted from two download attempts:
+
+$ ls -l *.png | wc -l
+1996
+$ ls -ls ~/git/sdsandbox/dataset/ford/2017-08-04-V2-Log1-Center/*.png | wc -l
+1974
+
+It looks like scheduler is stopping downloads. Another environment may be required if issue persists.
+
+A script to extract images from bag files has been added to repository. The steering angles for sample data are not a good example as the road is straight with no turns taken, meaning the data will be unbalanced. Some augmentation may be required to balance the data, when roads that are not straight are found.
+
+
+
 
 
 
