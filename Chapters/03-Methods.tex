@@ -59,7 +59,10 @@ From % https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pd
 
 
 \subsection{Data Augmentation}
+The data was augmented with several methods
+
 Describe was additional transformations was performed to enlarge dataset - maybe a discussion that more data is good? With references.
+
 
 Found this article:
 % https://lmb.informatik.uni-freiburg.de/Publications/2015/FDB15/image_orientation.pdf
@@ -70,14 +73,6 @@ fly. We use translations (up to 5\% of the image width), brightness adjustment
 % in the range [−0.2, 0.2], gamma adjustment with \\gamma \\memberof [−0.5, 0.1] and Gaussian
 pixel noise with a standard deviation in the range [0, 0.02].
   
-Paper is referred to by this discussion: 
-% https://stats.stackexchange.com/questions/335836/cnn-architectures-for-regression
-A somewhat more succinct definition of the procedure:  
-% https://stats.stackexchange.com/questions/456126/could-resnet-curve-be-used-for-a-regression-problem-e-g-housing-price-predicti
-Just to make it clear, a regression problem is one whose target is continuous and not discrete. In this sense you can make any Neural Network that is primarily used for classification a regressor, with minimal changes. Namely it needs to end with 1 neuron, no activation function and a proper loss function (e.g. mean squared error). For example, object detection is in its core a regression problem because you are trying to predict coordinates. Any ResNet could be used for these problems
-
-
-
 \section{Deep Convolutional Neural Network Models}
 
 Description of different network architectures used, noting what modifications were required.  
@@ -113,6 +108,12 @@ The architecture contains 22 layers where all
 
 \subsection{Deep Regression Models}
 Explain the process of transforming these models (except NVIDIA) into regression models, maybe cite \cite{lathuilire2018comprehensive} or papers cited therein.
+
+Paper is referred to by this discussion: 
+% https://stats.stackexchange.com/questions/335836/cnn-architectures-for-regression
+A somewhat more succinct definition of the procedure:  
+% https://stats.stackexchange.com/questions/456126/could-resnet-curve-be-used-for-a-regression-problem-e-g-housing-price-predicti
+Just to make it clear, a regression problem is one whose target is continuous and not discrete. In this sense you can make any Neural Network that is primarily used for classification a regressor, with minimal changes. Namely it needs to end with 1 neuron, no activation function and a proper loss function (e.g. mean squared error). For example, object detection is in its core a regression problem because you are trying to predict coordinates. Any ResNet could be used for these problems
 
 \subsection{Binning/Quantization}
 Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.

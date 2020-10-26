@@ -549,6 +549,56 @@ It looks like scheduler is stopping downloads. Another environment may be requir
 
 A script to extract images from bag files has been added to repository. The steering angles for sample data are not a good example as the road is straight with no turns taken, meaning the data will be unbalanced. Some augmentation may be required to balance the data, when roads that are not straight are found.
 
+2020-10-26
+
+Internet connection improved. Starting local downloads.
+
+%% UNITY
+
+Looked at some unity sim projects here:
+https://github.com/udacity/self-driving-car-sim
+
+Started the unity engine:
+$ cd 
+$ ./unity_start
+
+Project does not load. Looked at version:
+~/git/self-driving-car-sim/ProjectSettings(master)$ cat ProjectVersion.txt 
+m_EditorVersion: 5.5.1f1
+
+This was changed to 
+m_EditorVersion: 2019.4.2f1
+m_EditorVersionWithRevision: 2019.4.2f1 (20b4642a3455)
+
+To load project:
+$ ps aux | grep unity
+
+Kill all unity processes.
+
+Start the unity image as sudo
+sudo ./UnityHub.AppImage --no-sandbox
+
+Load self-driving-car-sim 
+Change unity version to 2019.4.2f1
+
+To load scenes:
+
+Assets > Scenes > MenuScene
+
+Thereafter, unity can be started with 
+$ ./unity_start
+
+To add more projects, run UnityHub.AppImage as described above.
+
+Leaving Unity on this footing, further investigation into linux logs would be good to find out about these silent errors when loading new projects without sudo.
+
+
+
+
+
+
+
+
 
 
 

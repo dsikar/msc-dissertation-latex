@@ -1,8 +1,7 @@
 %% Referencing
 %% See https://www.bibtex.com/e/entry-types/
 %% for Complete list of BibTeX entry types [with examples] - BibTeX.com
-
-
+%% To validate: https://biblatex-linter.herokuapp.com/validate
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% INTRODUCTION AND OBJECTIVES %%
@@ -75,6 +74,36 @@ DOI = {10.3390/s20092544}
   year={2016}
 }
 
+%% SURVEYS
+
+@article{Grigorescu_2020, 
+   title={A survey of deep learning techniques for autonomous driving},
+   volume={37},
+   ISSN={1556-4967},
+   url={http://dx.doi.org/10.1002/rob.21918},
+   DOI={10.1002/rob.21918},
+   number={3},
+   journal={Journal of Field Robotics},
+   publisher={Wiley},
+   author={Grigorescu, Sorin and Trasnea, Bogdan and Cocias, Tiberiu and Macesanu, Gigel},
+   year={2020},
+   month={Apr},
+   pages={362–386}
+}
+
+@article{Yurtsever_2020,
+   title={A Survey of Autonomous Driving: Common Practices and Emerging Technologies},
+   volume={8},
+   ISSN={2169-3536},
+   url={http://dx.doi.org/10.1109/ACCESS.2020.2983149},
+   DOI={10.1109/access.2020.2983149},
+   journal={IEEE Access},
+   publisher={Institute of Electrical and Electronics Engineers (IEEE)},
+   author={Yurtsever, Ekim and Lambert, Jacob and Carballo, Alexander and Takeda, Kazuya},
+   year={2020},
+   pages={58443–58469}
+}
+
 %% Business models
 % opportunity for cites sic to improve mobility
 % opportunities and challenges to shared autonomous mobility 
@@ -103,7 +132,7 @@ DOI = {10.3390/s20092544}
 
 %% End-to-end approach for self driving
 
-	Year = {2001}}
+	%%Year = {2001}}
 
 %%%%%%%%%%%%%
 %% CONTEXT %%
@@ -251,6 +280,21 @@ DOI = {10.3390/s20092544}
    pages={828–841}
 }
 
+
+% CIFAR-10
+@article{CIFAR_10,
+title= {CIFAR-10 Canadian Institute for Advanced Research},
+journal= {},
+author= {Alex Krizhevsky and Vinod Nair and Geoffrey Hinton},
+year= {2009},
+url= {http://www.cs.toronto.edu/~kriz/cifar.html},
+abstract= {The CIFAR-10 dataset consists of 60000 32x32 colour images in 10 classes, with 6000 images per class. There are 50000 training images and 10000 test images. 
+
+The dataset is divided into five training batches and one test batch, each with 10000 images. The test batch contains exactly 1000 randomly-selected images from each class. The training batches contain the remaining images in random order, but some training batches may contain more images from one class than another. Between them, the training batches contain exactly 5000 images from each class. },
+keywords= {Dataset},
+terms= {}
+}
+
 %% Problems pointed out with massive deep neural networks
 @misc{zhang2017understanding, 
       title={Understanding deep learning requires rethinking generalization}, 
@@ -272,7 +316,7 @@ DOI = {10.3390/s20092544}
 
     %% Network In Network
     
-    @misc{lin2013network,
+@misc{lin2013network,
     title={Network In Network},
     author={Min Lin and Qiang Chen and Shuicheng Yan},
     year={2013},
@@ -416,10 +460,6 @@ terms= {}
     url={https://www.kaggle.com/},
     urldate={2020-10-24}
 }
-
- 
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% SYNTHETIC DATASETS %%
