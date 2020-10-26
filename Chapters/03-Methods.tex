@@ -57,6 +57,32 @@ From % https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pd
 % http://www.robesafe.uah.es/personal/roberto.arroyo/docs/Almazan13iv.pdf
 % We might use a similar technique, time allowing
 
+\subsection{Kitti}
+
+The Kitti dataset TODO add provenance, add description
+Data format, steering angle description obtained from oxts/dataformat.txt 
+% cat 2011_09_26/2011_09_26_drive_0001_sync/oxts/dataformat.txt
+\begin{verbatim}
+yaw:   heading (rad),       0 = east,  positive = counter clockwise,\
+    range: -pi   .. +pi
+\end{verbatim}
+Note, this may not be the steering angle - TBC. So additional work may be needed to obtain.
+There are some pointers online, a simple approach seems to be:
+% https://physics.stackexchange.com/questions/112301/calculating-the-rate-at-which-a-car-turns
+This is also an interesting approach:
+% http://docs.ros.org/en/kinetic/api/teb_local_planner_tutorials/html/cmd__vel__to__ackermann__drive_8py_source.html
+With python code:
+\begin{verbatim}
+def convert_trans_rot_vel_to_steering_angle(v, omega, wheelbase):
+  if omega == 0 or v == 0:
+     return 0
+  radius = v / omega
+  return math.atan(wheelbase / radius)    
+\end{verbatim}
+Another possible method "Estimation of the Steering Angle Based on Extended Kalman-Filter"  
+% http://gvpress.com/journals/IJMUE/vol11_no12/27.pdf
+% equations 10 and 11
+
 
 \subsection{Data Augmentation}
 The data was augmented with several methods
