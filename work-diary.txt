@@ -486,7 +486,7 @@ Confirmed, kitti files do have yaw, the heading in radians, which raises the imp
 
 Also, we need to structure the data repository. One possibility is have it as a separate repo, with all data files ignored, and only the download scripts committed. Such that once cloned, scripts can be run and data downloaded. Then symlink created to code directory so models may be trained.
 
-/msc-dissertation-data
+/msc--data
     README 
     /udacity
         download_script.sh
@@ -497,6 +497,8 @@ Also, we need to structure the data repository. One possibility is have it as a 
     /ford
     /kitti
     /mechanical-turk
+
+$ ln -s ~/git/msc-data/ data
 
 2020.10.20
 
@@ -591,6 +593,33 @@ $ ./unity_start
 To add more projects, run UnityHub.AppImage as described above.
 
 Leaving Unity on this footing, further investigation into linux logs would be good to find out about these silent errors when loading new projects without sudo.
+
+Rest of the day tidying up download structure. Also, found this link
+https://towardsdatascience.com/how-to-train-your-self-driving-car-using-deep-learning-ce8ff76119cb
+Would a good example on binning the steering angles, showing how most data is "straight", so data is unbalanced. This needs to be addressed.
+
+Next, we need to run the training as described here:
+https://github.com/naokishibuya/car-behavioral-cloning
+which has good data augmentation
+Plus some share experience from someone who implemented several architectures:
+https://github.com/paul-o-alto/keras-resnet-sdc
+
+2020-10-27
+
+Development box 1 reaching capacity, all data except audi to be removed, except sample to test functions. Scenario will probably be one dedicated box per dataset.
+
+Current Audi download with about 40G to download
+
+$ du -sh *
+177M	camera_lidar-20190401121727_bus_signals.tar
+64G	camera_lidar-20190401121727_camera_frontcenter.tar
+74G	camera_lidar-20190401145936_camera_frontcenter.tar
+51G	gaimersheim
+4.0K	local-download.sh
+
+Plus Ingolstadt data 200M total Audi size, compressed and decompressed so far is 230G.
+
+So devbox1 is the audi-box from now on. Stopped on binning task.
 
 
 
