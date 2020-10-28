@@ -621,6 +621,11 @@ Plus Ingolstadt data 200M total Audi size, compressed and decompressed so far is
 
 So devbox1 is the audi-box from now on. Stopped on binning task.
 
+2020-10-28
+
+Need to take a week off before fast approaching first draft deadline. Also, might have to drop Ford dataset, as steering angles will be an issue. So far we have steering angles in udacity, unity and audi. Ford and kitti are the unknowns as far as extracting steering angles. 
+So approach is work with existing steering angles to have partial results for first draft, then try to incorporate ford and kitti between 1st and 2nd draft.
+
 
 
 
