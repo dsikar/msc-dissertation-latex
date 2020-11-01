@@ -626,6 +626,39 @@ So devbox1 is the audi-box from now on. Stopped on binning task.
 Need to take a week off before fast approaching first draft deadline. Also, might have to drop Ford dataset, as steering angles will be an issue. So far we have steering angles in udacity, unity and audi. Ford and kitti are the unknowns as far as extracting steering angles. 
 So approach is work with existing steering angles to have partial results for first draft, then try to incorporate ford and kitti between 1st and 2nd draft.
 
+2020-10-31
+
+Running training/testing. 
+Starting with NVIDIA architecture, unity data.
+
+Results table
+
+Run ID  Data    Network Training    Acc Error   Saved Best Model    Saved History
+1       Udacity 1       SGD Adam    .95 .06     model_01            history_01
+
+Automation is required. Let's start by  creating a smaller dataset that will train in minutes, for the sake of establishing the workflow.
+
+Sample has 12895 .jpg files and 12895 .json files with steering angles.
+
+$ ls -lA logs_Mon_Jul_13_08_29_01_2020/ | wc -l
+25791
+
+
+2020.11.01
+
+A good degree of automation was achieved. We just need to add some extras, like training rate, error function, epochs, etc. Plus ideally the network architecture, which we can recover from model, but best have it on a plain text file for ready access, plus the git branch and commit hash for reproducibility.
+
+To re-use naoshi's code, we need to generate a "driving log" file, such as:
+
+center,left,right,steering,throttle,brake,speed
+IMG/center_2016_12_01_13_30_48_287.jpg,IMG/left_2016_12_01_13_30_48_287.jpg,IMG/right_2016_12_01_13_30_48_287.jpg,0,0,0,22.14829
+
+that only includes center and steering. We got that, code does not run as environments are incompatible with TK's. We are installing the environment with conda.
+
+
+
+
+
 
 
 
