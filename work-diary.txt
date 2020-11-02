@@ -648,12 +648,20 @@ $ ls -lA logs_Mon_Jul_13_08_29_01_2020/ | wc -l
 
 A good degree of automation was achieved. We just need to add some extras, like training rate, error function, epochs, etc. Plus ideally the network architecture, which we can recover from model, but best have it on a plain text file for ready access, plus the git branch and commit hash for reproducibility.
 
-To re-use naoshi's code, we need to generate a "driving log" file, such as:
+To re-use Naoki's code, we need to generate a "driving log" file, such as:
 
 center,left,right,steering,throttle,brake,speed
 IMG/center_2016_12_01_13_30_48_287.jpg,IMG/left_2016_12_01_13_30_48_287.jpg,IMG/right_2016_12_01_13_30_48_287.jpg,0,0,0,22.14829
 
-that only includes center and steering. We got that, code does not run as environments are incompatible with TK's. We are installing the environment with conda.
+that only includes center and steering. We got that, code does not run as environments are incompatible with TK's. We are installing now installing Naoki's environment with conda.
+
+2020.11.02
+
+Conda install failed. So far no success running Naoki's code. Starting to document training sessions in Appendix D initially. 
+
+Next todo: .tex file to work on individual sections, without need to recompile whole document.
+
+
 
 
 

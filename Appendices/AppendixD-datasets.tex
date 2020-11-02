@@ -81,3 +81,99 @@ TODO ADD BINS
  \caption{Diagram showing bins centered around zero degrees, meaning most of time car is driving straight. Binning diagrams for all datasets can be found in appendix B}
  \label{fig:bins-placeholder}
 \end{figure}
+
+\section{Training Log}
+
+\begin{verbatim}
+Run ID  Data       Network Acc. Error Saved Best Model 
+3       log_sample NVIDIA1
+\end{verbatim}
+
+Run ID  Data    Network Training    Acc Error   Saved Best Model    Saved History
+%1       Udacity 1       SGD Adam    .95 .06     model_01            history_01
+
+\subsection{Run 3}
+
+This model has a single output, steering angle, and produced very low accuracy.
+Notes:
+\begin{verbatim}
+commit 423b5b783565b60e72f970485d9b3aa9887f5453
+training time
+dataset: sample_data
+\end{verbatim}
+
+\subsection{Run 4 - }
+
+% Naoki's model not doing well, sanity check with one output
+Also not doing well
+Next run, 2 outputs (steering and throttle)
+
+\subsection{Run 5 - 20201102081239} 
+
+\begin{verbatim}
+commit 076e8b32664738df6af9e14d75355504eb2a94b4
+Much better results with two outputs. 
+cat ../dataset/unity/log_sample/logs_Mon_Jul_13_08_29_01_2020/record_11659.json
+Both are floats - steering angle and throttle
+loss: 0.0105 - acc: 0.8502 - val_loss: 0.0111 - val_acc: 0.8617
+
+dataset: sample_data
+model: nvidia1
+outputs: 2
+\end{verbatim}
+
+\subsection{Run 5 - 20201102090041\_nvidia2}
+\begin{verbatim}
+commit 42dabb6321ad25f667c8663b63412c88c96b3b38
+model: nvidia2
+outputs: 2
+dataset: log_sample (size: 12k)
+$ python train.py --model=nvidia2 --outdir=../trained_models
+loss: 0.0108 - acc: 0.8483 - val_loss: 0.0117 - val_acc: 0.8495
+\end{verbatim}
+
+\subsection{Run 6 - 20201102094552\_nvidia1}
+\begin{verbatim}
+commit ec9d081b85f7386365428a73896b1d09be7ba917
+model: nvidia1
+outputs: 2
+dataset: log2 (280727)
+command
+$ train.py --model=nvidia1 --outdir=../trained_models
+loss: 0.0077 - acc: 0.8726 - val_loss: 0.0077 - val_acc: 0.8732
+\end{verbatim}
+
+\subsection{Run 7 - }
+\begin{verbatim}
+commit 1da10b6745f583e180d5b9c5ba4874847ba8610c
+model: nvidia2
+outputs: 2
+dataset: log2
+command
+$ train.py --model=nvidia2 --outdir=../trained_models
+\end{verbatim}
+
+\subsection{Run X - }
+\begin{verbatim}
+commit 6960f2f5fb50b565c0dfd6c8fe3ac1d283192e69
+model nvidia2
+outputs 2
+dataset log2
+command:
+train.py --model=nvidia2 --outdir=../trained_models
+\end{verbatim}
+
+
+\subsection{Run X - }
+\begin{verbatim}
+commit 
+model
+outputs
+dataset
+command:
+\end{verbatim}
+
+
+
+
+
