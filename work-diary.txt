@@ -661,6 +661,8 @@ Conda install failed. So far no success running Naoki's code. Starting to docume
 
 Next todo: .tex file to work on individual sections, without need to recompile whole document.
 
+Also, need to record the figure of 8 track data, as the data we have might be a bit too random for the model size.
+
 
 
 
