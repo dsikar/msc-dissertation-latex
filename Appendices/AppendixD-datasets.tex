@@ -167,21 +167,30 @@ train.py --model=nvidia2 --outdir=../trained_models
 \subsection{Run 9 - 20201102210514_nvidia2.h5}
 \begin{verbatim}
 Running nvidia2 with augmentation
-commit 
+commit 6960f2f5fb50b565c0dfd6c8fe3ac1d283192e69
 model nvidia2
-outputs
-dataset
+outputs 2
+dataset log2
 command:
+train.py --model=nvidia2 --outdir=../trained_models
+loss: 0.0345 - acc: 0.7906 - val_loss: 0.0236 - val_acc: 0.8084
+Stop! Still running!!! Epoch 60 and still improving. ...
+% loss: 0.0193 - acc: 0.8250 - val_loss: 0.0116 - val_acc: 0.8503
+% 0.0123 - acc: 0.8501 - val_loss: 0.0091 - val_acc: 0.8594
+Ran 78 epochs and may have thrown error:
+problems with loss graph
+Note biggest increase in accuracy during training
 \end{verbatim}
 
 \subsection{Run 10 - }
 \begin{verbatim}
-Run NVIDIA1 WITHOUT augmentation
-commit 
-model
-outputs
-dataset
+Run nvidia2 WITHOUT augmentation, just preprocessing
+commit 2add77bb60505fe25075f9da55f6465e65cd3825
+model nvidia 2
+outputs 2
+dataset log2
 command:
+train.py --model=nvidia2 --outdir=../trained_models
 \end{verbatim}
 
 \subsection{Run X - }
