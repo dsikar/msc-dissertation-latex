@@ -182,7 +182,7 @@ problems with loss graph
 Note biggest increase in accuracy during training
 \end{verbatim}
 
-\subsection{Run 10 - }
+\subsection{Run 10 - 20201103211330_nvidia2.h5}
 \begin{verbatim}
 Run nvidia2 WITHOUT augmentation, just preprocessing
 commit 2add77bb60505fe25075f9da55f6465e65cd3825
@@ -191,6 +191,14 @@ outputs 2
 dataset log2
 command:
 train.py --model=nvidia2 --outdir=../trained_models
+loss: 0.0233 - acc: 0.8179 - val_loss: 0.0170 - val_acc: 0.8304
+loss: 0.0084 - acc: 0.8656 - val_loss: 0.0086 - val_acc: 0.8655
+Epoch 45/100
+loss: 0.0083 - acc: 0.8662 - val_loss: 0.0086 - val_acc: 0.8638
+problems with loss graph
+
+No loss graph, again, no augmentation trained quicker that previous
+
 \end{verbatim}
 
 \subsection{Run X - }

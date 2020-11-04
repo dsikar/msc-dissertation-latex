@@ -663,6 +663,8 @@ Next todo: .tex file to work on individual sections, without need to recompile w
 
 Also, need to record the figure of 8 track data, as the data we have might be a bit too random for the model size.
 
+Also, need to recoup models from stale jobs and carry on training, as one job overran the 24h limit on camber and stopped.
+
 
 
 
