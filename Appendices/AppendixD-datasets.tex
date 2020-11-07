@@ -201,6 +201,22 @@ No loss graph, again, no augmentation trained quicker that previous
 
 \end{verbatim}
 
+\subsection{Run 11 - }
+\begin{verbatim}
+commit 6439a8758d8b46a1cbc3bcefc9db4c15f70820df
+model nvidia1
+outputs 2
+dataset log 2
+command:
+train.py --model=nvidia1 --outdir=../trained_models
+Epoch 1/100
+1755/1755 [==============================] - 682s 389ms/step - loss: 0.0271 - acc: 0.8049 - val_loss: 0.0172 - val_acc: 0.8351
+Epoch 84/100
+1755/1755 [==============================] - 559s 318ms/step - loss: 0.0099 - acc: 0.8581 - val_loss: 0.0083 - val_acc: 0.8662
+problems with loss graph (probably a bug introduced in adding info to graph?)
+
+\end{verbatim}
+
 \subsection{Run X - }
 \begin{verbatim}
 commit 
