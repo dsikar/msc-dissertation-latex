@@ -715,6 +715,13 @@ Preliminary results. Better accuracies for jungle model with augmentation and pr
 
 Although accuracies are not SOTA, the unity sim self driving car has successfully completed several laps of the small_looping_course
 
+2020.11.08
+
+For the sake of quicker compilation, individual sections are to be written in a separate MSc_single_chapter overleaf project, then incorporated to main.tex in project report.
+
+The main reflections from the self-driving models created yesterday are:
+* What is the least amount of data required to create a model that could drive a lap around a circuit and a random track? If image preprocessing and augmentation are key, it could turn out to be less than expected.
+
 
 
 
