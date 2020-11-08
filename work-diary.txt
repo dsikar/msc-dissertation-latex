@@ -722,7 +722,12 @@ For the sake of quicker compilation, individual sections are to be written in a 
 The main reflections from the self-driving models created yesterday are:
 * What is the least amount of data required to create a model that could drive a lap around a circuit and a random track? If image preprocessing and augmentation are key, it could turn out to be less than expected.
 
-
+Todos:
+Copy and edit /home/simbox/git/msc-data/ford/sample/parse_ford_yaml_time.py to deal with steering angles. A few pointers:
+https://www.theconstructsim.com/ros-qa-how-to-convert-quaternions-to-euler-angles/
+https://robotics.stackexchange.com/questions/16471/get-yaw-from-quaternion
+http://docs.ros.org/en/jade/api/tf/html/python/transformations.html
+https://en.wikipedia.org/wiki/Euler_angles
 
 
 
