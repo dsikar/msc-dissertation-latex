@@ -729,7 +729,18 @@ https://robotics.stackexchange.com/questions/16471/get-yaw-from-quaternion
 http://docs.ros.org/en/jade/api/tf/html/python/transformations.html
 https://en.wikipedia.org/wiki/Euler_angles
 
+To run NaokiNet we'll need to change the output format in 
+./Assets/Prefabs/Donkey.prefab
 
+  m_Name:
+  m_EditorClassIdentifier:
+  sensorCam: {fileID: 20774512129789012}
+  width: 160
+  height: 120
+
+to 200w x 66h.
+
+Either that or change the augmentation process, to first resize image then perform augmentation.
 
 
 
