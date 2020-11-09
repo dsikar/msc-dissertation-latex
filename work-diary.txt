@@ -742,6 +742,8 @@ to 200w x 66h.
 
 Either that or change the augmentation process, to first resize image then perform augmentation.
 
+One thing to try first. Run udacity simulator in training mode and check image size output. That will be the ground truth. Expected size is greater than 200x66, both width and height.
+
 
 
 
