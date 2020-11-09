@@ -1,10 +1,46 @@
 % Appendix A
-
+\label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
 \chapter{Methods} % Main appendix title
 
-\label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
+Procedures used to set up experiments are detailed in this appendix.
 
-As there were many training jobs to run, requiring storage and computing resources that could not be accommodated in a single environment without incurring extra costs, the workload was spread over different environments.
+\section{Running the car simulator}
+\label{RunningCarSimulatorForInference}
+
+The main testing environment consisted of a Dell Precision Tower 5810 with a 6 core Intel Xeon Processor and 32GB memory running Ubuntu 18.04. Unity Hub 2.3.2 was installed then run as sudo:
+\begin{verbatim}
+$ sudo ./UnityHub.AppImage --no-sandbox 
+\end{verbatim}
+The car simulator source was cloned from:
+\begin{verbatim}
+$ git clone https://github.com/dsikar/sdsandbox.git    
+\end{verbatim}
+The Unity project contained in sdsandbox/sdsim can then added and loaded.
+Once the menu scene runs, one of 5 circuits can be chosen. Once the chosen circuit is loaded, there are options to \textit{Auto Drive w Rec} (generate test data and steering angle using PID control) or \textit{NN Control over Network} (send images over network and receive predicted steering angles). The first case will output files to ../output directory, the second case will send and listen to network messages. The handshake process has been captured with tcpflow and stored to  src/debug/tcpflow\_output.txt. The prediction engine starts returning predicted steering angles after the 4th frame sent by simulator as described in section \ref{NetMonDebug}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=0.17]{Figures/UnityHubSDSandbox3in1.png}
+ \caption{Left to right: Unity Hub, SDSandbox home screen and simulation ready to run}
+ \label{fig:SDSandboxHome}
+\end{figure}
+
+
+
+\section{Network monitoring and debugging}
+\label{NetMonDebug}
+tcpflow (\cite{garfinkel2013passive}) was used to monitor network traffic between car simulator and neural network prediction engine. Once the simulator is setup to run in neural network mode and before the predict\_client.py prediction engine starts, tcpflow is launched set to listen on the loopback interface port 9091, and output network traffic packets to console:
+\begin{verbatim}
+$ sudo tcpflow -i lo -c port 9091
+\end{verbatim}
+The prediction script then runs, and JSON (\cite{pezoa2016foundations}) a lightweight data-interchange format, tcp packets may be monitored and debugged. Simulator packets are distinguished by \textit{telemetry} and prediction engine packets by \textit{control} msg\_types respectively, as shown in excerpt:
+\begin{verbatim}
+127. (...) {"msg_type":"telemetry",(...),"image":(...)
+127. (...) {"msg_type": "control", "steering": "-0.09476048" (...)
+\end{verbatim}
+The packets carry the image sent from sim to prediction engine, and returned steering angle prediction.
+
+
 
 \section{Datasets}
 

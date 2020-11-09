@@ -12,6 +12,22 @@ Note: only use the word ‘methodology’ if you know what it means!
 
 % LC - 14 pages
 
+\section{Driving simulators}
+
+Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the \cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020}).
+Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file. The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times to gather data. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
+
+Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \ref{fig:UdacitySdSandboxAutonomous}).
+
+\begin{figure}[h!]
+\centering
+\includegraphics[scale=0.22]{UdacitySdSandboxSim.png}
+\caption{Left to right: legacy Udacity and SDSandbox Autonomous Driving menus}
+\label{fig:UdacitySdSandboxAutonomous}
+\end{figure}
+
+Setting up the simulator and prediction engine is further detailed in section \ref{RunningCarSimulatorForInference}.
+
 \section{Data Augmentation}
 To avoid overfitting, the data is augmented by: cropping the image to a height band that excluded horizon and car shadow, resized to required model input size, converted from RGB to YUV, 
 % get images from http://localhost:8890/notebooks/augument.ipynb
