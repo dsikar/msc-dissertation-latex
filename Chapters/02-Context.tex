@@ -21,7 +21,14 @@ You should demonstrate that you understand what you have read by providing some 
 %% Prior methods used in image classification, using manual feature extraction
 
 % What is end to end learning?
-The properties of multilayer feedforward neural networks as function approximators has been studied extensively, especially in the 1980's . \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available. while (\cite{cybenko1989approximation}) demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than adeterministic relation between input and target. (\cite{hornik1989multilayer}) state their results do not address the issue of how many units are needed to attain a  given degree of approximation.  
+The properties of multilayer feedforward neural networks as universal function approximators has been studied extensively, especially in the 1980's . \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available. while (\cite{cybenko1989approximation}) demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function with arbitrary precision providing that
+no constraints are placed on the number of nodes or the size of the weights. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than a deterministic relation between input and target. (\cite{hornik1989multilayer}) state their results do not address the issue of how many units are needed to attain a  given degree of approximation.  
+%% cybenko alternative entry
+% backpropagation
+Stochastic Gradient Descent (SGD) has become the standard for training deep neural networks
+% training neural networks and the vanishing gradient problem
+
+One of the main difficulties in training deep neural networks in the vanishing gradient problem, when, during the training phase, gradients become excessively large or small such that the network ceases to learn. This is also known as the degradation problem. 
 
 
 

@@ -10,6 +10,58 @@ result (which goes under Results).
   
 Note: only use the word ‘methodology’ if you know what it means!  
 
+%% On RELU not actually being differentiable:
+%Some of the hidden units included in this list are not actually differentiable %at
+%all input points. For example, the rectified linear function g (z) = max{0, z} is not
+%differentiable at z = 0. This may seem like it invalidates g for use with a gradientbased
+%learning algorithm. In practice, gradient descent still performs well enough
+%for these models to be used for machine learning tasks. This is in part because
+%neural network training algorithms do not usually arrive at a local minimum of
+%the cost function, but instead merely reduce its value significantly,
+%Because we do not
+%expect training to actually reach a point where the gradient is 0 , it is %acceptable
+%for the minima of the cost function to correspond to points with undefined gradient.
+%Hidden units that are not differentiable are usually non-differentiable at only a
+%small number of points.
+% pg 207 Goodfellow
+% This section from same book pg 475, maybe better in Context
+%Another important push, still ongoing, has been towards end-to-end deep
+%learning speech recognition systems that completely remove the HMM. The first
+%major breakthrough in this direction came from Graves et al. (2013) who trained
+%a deep LSTM RNN (see section 10.10), using MAP inference over the %frame-tophoneme
+%alignment, as in LeCun et al. (1998b) and in the CTC framework (Graves
+%et al., 2006; Graves, 2012).
+
+% Batch normalization - in the context of preprocessing data for our trainng
+
+\cite{ioffe2015batch, 7005077}
+define Internal Covariate Shift as the change in the
+distribution of network activations due to the change in
+network parameters during training. To improve the training, we seek to reduce the internal covariate shift. By
+fixing the distribution of the layer inputs x as the training
+progresses, we expect to improve the training speed. I
+"It has
+been long known (LeCun et al., 1998b; Wiesler & Ney,
+2011) that the network training converges faster if its inputs are whitened – i.e., linearly transformed to have zero means and unit variances, and decorrelated. "
+However, since x is affected by
+W, b and the parameters of all the layers below, changes
+to those parameters during training will likely move many
+dimensions of x into the saturated regime of the nonlinearity and slow down the convergence. This effect is
+amplified as the network depth increases.
+ In practice,
+the saturation problem and the resulting vanishing gradients are usually addressed by using Rectified Linear Units
+(Nair & Hinton, 2010) ReLU(x) = max(x, 0), careful
+initialization (Bengio & Glorot, 2010; Saxe et al., 2013),
+and small learning rates. If, however, we could ensure
+that the distribution of nonlinearity inputs remains more
+stable as the network trains, then the optimizer would be
+less likely to get stuck in the saturated regime, and the
+training would accelerate.
+
+\cite{lecun2012efficient}
+Lecun points out:
+Stochastic learning is usually much faster than batch learning, results in better solutions, particularly on large redundant datasets. The idea being since there is a lot of repetition (similar frames is dataset). SGD also works well because nonlinear networks usually have multiple local minima of different depths. The noise present in the updates can results jumping into the basin of another, possibly deeper, local minimum. Networks learn the fastest from the most unexpected sample, so examples should be chosen with the maximum information content by means of shuffling the training set, however care must be taken not to apply this technique with data that contains outliers
+
 % LC - 14 pages
 
 \section{Driving simulators}
