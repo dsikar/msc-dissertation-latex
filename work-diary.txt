@@ -748,6 +748,12 @@ One thing to try first. Run udacity simulator in training mode and check image s
 
 Ran Udacity sim, output images are 320w x 160h.
 
+2020.11.11
+
+Errors on nvidia2 suggest the dimensions and strides need looking at:
+
+tensorflow.python.framework.errors_impl.InvalidArgumentError:  Input to reshape is a tensor with 147456 values, but the requested shape requires a multiple of 6656
+
 
 
 
