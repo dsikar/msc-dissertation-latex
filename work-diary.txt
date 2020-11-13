@@ -754,6 +754,10 @@ Errors on nvidia2 suggest the dimensions and strides need looking at:
 
 tensorflow.python.framework.errors_impl.InvalidArgumentError:  Input to reshape is a tensor with 147456 values, but the requested shape requires a multiple of 6656
 
+2020.11.13
+
+Ran nvidia2, still getting errors when using resized images. Need to debug resize function of 200x66 size images.
+
 
 
 
