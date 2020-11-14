@@ -71,6 +71,9 @@ order and other recurrent architectures)" \cite{hochreiter2001gradient}
 
 Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the \cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020}).
 Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file. The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times to gather data. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
+The data is then moved from the output directory to a labelled directory of choice (details in appendix).
+
+
 
 Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \ref{fig:UdacitySdSandboxAutonomous}).
 
@@ -81,7 +84,10 @@ Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \re
 \label{fig:UdacitySdSandboxAutonomous}
 \end{figure}
 
-Setting up the simulator and prediction engine is further detailed in section \ref{RunningCarSimulatorForInference}.
+Setting up the simulator and prediction engine is further detailed in Appendix
+
+
+\ref{RunningCarSimulatorForInference}.
 
 \section{Data Augmentation}
 To avoid overfitting, the data is augmented by: cropping the image to a height band that excluded horizon and car shadow, resized to required model input size, converted from RGB to YUV, 
@@ -118,7 +124,16 @@ Maybe cite goodfellow once and do a joblot on items.
 Our NVIDIA architecture is very similar to the one proposed by Bojarski et al. 2016. Our alternative AlexNet, GoogleLeNet, VGGNet and ResNet however have much fewer parameters. This is due to the "degradation" problem, where the number of parameters is too large for the dataset, and the network fails to converge.
 
 \section{Datasets}
-What datasets we used and what data was gathered
+% What datasets we used and what data was gathered
+3 datasets where used. Udacity self-driving real life data, Unity 3D game engine data, and the same datasets with added rain. Figure X shows details of the data.
+
+The datasets are downloaded via script (\cite{Sikar2020}) and structured according to environment (local, Camber or DevCloud).
+
+Two data augmentation libraries were used: \cite{Naoki2016} to add random shifts, flips, crop and change images to YUV format (as per \cite{bojarski2016end} data augmentation method used in the baseline architecture) and \cite{Saxena2017} to add rain and reflections to the testing datasets.
+
+\section{Training and Testing}
+
+The Keras (\cite{chollet2015keras}) deep learning API (Application Programming Interface) written in Python (\cite{van1995python}) and in this case acting as a wrapper around the machine learning library Tensorflow (\cite{abadi2016tensorflow})  was used to create, train and test models.
 
 \subsection{Ford AV Dataset}
 % Get details from https://avdata.ford.com/downloads/default.aspx

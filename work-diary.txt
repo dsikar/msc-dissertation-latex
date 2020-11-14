@@ -758,6 +758,10 @@ tensorflow.python.framework.errors_impl.InvalidArgumentError:  Input to reshape 
 
 Ran nvidia2, still getting errors when using resized images. Need to debug resize function of 200x66 size images.
 
+2020.11.14
+
+Making a start on results and continuing to write up methods.
+
 
 
 

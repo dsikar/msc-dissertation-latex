@@ -56,6 +56,28 @@ TODO ADD BINS
 
 %% TODO add correspondence with Mentar
 
+\section{Unity3D}
+The simulator is started by running:
+\begin{verbatim}
+$ sudo ~/.Unity.AppImage --no-sandbag   
+\end{verbatim}
+This will load the Unity Hub application. A project can be added, which will be repository cloned from \cite{SDSandboxSim}. Once loaded, the menu scene is selected and the project is run. Once running, an output directory must be chosen. A track is then selected (TODO track list), then the option "Auto with REC TODO double check".  
+TODO ADD IMAGE SEQUENCE  
+Once a number of laps have been completed, the images can be moved to a labelled folder using prepare\_data.py script. This will move images to a user defined directory, create a sub-directory named with a date and timestamp
+
+The sky colour can be changed via Windows > Renderer > Lighting menu, then under Environment changing "Skybox Material".
+
+Changing camera sensor image output size
+
+There are two ways to change the size of images output by simulator camera sensor, one is by editing Donkey.Prefab file and changing lines 3415 and 3416:
+\begin{verbatim}
+  width: 160
+  height: 120
+\end{verbatim}
+The other was is through Unity
+Changing sky colour
+The sky colour can be changed via Windows > Renderer > Lighting Settings menu, then under Environment changing "Skybox Material" chossing a different material.  
+The simulator lighting can be made darker, in the same menu, under Environment Lighting > Intensity MUltiplier. A value of 1 is chosen to generate training datasets, and a value of 0.26 when running the simulator in NN Control over Network mode, that is using the prediction engine to predict steering angles.
 \section{Udacity}
 
 1. Link trail - medium (Indian guy) -> medium (Chinese guy)-> github (Japanese guy)  
