@@ -201,6 +201,13 @@ pixel noise with a standard deviation in the range [0, 0.02].
   
 \section{Deep Convolutional Neural Network Models}
 
+The input image is convolved with a kernel resulting in a feature map size that is calculated with equation \ref{eq:feature_map} as decribed by \cite{dumoulin2018guide}:
+\begin{equation}
+    \label{eq:feature_map}
+    n_{out}= \Big\lfloor\frac{n_{in} + 2p -k}{s} \Big\rfloor +1
+\end{equation}
+where $n_{out}$ is the output size of convolved feature map, $n_{in}$ is the input size of image or feature map, $p$ is the padding size, $k$ is the kernel size and $s$ is the stride. For example, in the classic Alexnet (\cite{krizhevsky2012imagenet}) architecture, with input image size 224x224, kernel size 11, padding equal zero and stride = 4, the resulting feature map size in the first convolutional layer is 55x55. 
+Alexnet has an input layer with dimensions 224x224x3, where 3 is the number of channels (RGB image), the second layer has dimensions 55x55x48, the third convolutional layer has dimensions 27x27x128 and so on. This is typical of deep network architectures, decreasing feature map sizes with increasing number of channels as network depth increases.
 Description of different network architectures used, noting what modifications were required.  
 
 \textbf{Discussion on the number of parameters required given size of dataset.}  
