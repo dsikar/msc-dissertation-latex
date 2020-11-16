@@ -762,6 +762,35 @@ Ran nvidia2, still getting errors when using resized images. Need to debug resiz
 
 Making a start on results and continuing to write up methods.
 
+2020,11.16
+
+Need to report 3 runs on nvidia baseline
+
+1. with jungle1 data
+2. with log
+3. with log2
+
+need to report data size, image size, process
+
+nb - first three runs we are not cropping
+1. did not get past first epoch
+2. did not finish first epoch (data error)
+3. finishing first epoch but with bad accuracy on first run, expectation is  
+1755/1755 [==============================] - 527s 300ms/step - loss: 0.3972 - acc: 2.6709e-05 - val_loss: 0.0587 - val_acc: 8.9388e-05
+baseline nvidia will not work - 
+# trying one with cropping
+4. failed
+# fails on account of cropping aspect ratio?
+OpenCV(4.2.0) /io/opencv/modules/imgproc/src/resize.cpp:4045: error: (-215:Assertion failed) !ssize.empty() in function 'resize'
+
+We need to document these four runs, and start documenting every run hereafter.
+
+Note crop function generates an error as resulting array is size (0,200,3).
+
+for 202.11.17, we need to look at images sizes with augmentation.ipynb and work out if the NVIDIA 200x66 dimension was a cropped size. Plus add images to report and document, e.g. what kind of preprocessing did NVIDIA do. Augmentation, etc.
+
+
+
 
 
 

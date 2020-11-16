@@ -164,3 +164,117 @@ This will generate a model, saved in the .h5 format, a python dictionary object 
 
 run experiment on vanilla code (no augmentation)
 Record cash crash and deviation from actual to predicted steering angles.
+
+\section{Correspondence with authors}
+
+Correspondence with \textbf{Urs Muller}, co-author of \cite{bojarski2016end}, with respect to network training settings.
+
+\begin{verbatim}
+From: Urs Muller <umuller@nvidia.com>Sent: 16 November 2020 19:30
+To: PG-Sikar, Daniel <Daniel.Sikar@city.ac.uk>
+Subject: Re: End to End Learning for Self-Driving Cars - Network Training Parameters
+
+CAUTION: This email originated from outside of the organisation. 
+Do not click links or open attachments unless you recognise the
+sender and believe the content to be safe.
+
+Hi Daniel,
+
+We used the following settings (we haven't documented them in any publication):
+
+loss function: MSE
+optimizer: adadelta
+learning rate: 1e-4 (but not really used in adadelta)
+dropout: 0.25
+
+Best regards,
+Urs
+
+From: PG-Sikar, Daniel <Daniel.Sikar@city.ac.uk>
+Sent: Sunday, November 15, 2020 6:53To: Urs Muller <umuller@nvidia.com>
+Subject: End to End Learning for Self-Driving Cars - Network Training Parameters
+ 
+External email: Use caution opening links or attachments
+
+Hi,
+
+With respect to your network training, I am investigating the effect of noise 
+(rainy images) on network performance, using your architecture as a baseline.
+
+Would you be able to point me towards any documentation detailing loss function, 
+learning rate, optimizer and layer droupout probabilities used when training 
+your network?
+
+Thanks in advance for any help and kind regards,
+
+Daniel Sikar | MSc Data Science Candidate
+School of Mathematics, Computer Science and Engineering
+City University of London    
+\end{verbatim}
+
+Corresponde with \textbf{Ankit Vora}, co-author of \cite{agarwal2020ford}, with respect to extracting steering angles from rosbag files.
+
+\begin{verbatim}
+Vora, Ankit (A.) <avora3@ford.com>
+Thu 05/11/2020 13:55
+CAUTION: This email originated from outside of the organisation. 
+Do not click links or open attachments unless you recognise the
+sender and believe the content to be safe.
+
+Hi Daniel,
+
+The information you are looking for will be in the /pose_ground_truth message. 
+That message represents the position and orientation of the vehicle.
+You will have to convert quaternions to yaw, pitch, roll angles and
+then use the yaw values.
+
+Ankit
+From: PG-Sikar, Daniel <Daniel.Sikar@city.ac.uk>
+Sent: Wednesday, October 28, 2020 7:00 PM
+To: Vora, Ankit (A.) <avora3@ford.com>
+Subject: Ford AV Dataset - obtaining steering angles
+ 
+Hi,
+I am studying your AV datast and have extracted the /imu data from provided .bag files, 
+I am trying to work out if the steering angle can be inferred from the data?
+Your article states the dataset provides 6DOF pose estimation.
+The extracted /imu topic looks like:
+
+header:
+  seq: 137596
+  stamp:
+    secs: 1501822140
+    nsecs: 610330104
+  frame_id: "imu"
+orientation:
+  x: 0.00133041249526
+  y: 0.00486443211508
+  z: 0.584795486661
+  w: 0.811165091756
+orientation_covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+angular_velocity:
+  x: -0.0018081133007
+  y: -0.0105949952451
+  z: -0.00118502619208
+angular_velocity_covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+linear_acceleration:
+  x: -0.0136899789795
+  y: 0.199539378285
+  z: 0.305044800043
+linear_acceleration_covariance: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+
+I guess I am interested in the yaw, which would be the value z, but
+having looking at the pattern it does not look like an angle that
+could be associated to steering, positive and negative values close
+to zero.
+
+Could you help me identify the steering angle, or if it is not
+present suggest any approaches to extract it from the data?
+
+Anyway help would be greatly appreciated.
+
+Daniel Sikar
+Daniel Sikar | MSc Data Science Candidate
+School of Mathematics, Computer Science and Engineering
+City University of London   
+\end{verbatim}
