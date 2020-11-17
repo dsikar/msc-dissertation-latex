@@ -166,7 +166,10 @@ run experiment on vanilla code (no augmentation)
 Record cash crash and deviation from actual to predicted steering angles.
 
 \section{Correspondence with authors}
+\label{corr_with_authors}
 
+\subsection{Correspondence with Urs Muller 1}
+\label{urs_muller1}
 Correspondence with \textbf{Urs Muller}, co-author of \cite{bojarski2016end}, with respect to network training settings.
 
 \begin{verbatim}
@@ -212,7 +215,37 @@ School of Mathematics, Computer Science and Engineering
 City University of London    
 \end{verbatim}
 
-Corresponde with \textbf{Ankit Vora}, co-author of \cite{agarwal2020ford}, with respect to extracting steering angles from rosbag files.
+\subsection{Correspondence with Urs Muller 2}
+\label{urs_muller2}
+\begin{verbatim}
+Urs Muller <umuller@nvidia.com>
+Tue 17/11/2020 11:47
+CAUTION: This email originated from outside of the organisation. Do not click links or open attachments unless you recognise the sender and believe the content to be safe.
+
+Hi Daniel,
+
+Yes, correct. We cropped everything above the horizon. The lower edge of the crop is as low as possible before the road gets blocked by the hood of the car.
+
+Best regards,
+Urs
+From: PG-Sikar, Daniel <Daniel.Sikar@city.ac.uk>
+Sent: Tuesday, November 17, 2020 2:56
+To: Urs Muller <umuller@nvidia.com>
+Subject: Re: End to End Learning for Self-Driving Cars - Network Training Parameters
+ 
+External email: Use caution opening links or attachments
+Hi Urs,
+
+Thanks for your reply. One more question with respect to the image size presented to your network - 66 pixel height by 200 width. Was this cropped from the size your camera sensors were generating? To keep only the road in the frame and omit anything above the horizon?
+
+Kind regards,
+
+Daniel    
+\end{verbatim}
+
+\subsection{Correspondence with Ankit Vora}
+\label{ankit_vora}
+Correspondence with \textbf{Ankit Vora}, co-author of \cite{agarwal2020ford}, with respect to extracting steering angles from rosbag files.
 
 \begin{verbatim}
 Vora, Ankit (A.) <avora3@ford.com>

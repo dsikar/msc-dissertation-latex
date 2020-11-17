@@ -4,6 +4,10 @@
 
 Procedures used to set up experiments are detailed in this appendix.
 
+\section{Cleaning data}
+
+Data corruption was found with Unity3D generated datasets where some .json files were not generated, leading to missing steering angles and throttle values for some images. There "orphaned" images were deleted with script src/utils/jsonclean.py
+
 \section{Running the car simulator}
 \label{RunningCarSimulatorForInference}
 

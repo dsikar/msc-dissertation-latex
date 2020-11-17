@@ -223,7 +223,7 @@ No loss graph, again, no augmentation trained quicker that previous
 
 \end{verbatim}
 
-\subsection{Run 11 - }
+\subsection{Run 11}
 \begin{verbatim}
 commit 6439a8758d8b46a1cbc3bcefc9db4c15f70820df
 model nvidia1
@@ -239,13 +239,240 @@ problems with loss graph (probably a bug introduced in adding info to graph?)
 
 \end{verbatim}
 
-\subsection{Run X - }
+\subsection{Run 12}
 \begin{verbatim}
-commit 
-model
-outputs
-dataset
+commit augment.ipynb
+model nvidia_baseline
+outputs 1
+dataset log2
 command:
+train.py --model=nvidia_baseline --outdir=../trained_models
+
+There is an issue with the aspect ration and cropping, need to investigate with augment.ipynb
+
+\end{verbatim}
+
+\subsection{Run 13}
+\begin{verbatim}
+commit e14e4bb9bdd0d322867c6cdba706478f662e71f6
+model nvidia_baseline
+outputs 1
+dataset log
+command:
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=1
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+
+Comment: ran ok for one epoch, images sized correctly.
+Adding more epochs
+\end{verbatim}
+
+\subsection{Run 14}
+\begin{verbatim}
+commit e14e4bb9bdd0d322867c6cdba706478f662e71f6
+model nvidia_baseline
+outputs 1
+dataset log
+command:
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+
+Comment: Started with very low accuracy.
+Stopped process as error seems to have gone out of range
+Epoch 5/100
+283/283 [==============================] 
+- 107s 377ms/step - loss: nan - acc: 5.5259e-05 
+- val_loss: nan - val_acc: 1.1004e-04
+\end{verbatim}
+
+\subsection{Run 15}
+\begin{verbatim}
+commit aec3290fdbc83e71e450deef650aa2d51873b886
+model nvidia_baseline
+outputs 2
+dataset log
+command:
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+Comment: Started at loss: nan - acc: 0.4305. Two outputs definitely helps. Why?
+Perhaps because model is not going around track at constant speed?
+
+\end{verbatim}
+
+\subsection{Run 16}
+
+\begin{verbatim}
+commit 10a3fc2f6d23e04f604914c1f8420e574a8ce808
+model nvidia_baseline
+outputs 2
+dataset log
+command:
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+Comment: Added linear activation in final layer, loss returning a reasonable value:
+loss: 1.2035 - acc: 0.5404
+Turned into nan on 3rd epoch. Accuracy going down, stopping process
+\end{verbatim}
+
+\subsection{Run 17}
+
+\begin{verbatim}
+Commit: a76169106a9087f5cc7e851fe09294699bb6240c 
+Model: nvidia_baseline
+Outputs: 2
+Dataset: log
+Command: 
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+
+Comment: Removed weight decay
+Still loss taking NaN values
+Epoch 13/100
+281/281 (...) val_loss: nan - val_acc: 0.4939
+
+\end{verbatim}
+
+\subsection{Run 18 }
+
+\begin{verbatim}
+Commit: baa8f3d066dc37d3c2bb7792fa9db4801824d1bb 
+Model: nvidia_baseline
+Outputs: 2
+Dataset: log
+Command: 
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+Comment: Removed dropout from last dense layer. Training loss NaN on first epoch.
+Dropout added again, loss back to under 1. Seems to have an influence, trying
+multiple dropout removals next.
+
+\end{verbatim}
+
+
+
+\subsection{Run 19}
+\begin{verbatim}
+Commit: 16a6f8ffc6399143e7ad5a6885ee9b44b3ca1dda
+Model: nvidia_baseline
+Outputs: 2
+Dataset: log
+Command: 
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/log/*.jpg
+--aug=True
+--preproc=True
+Comment: Left one dropout (.25) layer, loss still NaN.
+\end{verbatim}
+
+\subsection{Run 20}
+
+\begin{verbatim}
+Commit: d7e05ad1cdf0fab3a83975be259feb16830b5a38
+Rest same as 19
+Comment: Removed Dense(1164) layer. Loss is Nan on first epoch.
+Stopping run
+
+\end{verbatim}
+
+\subsection{Run 21}
+\begin{verbatim}
+Commit: d8fb9705dd676554dcf84a213b3c27d0e1f9d0c4 
+Rest same as 19
+Comment: Loss is Nan on first epoch
+Epoch 1/100
+(...)loss: nan - acc: 0.5017
+\end{verbatim}
+
+\subsection{Run 22}
+\begin{verbatim}
+Commit: ba4432568a589eac5a7d7c4927fa96e2f9e11bd1
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Using Glorot Uniform (Xavier) kernel initializer.
+Loss in Nan on first epoch. Training stopped.
+Epoch 1/100
+284/284 [==============================] - 101s 357ms/step - loss: nan - acc: 0.4609
+\end{verbatim}
+
+\subsection{Run 23}
+\begin{verbatim}
+Commit: 5cba2c7b01a160e7053e09220e63b1c575cf51e8  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: All biases initialized to 0.
+Loss in Nan on first epoch. Training stopped.
+Epoch 1/100
+283/283 (...) loss: nan 
+\end{verbatim}
+
+\subsection{Run 24}
+\begin{verbatim}
+Commit: 56aea3e16bb0f9db5735dfa536809389f35b12da  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Removed Dense(10) layer
+Loss in Nan on first epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 25}
+\begin{verbatim}
+Commit: 6a8ee72727db2508d2ff1ae35d068837a5b524ab  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Increased dropout to 0.5.
+Loss in Nan on second epoch. Training stopped.
+Epoch 1/100
+285/285 [==============================] - 100s 352ms/step 
+- loss: 0.0660 - acc: 0.6910 - val_loss: 0.0299 - val_acc: 0.7809
+Epoch 2/100
+285/285 [==============================] - 100s 350ms/step - loss: nan - acc: 0.5000
+\end{verbatim}
+
+\subsection{Run 26}
+\begin{verbatim}
+Commit: e4a287dc816a2a4d2c47893b131c710b2ecb8594  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Spreading 0.5 dropout between layers (0.1 each).
+Loss in Nan on third epoch. Training stopped.
+Epoch 3/100
+284/284 (...) loss: nan
+\end{verbatim}
+
+\subsection{Run 26}
+\begin{verbatim}
+Commit: 2e5bf1b7002a2ddbbe2fea003fce010627d723e2  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed layer dropout to 0.15.
+Loss in Nan on first epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 27}
+\begin{verbatim}
+Commit:   
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed layer dropout to 0.05.
+Loss in Nan on first epoch. Training stopped.
 \end{verbatim}
 
 
