@@ -475,6 +475,78 @@ Comment: Changed layer dropout to 0.05.
 Loss in Nan on first epoch. Training stopped.
 \end{verbatim}
 
+\subsection{Run 28}
+\begin{verbatim}
+Commit: 9a70ff7e194736a475bdce0b6eddc65aad6ea8c0  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed number of kernels on 2nd Conv layer to 32.
+Loss in Nan on first epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 29}
+\begin{verbatim}
+Commit:   
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed number of kernels on 3nd Conv layer to 64.
+Loss in Nan on first epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 30}
+\begin{verbatim}
+Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed aspect ratio to 160x120
+Loss in Nan on 2nd epoch. Training stopped.
+Epoch 2/100
+283/283 (...) loss: nan - acc: 0.5982
+\end{verbatim}
+
+\subsection{Run 31}
+\begin{verbatim}
+Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed aspect ratio to 160x120
+Loss in Nan on 2nd epoch. Training stopped.
+Epoch 2/100
+283/283 (...) loss: nan - acc: 0.5982
+\end{verbatim}
+
+\subsection{Run 32}
+\begin{verbatim}
+Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
+Model: nvidia_baseline
+Outputs: 2
+Dataset: jungle1
+Command: 
+train.py --model=nvidia_baseline
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/jungle1/log/*.jpg
+--aug=True
+--preproc=True
+Comment: Loss in Nan on 1st epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 33}
+\begin{verbatim}
+Commit: 861095ac1a997e0f460aca6ceda93df98b7d0a48  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Explicitly setting strides=(1,1) is conv layers 4 and 5.
+Loss in Nan on 1st epoch. Training stopped.
+\end{verbatim}
+
+\subsection{Run 33}
+\begin{verbatim}
+Commit: d0b7160793ee433ed25724d966a7d3bd85ae8ffa  
+Model, Outputs, Dataset and Command: Same as 19
+Comment: Changed batch size to 64
+Loss is NaN on 7th epoch
+Epoch 7/100
+567/567 (...) loss: nan
+\end{verbatim}
+
+
+
 
 
 
