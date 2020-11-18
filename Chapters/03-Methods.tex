@@ -67,41 +67,31 @@ is generalized to parameterized dynamical systems (hence including second
 order and other recurrent architectures)" \cite{hochreiter2001gradient}
 % LC - 14 pages
 
-\section{Driving simulators}
+\section{Driving Simulators}
 
-Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the \cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020}).
-Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file. The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times to gather data. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
-The data is then moved from the output directory to a labelled directory of choice (details in appendix).
+Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community still uses behavioral learning to train their self-driving CNNs (see correspondence with main maintainer in \ref{corr:ellerbach}
+).  
+ 
+Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file (\cite{SDSandboxSim}). The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
+The data is then ready to be processed and presented to a neural network.
 
+Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \ref{fig:UdacitySdSandboxAutonomous}) the options being \textit{AUTONOMOUS MODE} and \textit{Auto Drive w Rec} respectively. Output image sizes are 320x160 and 160x120 respectively.
 
-
-Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \ref{fig:UdacitySdSandboxAutonomous}).
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.22]{UdacitySdSandboxSim.png}
-\caption{Left to right: legacy Udacity and SDSandbox Autonomous Driving menus}
+\includegraphics[width=\textwidth]{UdacitySdSandboxSim.png}
+\caption{Left to right: legacy Udacity and SDSandbox Autonomous Driving Simulators}
 \label{fig:UdacitySdSandboxAutonomous}
 \end{figure}
 
 Setting up the simulator and prediction engine is further detailed in Appendix
 
-
 \ref{RunningCarSimulatorForInference}.
 
-\section{Data Augmentation}
-To avoid overfitting, the data is augmented by: cropping the image to a height band that excluded horizon and car shadow, resized to required model input size, converted from RGB to YUV, 
-% get images from http://localhost:8890/notebooks/augument.ipynb
+\section{Data Augmentation and Pre-Processing}
 
-
-\section{Development environments}
-
-Models were created in different environments to accomodate the heavy workload. Intel DevCloud 
-
-\subsection{Digital Images}
-Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
-
-\subsection{Data Augmentation and Pre-Processing}
+% Missing an introduction on why this is important
 
 For the NVIDIA baseline model, assumed image capture size is 320wx160h pixels (to be confirmed), and the 200wx66h pixel image presented to network is a crop containing road and excluding horizon. The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
 
@@ -113,6 +103,48 @@ For the NVIDIA baseline model, assumed image capture size is 320wx160h pixels (t
 \end{figure}
 
 Prior to presenting pixel colour channel values to the network, a number of pre-processing steps have become standard with neural network classifiers and regressors applied to computer vision.
+
+The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) corresponding to steering angles. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s  in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being recorded. The maximum steering angle, is set in the simulator with respect to a car. In this case it is plus or minutes 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle. The data shows a high bias towards right turns because the simulated vehicle drives clockwise around the track.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/GeneratedTrackPlusHistogram.png}
+ \caption{Normalized histogram of Unity 3D SDSandbox generated track steering angles for 45410 image frames. The corresponding track is shown on the right}
+ \label{fig:GeneratedTrackPlusHist}
+\end{figure}
+
+Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers removed was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/GeneratedRoadPlusHistogram.png}
+ \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right}
+ \label{fig:GeneratedRoadPlusHist}
+\end{figure}
+
+%\section{Data Augmentation}
+%To avoid overfitting, the data is augmented by: cropping the %image to a height band that excluded horizon and car shadow, %resized to required model input size, converted from RGB to YUV, 
+% get images from http://localhost:8890/notebooks/augument.ipynb
+
+\section{Adding rain to images}
+% Missing an introduction discussing why this is being done
+To add rain to the testing images, \textit{Automold Road Augmentation Library} (\cite{Saxena2017}) is used, consisting of a Python module capable of adding rain-like effect to images. Figure \ref{fig:AutomoldRoadAugmentationLibrary} shows on the top row, a real-life image and on the bottom row, an image created by SDSandbox simulator. The columns from left to right have: no rain added, light rain added, heavy rain with a -10 degree slant added and torrential rain with a 20 degree slant added.  
+During inference (running steering predictions) the image is (in addition to same pre-processing, and excluding augmentation, performed during training time) processed such that it will contain rain never seen before by the network. The outcome is uncertain, given the effect of random noise on CNNs (see section TODO add section with discussion on one pixel attacks), although the flattening effect of the RGB to YUV transformation (see section TODO add section with RGB to YUV discussion) may have a desirable filtering effect.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/AutomoldRain.png}
+\caption{Left to right: images}
+\label{fig:AutomoldRoadAugmentationLibrary}
+\end{figure}
+
+\section{Development environments}
+
+Models were created in different environments to accomodate the heavy workload. Intel DevCloud 
+
+\subsection{Digital Images}
+Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
+
+
 
 
 Explain:  
