@@ -108,7 +108,7 @@ The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHi
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/GeneratedTrackPlusHistogram.png}
- \caption{Normalized histogram of Unity 3D SDSandbox generated track steering angles for 45410 image frames. The corresponding track is shown on the right}
+ \caption{Normalized histogram of Unity 3D SDSandbox steering angles for 45410 image frames. The corresponding track (small\_looping\_couse) is shown on the right}
  \label{fig:GeneratedTrackPlusHist}
 \end{figure}
 
@@ -124,6 +124,32 @@ Another simulated circuit used was the \textit{Generated Road}, which creates a 
 %\section{Data Augmentation}
 %To avoid overfitting, the data is augmented by: cropping the %image to a height band that excluded horizon and car shadow, %resized to required model input size, converted from RGB to YUV, 
 % get images from http://localhost:8890/notebooks/augument.ipynb
+
+% \section{Training a model}
+
+\section{Predicting steering angles for a simulated track}
+
+To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{CITATIONNEEDED} framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
+\textbf{DESCRIBE HANDSHAKING} \textbf{DESCRIBE TCP} 
+\textbf{DESCRIBE GRAPH}
+Figure \ref{PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{TCPFLOW} a log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} amd created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{reffigure}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/PredSteeringAnglestcpflowNvidia1.png}
+ \caption{Predicted (blue) and ground-truth simulator (orange) steering angles. The simulator steering angle values in this case are obtained from data packets sent over the TCP network.}
+ \label{fig:PredSteeringAnglestcpflowNvidia1}
+\end{figure}
+
+Taking this technique one step further, a video can be created using the image sent by simulator, next to the processed image presented to network. Together with the steering angle that would be used by simulator with the steering angle produced by prediction engine (predict\_client.py) which is used by the simulator.
+This also can produced a metric representing \textit{goodness-of-steer}, as seen in equation     \ref{eq:goodness_of_steer}:
+
+\begin{equation}
+    \label{eq:goodness_of_steer}
+    g_s(p,g) = \frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c
+\end{equation}
+where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized). The sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
+
 
 \section{Adding rain to images}
 % Missing an introduction discussing why this is being done
