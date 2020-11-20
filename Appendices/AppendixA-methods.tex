@@ -1,5 +1,5 @@
 % Appendix A
-\label{AppendixA} % For referencing this appendix elsewhere, use \ref{AppendixA}
+\label{AppendixA-methods} % For referencing this appendix elsewhere, use \ref{AppendixA}
 \chapter{Methods} % Main appendix title
 
 Procedures used to set up experiments are detailed in this appendix.
@@ -44,7 +44,16 @@ The prediction script then runs, and JSON (\cite{pezoa2016foundations}) a lightw
 \end{verbatim}
 The packets carry the image sent from sim to prediction engine, and returned steering angle prediction.
 
+\section{Generating Plots}
 
+This section describe the tools used to generate plots.
+
+\subsection{Steering angle comparison}
+
+Plots were generated with Jupyter Notebook:
+\begin{verbatim}
+    src/utils/
+\end{verbatim}
 
 \section{Datasets}
 

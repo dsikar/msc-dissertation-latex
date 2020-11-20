@@ -67,6 +67,11 @@ is generalized to parameterized dynamical systems (hence including second
 order and other recurrent architectures)" \cite{hochreiter2001gradient}
 % LC - 14 pages
 
+\section{ROS}
+The Robot Operating System (\cite{quigley2009ros}) is middleware, that is, placed between the operating system an the application program. It helps manage complexity and distributed systems, such as a managing the process of recording several sensor outputs in a moving vehicle. The term "plumbing" is sometimes used, as parts of a distributed application are connection with "data pipes".  
+ROS was used to store data from the FORD AV dataset.
+
+
 \section{Driving Simulators}
 
 Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community still uses behavioral learning to train their self-driving CNNs (see correspondence with main maintainer in \ref{corr:ellerbach}
@@ -86,7 +91,6 @@ Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \re
 \end{figure}
 
 Setting up the simulator and prediction engine is further detailed in Appendix
-
 \ref{RunningCarSimulatorForInference}.
 
 \section{Data Augmentation and Pre-Processing}
@@ -129,10 +133,10 @@ Another simulated circuit used was the \textit{Generated Road}, which creates a 
 
 \section{Predicting steering angles for a simulated track}
 
-To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{CITATIONNEEDED} framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
+To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{brockman2016openai} (TODO FURTHER DISCUSS PLATFORM) framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
 \textbf{DESCRIBE HANDSHAKING} \textbf{DESCRIBE TCP} 
 \textbf{DESCRIBE GRAPH}
-Figure \ref{PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{TCPFLOW} a log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} amd created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{reffigure}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
+Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{garfinkel2013passive}. A log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} and created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{reffigure}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
 
 \begin{figure}[ht]
  \centering 
@@ -150,9 +154,27 @@ This also can produced a metric representing \textit{goodness-of-steer}, as seen
 \end{equation}
 where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized). The sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
 
+\section{Identifying rainy images with Amazon Mechanical Turk}
+
+Amazon Mechanical Turk \cite{crowston2012amazon} is an online marketplace where jobs can be outsourced using the \textit{crowsourcing} model  (\cite{vukovic2009crowdsourcing}) which delivers a scalable workforce that may be adjusted in size as required. Mechanical Turk has been referred to as \textit{artificial artificial intelligence} (\cite{dai2011artificial}) where a task requiring human intelligence level, such as labelling an image, can be assigned to a real person, in lieu of writing  a computer algorithm capable of doing so. Mechanical Turk, launched in 2005, was instrumental in labelling the Imagenet (\cite{deng2009imagenet}) dataset which lead to advances in computer vision image recognition with a number of deep (TODO explain "deep" at some point) network architectures ( \cite{krizhevsky2012imagenet}, \cite{he2015deep}, \cite{szegedy2014going} and \cite{simonyan2015deep}). 
+
+For this study Amazon SageMaker Ground Truth (\cite{SageMakerGroundTruthDocumentation2020}) was used. It is a wrapper for Mechanical Turk, and facilitates the process of setting up the image labelling job, especially the UI (user interface) that the labeler workforce must used.  
+The aim here is to find segments of real life footage that may contain rain. The Ford AV (\cite{agarwal2020ford}) has sections labeled as "cloudy" so may contain rain. 100 images, chosen at regular intervals, the expectation being this may help narrow down the location of rainy images, if any. To test the accuracy of the service, 5 images with rain are added to the dataset. The expectation being labels for these 5 images will be "rain". 
+% https://us-east-2.console.aws.amazon.com/sagemaker/groundtruth?region=us-east-2#/labeling-jobs/create
+The unlabelled dataset is stored on AWS S3 (\cite{AmazonS3Documentation2020}). An "Image Classification (Single Label)" "Task type" is chosen, i.e. workers will verify if the proposed label "Rainy image" is correct. The process workflow is shown of Figure \ref{fig:amazon-ground-truth}.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/SageMakerGroundTruth.png}
+ \caption{Amazon SageMaker Ground Truth workflow: a dataset is placed on Amazon S3, labeling job is created, workers label data using a labeling user interface resulting in a labeled dataset}
+ \label{fig:amazon-ground-truth}
+\end{figure}
+
+
 
 \section{Adding rain to images}
 % Missing an introduction discussing why this is being done
+The synthetic datasets used contain no rain. To test models with rainy images, rain must be added. 
 To add rain to the testing images, \textit{Automold Road Augmentation Library} (\cite{Saxena2017}) is used, consisting of a Python module capable of adding rain-like effect to images. Figure \ref{fig:AutomoldRoadAugmentationLibrary} shows on the top row, a real-life image and on the bottom row, an image created by SDSandbox simulator. The columns from left to right have: no rain added, light rain added, heavy rain with a -10 degree slant added and torrential rain with a 20 degree slant added.  
 During inference (running steering predictions) the image is (in addition to same pre-processing, and excluding augmentation, performed during training time) processed such that it will contain rain never seen before by the network. The outcome is uncertain, given the effect of random noise on CNNs (see section TODO add section with discussion on one pixel attacks), although the flattening effect of the RGB to YUV transformation (see section TODO add section with RGB to YUV discussion) may have a desirable filtering effect.
 
@@ -165,27 +187,11 @@ During inference (running steering predictions) the image is (in addition to sam
 
 \section{Development environments}
 
-Models were created in different environments to accomodate the heavy workload. Intel DevCloud 
+Three development environments are planned to be used, a local environment to run the Unity3D SDSdanbox application, and two additional environments, the Intel Dev-Cloud (\cite{IntelDevCloud2020}) and City University's Camber server (\cite{Camber2019}).
+% Further develop running jobs in these environments
 
 \subsection{Digital Images}
 Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
-
-
-
-
-Explain:  
-\begin{itemize}
-    \item Convolution
-    \item pre-processing
-    \item Kernel/filter size
-    \item Stride
-    \item padding
-    \item activation function
-    \item Loss function
-    \item optimisers
-    \item Back-propagation
-    % on this topic, a lot to cite, from Paul Werbos' PhD thesis "Beyond Regression: New Tools for Prediction and Analysis in the Behavioural Sciences, through Rummelhart et al. and LeCunn et al.
-\end{itemize}
 
 Maybe cite goodfellow once and do a joblot on items.  
 
@@ -244,13 +250,12 @@ Another possible method "Estimation of the Steering Angle Based on Extended Kalm
 
 \subsection{Data balancing}
 
-The data was found to be unbalanced, with most steering angles around the middle
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/bins.png}
- \caption{Diagram showing bins centered around zero degrees, meaning most of time car is driving straight. Binning diagrams for all datasets can be found in appendix B}
- \label{fig:bins-placeholder}
-\end{figure}
+Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angles are expected to be close to zero (car driving straight). So some form of undersampling may need to be used to address the issue.
+
+
+
+
+
 
 \subsection{Data Augmentation}
 The data was augmented with several methods
@@ -282,14 +287,14 @@ The size of feature maps generated by each convolutional layer is determined wit
 \end{equation}
 where $n_{out}$ is output size of convolved feature map, $n_{in}$ is input size of image or feature map, $p$, $k$ and $s$ are padding, kernel and stride size respectively.  
  
-For example, to determine size of feature maps in the first convolutional layer $n_{out}=\lfloor(66+(2\times0)-5)/2\rfloor)+1=31$, $n_{out}=\lfloor(200+(2\times0)-5)/2\rfloor+1=98$. The Keras (\cite{chollet2015keras}) machine learning framework is used to build the model. The calculation for number of trainable parameters (weights) in a convolutional layer is assumed to be:
+For example, to determine size of feature maps in the first convolutional layer $n_{out}=\lfloor(66+(2\times0)-5)/2\rfloor)+1=31$, $n_{out}=\lfloor(200+(2\times0)-5)/2\rfloor+1=98$. The Keras (\cite{chollet2015keras}) machine learning framework is used to build the model. The calculation for number of trainable parameters (weights) in a convolutional layer is given in equation \ref{eq:trainable_params}:
 \begin{equation}
-    \label{eq:feature_map}
+    \label{eq:trainable_params}
     n_p= m \times n \times  d \times k + d
 \end{equation}
-where $m$ and $n$ are the convolutional kernel dimensions, $d$ is the number of feature maps in the current layer and $k$ is the number of feature maps in the previous layer. Note $d$ is added to acccount for \textit{bias} term. For example, the number of trainable parameters for the first convolutional layer in \ref{NVIDIA_baseline} is given by $n_p = 5 \times 5 \times 24 \times 3 + 24 = 1,824$. The number of trainable parameters in a fully connected layer is given by:
+where $m$ and $n$ are the convolutional kernel dimensions, $d$ is the number of feature maps in the current layer and $k$ is the number of feature maps in the previous layer. Note $d$ is added to acccount for \textit{bias} term. For example, the number of trainable parameters for the first convolutional layer in \ref{NVIDIA_baseline} is given by $n_p = 5 \times 5 \times 24 \times 3 + 24 = 1,824$. The number of trainable parameters in a fully connected layer is given by equation \ref{eq:trainable-parmas}:
 \begin{equation}
-    \label{eq:feature_map}
+    \label{eq:trainable-parmas}
     n_p= m \times n + n
 \end{equation}
 where $m$ is the number of inputs in previous layer and $n$ is number of neurons in current layer. Note second term $n$ is added to account for \textit{bias} term. For example, for the first fully connected layer in \ref{NVIDIA_baseline} the number of parameters is given by $n_p = 1164 \times 100 = 1,342,092$, where the inputs are values from previous flattened layer, that is, a vectorized representation of the last convolutional layer feature maps.  

@@ -793,11 +793,16 @@ for 2020.11.17, we need to look at images sizes with augmentation.ipynb and work
 
 Added sections to Methods and appendix D. 
 
-Tasks for 2020.11.19. Finish GetSteering.py (maybe find a better name, too) to plot a relative steering angle deviation (y) time series of the predicted steering compared to actual steering sent by sim. This last one, in theory, should be the steering that would have been taken by sim hand it been in PID mode (TBC).
+Tasks for 2020.11.19. Finish GetSteering.py (maybe find a better name, too) to plot a relative steering angle deviation (y) time series of the predicted steering compared to actual steering sent by sim. This last one, in theory, should be the steering that would have been taken by sim hand it been in PID mode (TBC). Update - This does not seem to be the case. More work need investigating code on sim side to determine what exactly is the steering_angle attribute sent by sim.
 
 Also, save a series of frames, as sent by sim during autodrive, together with the preprocess frame, side by side to then make a video showing what the sim sees and what the neural network is seeing.
 
 Finally, time allowing, rerun nvidia_baseline.
+
+2020.11.20
+
+There seems to be an issue with the small loop circuit data. Loss resulting in NaN on many runs. Once data was changge to genRoad training loss started converging againg. 
+It seems to be a good point to try nvidia_baseline again, maybe Alexnet and another toy ResNet, VGGNet and or Inception. Get as many results as possible tomorrow. Then Sunday and Monday crack on with the writing to try to get to a reasonable first draft. Submit by Monday night WITHOUT fail, whatever is ready.
 
 
 
