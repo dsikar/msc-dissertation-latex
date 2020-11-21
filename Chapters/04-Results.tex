@@ -21,9 +21,46 @@ It is essential that you identify clearly what you accomplished or produced your
 \section{Network training}
 
 % write up, label runs and make reference
+The first working model (able to successfully self-drive around the Generated Track
+
+% probably best to more this to results section and reference here
+\begin{verbatim}
+# data: genRoad (log2 renamed)
+# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+$ python train.py --model=sanity --outdir=../trained_models
+\end{verbatim}
+this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+and run as per procedure described in (TODO add reference).
+
+
+
+\begin{verbatim}
+# data: genRoad (log2 renamed)
+# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+$ python train.py --model=sanity --outdir=../trained_models
+\end{verbatim}
+this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+and run as per procedure described in (TODO add reference).
+
+\subsection{Modifications to original source code}
+Models are trained with code written in train.py, models.py and conf.py. This code has been modified from the original. To compare changes a git diff can be copying the original code over the source code used in this project and performing a "git diff"
+\begin{verbatim}
+# clone repository for dissertation
+$ git clone https://github.com/dsikar/sdsandbox
+# clone original
+$ git clone https://github.com/tawnkramer/sdsandbox sandbox_orig
+# copy original over dissertation
+$ cp sandbox_org/src/* sdsandbox/src
+# compare
+$ cd sdsandbox 
+$ git diff
+\end{verbatim}
+
 
 Starting with the NVIDIA baseline, a number of hyperparameters were trialed. The initial setup failed to generate usable models. 
 The table below presents training results for best trained models.
+
+% training with one parameter
 
 \section{Simulated self-driving car}
 
@@ -35,4 +72,9 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 \begin{verbatim}
 ./Assets/Scripts/Logger.cs
 \end{verbatim}
+
+\section{Generated Track performance}
+
+
+The $G_s$ (goodness-of-steer) model performance score, was obtained by recording one full lap and comparing steering angles with model predictions.
 

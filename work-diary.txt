@@ -801,8 +801,20 @@ Finally, time allowing, rerun nvidia_baseline.
 
 2020.11.20
 
-There seems to be an issue with the small loop circuit data. Loss resulting in NaN on many runs. Once data was changge to genRoad training loss started converging againg. 
+There seems to be an issue with the small loop circuit data. Loss resulting in NaN on many runs. Once data was changge to genRoad training loss started converging again. 
 It seems to be a good point to try nvidia_baseline again, maybe Alexnet and another toy ResNet, VGGNet and or Inception. Get as many results as possible tomorrow. Then Sunday and Monday crack on with the writing to try to get to a reasonable first draft. Submit by Monday night WITHOUT fail, whatever is ready.
+
+2020.11.21 - 
+
+Remaining full days left till deadline: max 18 days 
+21, 22, 23, 28, 29 , 30
+5, 6, 12, 13, 19, 20
+12 days
++4 hols last week
+15, 16, 17, 18
++ 1 "processional" day Dec 21st
+
+1. Record one lap of generated track
 
 
 

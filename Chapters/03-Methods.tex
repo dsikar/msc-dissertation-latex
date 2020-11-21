@@ -93,6 +93,40 @@ Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \re
 Setting up the simulator and prediction engine is further detailed in Appendix
 \ref{RunningCarSimulatorForInference}.
 
+\subsection{Installing the driving simulator}
+\label{recording-one-lap}
+\textit{Unity Hub} is downloaded and run.
+
+The code is cloned from:
+\begin{verbatim}
+git clone https://github.com/dsikar/sdsandbox    
+\end{verbatim}
+This will download the source code to the sdsandbox directory.
+
+Unity Hub is then run:
+\begin{verbatim}
+$ sudo ./UnityAppImage --no-sandbox
+\end{verbatim}
+
+The project can then be added through Unity Hub by adding the sdsandbox/sdsim directory.
+The "menu" scene is selected, and the play arrow button clicked. "Generated Track" is double-clicked, then "Auto Drive w Rec" option selected. This will set the simulator car going around the track. Once a lap is completed, the Stop button is clicked.  
+Images in .jpg format and steering angles stored in .json files are created in sub-directory sdsim/log, and are ready to be moved to the "dataset" directory:
+\begin{verbatim}
+$ mv sdsim/log dataset/unity/genTrackOneLap
+\end{verbatim}
+
+\subsection{Training models}
+
+Models are trained with the src/train.py script.
+
+\subsection{Generating graphs}
+
+Two graphs are used, steering angle histograms and steering angle plots. A set of functions have been written for this purpose in steerlib.py. For example to generate a histogram of steering angles from a 
+% maybe move to methods or results, explaining here for now
+
+
+
+
 \section{Data Augmentation and Pre-Processing}
 
 % Missing an introduction on why this is important
