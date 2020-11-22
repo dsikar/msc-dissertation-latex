@@ -1,6 +1,6 @@
 
 \chapter{Results}
-
+% LC 25pgs
 \label{Results} 
 
 This chapter presents the outputs that you produced, by applying the methods that you have selected, including e.g. analysis, design, prototyping, experimental work, evaluation, etc.  
@@ -15,7 +15,6 @@ It is essential that you identify clearly what you accomplished or produced your
 %	Network training
 %-----------------------------------
 
-\section{Extracting steering angles with ROS}
 
 
 \section{Network training}
@@ -78,3 +77,43 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 
 The $G_s$ (goodness-of-steer) model performance score, was obtained by recording one full lap and comparing steering angles with model predictions.
 
+\section{Datasets}
+
+The following training datasets were generated:
+
+Origin  Directory   Number of files Comment
+SDSandbox   unity/smallLoopingCourse/log/* 34443 from small\_looping\_course
+SDSandbox   unity/warehouse/*   41126 From Warehouse course
+SDSandbox   unity/smallLoop/*   45422   From small\_looping\_course
+SDSandbox   unity/roboRacingLeague/* 12778 From "Robot Racing League" course
+SDSandbox   unity/log\_sample   25791   From small\_looping\_course
+SDSandbox   unity/genRoad 280727 From "Generated Road" course
+
+
+
+Following the list of data deliverables (\ref{Deliverables-Datasets}) the Udacity data consisting of two files 
+
+\subsection{Locating rainy sections with Mechanical Turk}
+For Mechanical Turk, the data that looked most promising was Ford V2 Log 1 and V3 Log 1, both described as "freeway, overpass, bridge, cloudy". We drew 50 images uniformly from each log and added 5 images with rain that were expected to be labelled as such. The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
+% rainy files created with automold/RainyImagesDissertationPlot.ipynb
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
+\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications.}
+\label{fig:MechTurkCreateJob}
+\end{figure}
+Labeling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
+The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
+There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
+The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
+The images were labelled by Mechanical Turk workers and results made available in a json encoded file (datasets/mechanical-turk/2020-11-21\_22 45 37.json) showing no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain". Figure \ref{fig:MechTurkLabeledImages}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
+\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
+\label{fig:MechTurkLabeledImages}
+\end{figure}
+
+%-----------------------------------
+%	Network running
+%-----------------------------------

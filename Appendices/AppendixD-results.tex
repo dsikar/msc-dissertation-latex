@@ -570,7 +570,7 @@ Epoch 2/100
 Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
 Model: nvidia_baseline
 Outputs: 2
-Dataset: jungle1
+Dataset: smallLoopingCourse (jungle1) (34443)
 Command: 
 train.py --model=nvidia_baseline
 --outdir=../trained_models
@@ -661,7 +661,7 @@ Given previous results, this run reverts code to commit 436f635f
 Commit: 436f635fa183740832270ea7db6869918a786d55
 Model: nvidia1
 Outputs: 2
-Dataset: log_sample (12894) small looping circuit
+Dataset: log_sample (12894) 
 Command: python train.py --model=sanity --outdir=../trained\_models
 Environment: simbox
 Comment: This model was trained with the committed code from November 7th, which produced the first success lap drive with not crashes or steering off the track.
@@ -698,14 +698,18 @@ commit 9908eb32975fe33075fefad73f411896456b4a84
 commit 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
 commit 8ebd02ab9556a0c2869e9b551417a6e28d5f86cf
 
+Data added on November 7th includes:
+smallLoopingCourse/log/logs_Sat_Nov__7_11_11_06_2020
+so this could be it.
+
 \end{verbatim}
 
-\subsection{37 - 20201120184912_sanity.h5}
+\subsection{37 - 20201120184912\_sanity.h5}
 \begin{verbatim}
 Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
 Model: nvidia1
 Outputs: 2
-Dataset: jungle1 (34439) generated track
+Dataset: smallLoopingCourse (jungle1) (34443 images) small_looping_course
 Command: python train.py --model=sanity --outdir=../trained\_models
 Environment: simbox
 Comment: This was the 3rd commit of the day
@@ -714,9 +718,30 @@ being used. To be confirmed. Now running nvidia1 on genRoad
 both on simbox and camber, loss still converging to 0
 and not in NAN range. 
 
+This model took see ../trained_models/sanity/20201120184912\_sanity.log
+Total training time: 16:08:01
+Training loss: 0.010
+Validation loss: 0.008
+Training accuracy: 0.858
+Validation accuracy: 0.858
+
 
 \end{verbatim}
 %PAUSE HERE - WRITING FUNCTION TO PLOT STEERING ANGLES AND BINS FROM LOGS
+
+
+\subsection{38 - }
+\begin{verbatim}
+Commit: e9c493508acc6e053742a5e1d9d6e0128a477735
+Model: 
+Outputs: 
+Dataset: 
+Command: 
+Environment: 
+Comment: 
+Command
+
+\end{verbatim}
 
 \subsection{XX - }
 \begin{verbatim}

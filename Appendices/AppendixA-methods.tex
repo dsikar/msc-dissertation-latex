@@ -119,6 +119,11 @@ Thus a timestamp can be obtained for each image extracted. This is done with scr
 While the steering angles are extracted 
 The image can be matched with a steering angle by obtaining the timestamp of image, the full secs 
 
+\section{Automold}
+The rainy images were created with:  
+\begin{verbatim}
+github.com/dsikar/automold/RainyImagesDissertationPlot.ipynb
+\end{verbatim}
 
 \section{Development Environments}
 
@@ -186,4 +191,12 @@ $ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow.log
 $ python predict_client.py \
 --model=../trained_models/nvidia_baseline/20201120124421\_nvidia\_baseline.h5
 \end{verbatim}
+
+% there probably will not be enough time to use ROS at scale so parking this for now in appendix, might leave for future reference or remove
+\section{ROS}
+The Robot Operating System (\cite{quigley2009ros}) is middleware, that is, placed between the operating system an the application program. It helps manage complexity and distributed systems, such as a managing the process of recording several sensor outputs in a moving vehicle. The term "plumbing" is sometimes used, as parts of a distributed application are connection with "data pipes".  
+ROS was used to store data from the FORD AV dataset.
+
+% \section{Extracting steering angles with ROS}
+Info on how to get a steering angle (YAW) using quaternions and the IMU data.
 

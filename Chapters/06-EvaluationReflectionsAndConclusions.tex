@@ -3,8 +3,25 @@
 
 \label{Eval} 
 
-This chapter should evaluate the project work as a whole. Here the original choice of objectives, the literature examined, the methods used, the planning, etc. are all reviewed to see what has been achieved by undertaking the project. There may be a summary of general conclusions drawn from the work done, highlighting the particular contribution of your project. You should also consider the implications of these conclusions. Discuss any proposals that you might make for further work, having discovered what you now know. It is also important to include a reflective section covering what you have learned from the project process. What would you do differently if you were to start again, knowing what you now know? Your report MUST include adequate Evaluation, Reflections and Conclusions to gain a passing grade.  
+%This chapter should evaluate the project work as a whole. Here the original choice of objectives, the literature examined, the methods used, the planning, etc. are all reviewed to see what has been achieved by undertaking the project. There may be a summary of general conclusions drawn from the work done, highlighting the particular contribution of your project. You should also consider the implications of these conclusions. Discuss any proposals that you might make for further work, having discovered what you now know. It is also important to include a reflective section covering what you have learned from the project process. What would you do differently if you were to start again, knowing what you now know? Your report MUST include adequate Evaluation, Reflections and Conclusions to gain a passing grade.  
 
 Here would be a good place, perhaps, to discuss "Understanding deep learning requires rethinking generalization", Zhang ICLR 2017, on deep models fitting random data (noise) perfectly.
 
-The absence of good quality labelled datasets has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
+TBC - TODO. Some points to reflect:
+\begin{itemize}
+    \item[--] What this project demonstrated
+    \item[--] What were the limitations
+    \item[--] What have I learnt
+    \item[--] What are the contributions
+    \item[--] What would I have done differently - narrowed the scope for sure.
+    \item[--] Here would be a good place, perhaps, to discuss "Understanding deep learning requires rethinking generalization", Zhang ICLR 2017, on deep models fitting random data (noise) perfectly. 
+    \item[--] Recommendations for future work: although CNNs are not well understood, they are heavily used. A lot of effort has gone into creating models that are and could be harnessed for self-driving, such as ResNets and deeper architectures. These deeper models have been applied successfully to multi-class classification problems. Assuming the network design somehow is optimized for this type of task it would be interesting to transform regression problems into multi-class classification problems by quantizing (assigning a continuous value into a discrete value) and binning the outputs, subject to the quantized values having acceptable precision, in the case of a self-driving car, the minimum acceptable steering change, as the network output would become discrete and cease to be continuous as the network would not longer be a regression model.
+    Perhaps such models could also produce usable results for computer vision applications.
+\end{itemize}
+%The absence of good quality labelled datasets has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
+
+
+%% Ethical issues - maybe leave to discussion and further work
+%This also raises issues related to safety, liability, privacy, cybersecurity, and industry %risks \cite{Taeihagh_2018}
+% Also, perhaps a discussion on social responsibility of developing systems that put people out of work
+`

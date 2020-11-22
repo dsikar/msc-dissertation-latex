@@ -11,7 +11,7 @@
 
 \section{Background}
 
-Chammas - 503 words, 7 references
+% Chammas - 503 words, 7 references
 % references
 % 1. Self driving robot with Mainframe processor
 % 2. European investment, Dickmans
@@ -30,61 +30,43 @@ Chammas - 503 words, 7 references
 %% Given the above, how reliable are self-driving cars relying on end-to-end ConvNets in the rain?
 %% This project builds on something or other, uses natural and synthetic datasets
 
+% What motivates the study of autonomous vehicles
+The development of self-driving cars, a particular case of autonomous vehicle (AV), is motivated by a number of goals, of a practical, safety, public interest and economic nature.
 %% Practical goal
- The ultimate goal of self-driving cars is to transport people from one place to another without any help from a driver (\cite{s20092544}).
+ From a practical perspective, the goal is "to transport people from one place to another without any help from a driver" (\cite{s20092544}).
  %% Public health perspective
- From a public health perspective, the overarching
-goal of autonomous vehicles is to
+ From a public health perspective, to
 transform the current approach
 to automotive safety from reducing injuries after collisions to
  complete collision prevention (\cite{Fleetwood_2017}).
 %% Business models
-Autonomous vehicles fleets allow for new shared autonomous mobility business models 
-\cite{riggs2019business}
-Shared autonomous electric vehicle (SAEVs) fleets (\cite{loeb2019fleet}. Shared Autonomous Vehicles (SAVs) have gained significant public interest as a possible less expensive, safer and more efficient version of today’s transportation networking companies (TNCs) and taxis.
+From a public interest and economic perspective, AV fleets allow for new shared autonomous mobility business models 
+(\cite{riggs2019business})
+though shared autonomous electric vehicle (SAEVs) fleets (\cite{loeb2019fleet}). Shared Autonomous Vehicles (SAVs) have gained significant public interest as a possible less expensive, safer and more efficient version of today’s transportation networking companies (TNCs) and taxis.
 
 %% Perceived superiority of AV systems
 This perceived superiority to human drivers is attributed to high-performance computing that allows AVs to process, learn from and adjust their guidance systems according
-to changes in external conditions at much faster rates than the typical human driver, and it
-is supplemented with vehicle-to-vehicle (V2 V) and vehicle-to-infrastructure (V2I) communication, allowing AVs to learn from other vehicles (\cite{west2016moving}).
+to changes in external conditions at much faster rates than the typical human driver  (\cite{west2016moving}).
+%and it
+%is supplemented with vehicle-to-vehicle (V2 V) and vehicle-to-infrastructure (V2I) %communication, allowing AVs to learn from other vehicles (\cite{west2016moving}).
 
+% moved to reflections
 %% Ethical issues - maybe leave to discussion and further work
-safety, liability, privacy, cybersecurity, and industry risks \cite{Taeihagh_2018}
+%This also raises issues related to safety, liability, privacy, cybersecurity, and industry %risks \cite{Taeihagh_2018}
+% TODO - how fast does the human eye process an image? How fast does a modern onboard AV system process and image
 
 %% Sensor fusion approach
-From an interaction, of the vehicle with the travelled path, perspective there are two approaches: the multi-sensor pipeline (Fig. \ref{fig:grigorescu-pipeline} as described by \cite{Grigorescu_2020} and \cite{Yurtsever_2020}. This is the current norm, as can be seen in various 
-approach as implemented by (TODO CITATION MISSING), 
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=0.85]{Figures/grigorescu-pipeline.png}
- \caption{Diagrams showing the multisensor pipelline approach (a) and the end to end approach (b) as described by \cite{Grigorescu_2020}}
- \label{fig:grigorescu-pipeline}
-\end{figure}
-
-
-
+The self-driving system for AVs can be distinguished by two approaches: the multi-sensor pipeline approach (\cite{Grigorescu_2020}, \cite{Yurtsever_2020}) relying on data from radar, sonar, lidar and images,
 %% End to end approach
-and the end to end learning approach as implemented by \cite{bojarski2016end}, training a CNN to map raw pixels from a single front-facing camera directly to steering commands.
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/bojarski-nvidia.png}
- \caption{Diagram of a trained network with a single centre camera input and a steering command output}
- \label{fig:bojarski-net}
-\end{figure}
+and the end to end approach (\cite{bojarski2016end}), relying on images alone. 
+
+Although CNNs have been successfully used to solve problems applied to Computer Vision, the robustness of such architectures has been increasingly scrutinised. \cite{Su_2019} proposed an algorithm where a deep neural network, when presented with a images (in this case images from the \cite{CIFAR_10} dataset) modified with a single pixel change, is capable of "fooling the network, such that an incorrect label is predicted with a high confidence value.  
 
 
-%% One pixel attacks
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/one-pixel-attack.png}
- \caption{One-pixel  attacks  created  with the algorithm proposed by \cite{Su_2019} that  successfully  fooled  three  types  of deep neural networks trained  on  CIFAR-10 (\cite{CIFAR_10}) dataset. The modified pixel is white, the original  class  labels  are   black while  the  target  class  labels  and  the corresponding confidence are blue}
- \label{fig:one-pixel-attack}
-\end{figure}
-
-Although CNNs have been use successfully for problems in applied to Computer Vision, the robustness of such architectures has been increasingly scrutinised. \cite{Su_2019} proposed an algorithm where a deep neural network, when presented with a images (in this case images from the \cite{CIFAR_10} dataset) with a single pixel change, the network output predicts an incorrect label with a high confidence (Fig. \ref{fig:one-pixel-attack}.  
-\cite{zhang2017understanding} demonstrated how traditional benchmarking approaches fail to explain why large neural networks generalize well in practice. By randomizing target labels, the experiments show that state-of-the-art convolutional neural networks for image classification trained with SGD (stochastic gradient descent) are large enough to fit a random labelling of the training data. This is achieved with a simple two-layer neural network, which presents a perfect finite sample expressivity as soon as the number of parameters exceeds the number of data points as usually is the case in practice.
+%% In the context of overfitting:
+\cite{zhang2017understanding} debated the need to rethink generalization, by demonstrating how traditional benchmarking approaches fail to explain why large neural networks generalize well in practice. By randomizing target labels, the experiments show that state-of-the-art convolutional neural networks for image classification trained with SGD (stochastic gradient descent) are large enough to fit a random labelling of the training data. This is achieved with a simple two-layer neural network, which presents a "perfect finite sample expressivity" as soon as the number of parameters exceeds the number of data points as usually is the case in practice with CNNs.  
+This poses a challenge for self-driving cars, specially if relying only on images. Since testing real life scenarios is not practical in this study, two options are examined: using public self-driving datasets containing images labelled with steering angles, and using game engines (\cite{cowan2014survey}), which are capable of generating labeled datasets and realistic environments where the autonomous vehicle may be tested.
+The research question is \textit{do images containing rain-like patterns affect self-driving CNNs trained to output steering predictions}? 
 
 %-----------------------------------
 %	AIMS AND OBJECTIVES
@@ -93,16 +75,25 @@ Although CNNs have been use successfully for problems in applied to Computer Vis
 
 % Chammas - 165 words, no references
 
-The main aim of this project is to determine through a series of experiments how reliable are self driving cars using end to end convolutional neural network architectures, relying solely on raw pixel inputs to predict steering, in the rain, that is, where rainy images are presented to the network. Since the rain pattern is random and can be seen as noise, the expectation is potential for such networks to be fooled and present lower accuracies.
+The main aim of this project is to to answer the research question, by evaluating how reliable are self driving cars using end to end convolutional neural network architectures to predict steering given images with rain-like noisy patters. The significance of this type of network is it relies only on raw pixel values, and no additional sensor inputs. 
+To reach this aim, the project objectives are:
+\begin{itemize}
+    \item[--] Determine a game engine capable of supporting the experiments 
+    \item[--] Select and create appropriate datasets 
+    \item[--] Determine software packages able to augment and add rain-like patterns to digital images
+    \item[--] Train self-driving end to end CNN models    
+    \item[--] Establish a workflow to modify images to be presented to the network during the running (driving) phase
+    \item[--] Determine a metric for evaluating how well a self-driving CNN is performing with respect to a steering ground truth    
+\end{itemize}
 
 %-----------------------------------
 %	BENEFICIARIES
 %-----------------------------------
 \subsection{Beneficiaries}
 
-Chammas - 79 words, no references
+% Chammas - 79 words, no references
 
-Autonomous vehicles and robotics increasingly rely on computer vision and in some cases convolutional neural networks. The issue of reliability in computer vision based systems when faced with noisy data, in the case of this study, images containing rain, is one that affects every such system using convolutional neural networks, not just autonomous vehicles, hence, any findings in this work could help practitioners to inform designs decisions, industry approval bodies surveying benchmarking methodologies, as well as providing a further advanced starting point for any further research in the area.
+Autonomous vehicles and robotics increasingly rely on computer vision and in some cases convolutional neural networks. The issue of reliability in computer vision based systems when faced with noisy data, in the case of this study, images containing rain, is one that affects any CNN based system, not only autonomous vehicles, hence, any findings in this work could be beneficial to help, practitioners inform design decisions, and industry approval bodies surveying benchmarking methodologies. The project, once reaching the aims, provides an open framework which may benefit any further research.
 
 %-----------------------------------
 %	Introduction to Methods and Work Plan
@@ -110,9 +101,12 @@ Autonomous vehicles and robotics increasingly rely on computer vision and in som
 
 \section{Introduction to Methods and Work Plan}
 
-Chammas - 130 words, no references
+% Chammas - 130 words, no references
 
-Morbi rutrum odio eget arcu adipiscing sodales. Aenean et purus a est pulvinar pellentesque. Cras in elit neque, quis varius elit. Phasellus fringilla, nibh eu tempus venenatis, dolor elit posuere quam, quis adipiscing urna leo nec orci. Sed nec nulla auctor odio aliquet consequat. Ut nec nulla in ante ullamcorper aliquam at sed dolor. Phasellus fermentum magna in augue gravida cursus. Cras sed pretium lorem. Pellentesque eget ornare odio. Proin accumsan, massa viverra cursus pharetra, ipsum nisi lobortis velit, a malesuada dolor lorem eu neque.
+The work plan is to survey the literature for current trends in AV CNNs. Followed by researching required tools and datasets to create a development environment for training and testing. Then existing CNN self-driving models will be replicated and modified. Once results are produced a performance metric will assess individual models producing the metrics required to complete the report. 
+The methods include the use of game engines to generate data and eare required are a game engine able to simulate select datasets and tools: a game engine and data augmentation library. then develop self-driving CNN models, then  determine model evaluation with a selected metric. And evaluate models quantitavely with the selected metric, and also qualitatively when using the game engine, by observing the self-driving vehicle around a simulated track and noting any oversterring and crashes.
+
+
 
 %-----------------------------------
 %	Changes in Methods and Work Plan
@@ -120,8 +114,9 @@ Morbi rutrum odio eget arcu adipiscing sodales. Aenean et purus a est pulvinar p
 
 \subsection{Changes in Methods and Work Plan}
 
-Chammas - 104 words, 1 reference, one image with revised work plan
-Morbi rutrum odio eget arcu adipiscing sodales. Aenean et purus a est pulvinar pellentesque. Cras in elit neque, quis varius elit. Phasellus fringilla, nibh eu tempus venenatis, dolor elit posuere quam, quis adipiscing urna leo nec orci. Sed nec nulla auctor odio aliquet consequat. Ut nec nulla in ante ullamcorper aliquam at sed dolor. Phasellus fermentum magna in augue gravida cursus. Cras sed pretium lorem. Pellentesque eget ornare odio. Proin accumsan, massa viverra cursus pharetra, ipsum nisi lobortis velit, a malesuada dolor lorem eu neque.
+% Chammas - 104 words, 1 reference, one image with revised work plan
+
+TODO There might not be enough time to get all proposed models working, so this section will be completed in the final week or two.
 
 %-----------------------------------
 %	Structure of the report
@@ -133,16 +128,14 @@ Morbi rutrum odio eget arcu adipiscing sodales. Aenean et purus a est pulvinar p
 The remaining report is structured as follows:
 \begin{itemize}
     \item[--] Chapter 2 provides the critical context, project motivation, methods used, literature survey and analysis. It outlines the current state of research with autonomous vehicles deep neural networks, including ConvNets.
-    \item[--] Chapter 3 describes in detail the data and neural network architectures used
-    \item[--] Chapter 4 describes the results obtained
-    \item[--] Chapter 5 provides a discussion
-    \item[--] Chapter 6 provides an evaluation
-    \item[--] Appendix A contains the RPMI 363 project proposal
+    \item[--] Chapter 3 contextualises the broader context of self-driving cars and the technologies pushing research further
+    \item[--] Chapter 4 describes results of training networks, together with metrics and video links showing the simulated car models self-driving
+    \item[--] Chapter 5 contains a discussion on what objectives were met, then it assess how the results could be employed in other cases related to AVs and to computer vision and robotics in genral.
+    \item[--] Chapter 6 evaluates and reflects on the project, limitations, contributions and ares for further work.
+    \item[--] Appendix A contains the RPMI project proposal
+    \item[--] Appendix B details methods used 
     \item[--] Appendix C contains
-    \item[--] Appendix D contains
-    \item[--] Appendix E contains
-    \item[--] Appendix F contains
-    \item[--] Appendix G contains
-    \item[--] Additional files have been submitted in the project submission area. These include python source code, unity source code, latex source code, images, URL of online repositories and URLs for data sources used.
+    \item[--] Appendix D presents tables containing \textit{deliverables} first put forward to my supervisor
+    \item[--] Appendix E contains training logs and notes on gathering results
+    \item[--] Additional files will be submitted in the project submission area. These include python source code, unity source code, latex source code, synthetic dataset download links, URL of online repositories and URLs for public data sources used.
 \end{itemize}
-Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.

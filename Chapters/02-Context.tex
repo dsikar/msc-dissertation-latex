@@ -5,11 +5,11 @@
 
 % LC 43 References
 
-This chapter explains the current state of your topic, in practice and theory. This is the state of the world which you intend to improve, and the state of knowledge on top of which you build your advances and from which you learn knowledge to apply and constraints on your work. So, you will report and analyse what is known about a certain topic, as reported in reference literature and published scientific literature; if you are developing a product, you will need to report about comparable or competing products over which you intend to improve or from which you will obtain ideas; you may need to describe legal or societal situation within which your work takes place; etc.  
+%This chapter explains the current state of your topic, in practice and theory. This is the state of the world which you intend to improve, and the state of knowledge on top of which you build your advances and from which you learn knowledge to apply and constraints on your work. So, you will report and analyse what is known about a certain topic, as reported in reference literature and published scientific literature; if you are developing a product, you will need to report about comparable or competing products over which you intend to improve or from which you will obtain ideas; you may need to describe legal or societal situation within which your work takes place; etc.  
   
-It is important to demonstrate scholarship, i.e. the ability to read about a subject area in a range of sources, assimilate the material and then discuss it intelligently.  
+%It is important to demonstrate scholarship, i.e. the ability to read about a subject area in a range of sources, assimilate the material and then discuss it intelligently.  
   
-You should demonstrate that you understand what you have read by providing some analysis or commentary in view of the goals of your project: it is not enough simply to provide summaries of what you have read. References should be cited following the Harvard Referencing Style. You must also explain, both in this chapter and, as appropriate, in others, how the results of the studies to which you make reference inform your project work. To gain a passing grade, your report MUST demonstrate adequate engagement with academic literature and any other sources necessary for the work to be well informed.  
+%You should demonstrate that you understand what you have read by providing some analysis or commentary in view of the goals of your project: it is not enough simply to provide summaries of what you have read. References should be cited following the Harvard Referencing Style. You must also explain, both in this chapter and, as appropriate, in others, how the results of the studies to which you make reference inform your project work. To gain a passing grade, your report MUST demonstrate adequate engagement with academic literature and any other sources necessary for the work to be well informed.  
 
 % The story we want to tell
 % End to end learning - what does it mean
@@ -102,7 +102,7 @@ Maybe a bit on how synthetic datasets are used in other domains e.g. https://arx
 % 21. \cite{rajpura2017object}
 
 %% Public datasets
-Kaggle (\cite{kaggle_2020} contains over 50,000 public datasets and 400,000 public jupyter notebooks (\cite{JupyterNotebook2020}), an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization and machine learning.
+%Kaggle (\cite{kaggle_2020} contains over 50,000 public datasets and 400,000 public jupyter notebooks (\cite{JupyterNotebook2020}), an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization and machine learning.
 
 Imagenet is an example of the availability of a computer vision datasets. Public datasets exist for a number of tasks applied to computer vision, such as  
 human action and activity recognition (\cite{chaquet2013survey}), agriculture (\cite{lu2020survey}) and hand pose estimation (\cite{li2019survey}).
@@ -112,15 +112,61 @@ Intel DevCloud (\cite{IntelDevCloud2020}).
 %	BACKGROUND
 %-----------------------------------
 
+% 
+(Fig. \ref{fig:grigorescu-pipeline} as described by \cite{Grigorescu_2020} and \cite{Yurtsever_2020}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=0.85]{Figures/grigorescu-pipeline.png}
+ \caption{Diagrams showing the multisensor pipeline approach (a) and the end to end approach (b) as described by \cite{Grigorescu_2020}}
+ \label{fig:grigorescu-pipeline}
+\end{figure}
+
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=1]{Figures/bojarski-nvidia.png}
+ \caption{Diagram of a trained network with a single centre camera input and a steering command output}
+ \label{fig:bojarski-net}
+\end{figure}
+
+%% One pixel attacks
+
+ (Fig. \ref{fig:one-pixel-attack}.
+ 
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=1]{Figures/one-pixel-attack.png}
+ \caption{One-pixel  attacks  created  with the algorithm proposed by \cite{Su_2019} that  successfully  fooled  three  types  of deep neural networks trained  on  CIFAR-10 (\cite{CIFAR_10}) dataset. The modified pixel is white, the original  class  labels  are   black while  the  target  class  labels  and  the corresponding confidence are blue}
+ \label{fig:one-pixel-attack}
+\end{figure}
+
+% fusion and end to end approach
+
+(Fig. \ref{fig:grigorescu-pipeline} 
+
+% bojarski
+and training a CNN to map raw pixels from three front-facing camera directly to steering commands.
+
+
+
 % A discussion of the proliferation of public datasets applied to machine learning, competitions, code repositiories, libraries is in order to contextualise the availability of data and tools in the context of our research
 
-\section{ImageNet Challenge}
+%-----------------------------------
+%	End to End Learning
+%-----------------------------------
+
+\section{End to End Learning}
 
 The  ImageNet Large-Scale Visual Recognition Challenge (ILSVRC) (Russakovsky et al., 2014) played an important part in the development of deep neural networks for image recognition. With the exception of DriveNet (NVIDIA end-to-end self-driving ConvNet architecture), all remaining four (AlexNet, GoogleLeNet, VGG and ResNet) were winning entries in the ILSVRC.  
 
 % Interesting compact discussion on various applications of CCN and computer vision and end to end learning with several applications
 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6539483/ pg
+
+%-----------------------------------
+%	End to End Learning
+%-----------------------------------
 
 \section{Deep Learning applied to autonomous vehicles}
 
