@@ -857,6 +857,10 @@ Below are the normalized histogram and bins recovered from tcplow logs for model
  \label{fig:tcpflow_20201120184912_bins} 
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 38
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Run 38 - 20201123162643\_sanity.h5}
 \begin{verbatim}
 Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
@@ -967,7 +971,8 @@ Video: https://youtu.be/377O2E_LwyU
 Steering data recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanit\_ppy.log
 This was running with commit 7f308649 where frame \textbf{is preprocessed} for prediction (predict\_ client.py) (Figures  \ref{fig:tcpflow_20201123162643_pp_graph} and  \ref{fig:tcpflow_20201123162643_pp_bins}). 
 Note the steering angles are a much tighter range. Bias toward positive 6 is due to road bending right.
-The bins show a left skewed distribution, due to the right turn.
+The bins show a left skewed distribution, due to the right turn. Steering goes a bit crazy but model
+manages to keep vehicle on the road.
 
 \begin{figure}[ht]
  \centering 
@@ -986,18 +991,70 @@ The bins show a left skewed distribution, due to the right turn.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 40
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run 40 - }
+\subsection{Run 40 - 20201124032017_nvidia2.h5}
 \begin{verbatim}
-Commit: 
-Model: 
+Commit: 7f3086490118fec1a20e99e93cc1b853a91272b6
+Model: nvidia1
 Outputs: 2
 Dataset: N/A
-Command: 
-Environment: simbox
-Comment: 
-Command
+Command: python3 train.py --model=nvidia2 --outdir=../trained_models --epochs=100
+Environment: devcloud
+Comment: Trained with nvidia2 model. Need to double check input size, as it might
+be originally expecting 200x66.
+Model did not do well and drove straight off the road. One thing to note, pixels are
+being normalized and zero centered:
+x = Lambda(lambda x: x/127.5 - 1.0)
+Also, one single dropout layer. Need to try with different image size to match
+original design.
 
+$ sudo tcpflow -i lo -c port 9091 (right angle bracket) /tmp/tcpflow.log
+$ python predict_client.py --model=../trained_models/devcloud/nvidia2/20201124032017_nvidia2.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201124032017\_nvidia2.h5
+
+https://youtu.be/RW-luOWQ_qY
+
+tcpflow log file moved:
+cp /tmp/tcpflow.log ../dataset/unity/genRoad/tcpflow/20201124032017_nvidia2.log
+
+sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201124032017_nvidia2.log)
+sarr = np.asarray(sa)
+p = sarr[:,0]
+p = sarr[:,0]  
+plotSteeringAngles(p, g, 25, False, "Generated Road", "20201124032017_nvidia2.h5")
+plotBinsFromArray(p, 25, "20201124032017_nvidia2.h5", "tcpflow/20201124032017_nvidia2.log")
 \end{verbatim}
+
+Run 40 started well then pretty much drove straight off the road - need to investigate image
+geometry
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201124032017_nvidia2_graph.png}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201124032017\_ nvidia2.log for model 20201124032017\_ nvidia2.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/RW-luOWQ_qY}{https://youtu.be/RW-luOWQ_qY}
+ \label{fig:tcpflow_20201124032017_nvidia2_graph}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201124032017_nvidia2_bins.png}
+ \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201124032017\_ nvidia2.log for model 20201124032017\_ nvidia2.h5 driving on Generated Road}
+ \label{fig:tcpflow_20201124032017_nvidia2_bins} 
+\end{figure} 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 41
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 41 - }
+\begin{verbatim}
+Commit: d96040898eb731984aced536f310db546d4e25aa
+Model: nvidia1
+Outputs: 2
+Dataset: genRoad
+Command: python train.py --model=nvidia1 --outdir=../trained_models --epochs=100
+Environment: simbox
+Comment: Trying to train a model that does well on Generated Road
+\end{verbatim}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX

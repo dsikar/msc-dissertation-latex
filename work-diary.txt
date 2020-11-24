@@ -852,11 +852,20 @@ Preliminary results for rain on Generated track
  2123  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential crash
  2124  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=20 crash
  2125  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=10 crash
- 2126  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=1  crash with change in intensidty
+ 2126  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=1  crash with change in intensity
  2127  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=heavy --slant=10 crash with change in light intensity
  2128  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential crash with change in light intensity
 
+In short, car crashes in torrential rain. Next we need to write the script to create a side-by-side video of what the image with added rain looks like and what the preprocessed image looks like (in YUV space).
 
+2020.11.24
+
+I think we seriously need to start thinking about scope limitation.
+We need to have resutls. For that end, let's focus on the prediction from single frame script, that is, we feed the images in, get the predictions out, and can compare models that way.
+
+So we have the videos of added rain next to processed YUV images. That should be the last of videos, perhaps made an assembly of Udacity data. Then get some graphs together of double plots, models and ground truth.
+
+Let's try to keep it simple.
 
 
 
