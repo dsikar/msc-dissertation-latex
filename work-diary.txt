@@ -837,6 +837,25 @@ What can be realistically achieved? Reasonable results write up with Udacity and
 In reality, we would need at least a couple (e.g. Nvidia original and Nvidia modified, which we have), to compare architectures, squeezing it further, at least AlexNet to compare three. That is probably the best case scenario. For Tuesday through Friday we can focus on getting Alexnet running, maybe a couple of hours a day (8 hours total).
 For the following week, same 8 hours to do the same with ResNet, but discretising the output to make it a classification problem.
 
+2020.11.22
+
+TODOS 
+1. Send pdf to Artur
+2. Share Overleaf project with Artur
+
+Preliminary results for rain on Generated track
+
+ 2119  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=light no crash 
+ 2120  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=heavy no crash 
+ 2121  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=heavy --slant=5 no crash 
+ 2122  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=heavy --slant=20 no crash 
+ 2123  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential crash
+ 2124  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=20 crash
+ 2125  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=10 crash
+ 2126  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential --slant=1  crash with change in intensidty
+ 2127  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=heavy --slant=10 crash with change in light intensity
+ 2128  python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 --rain=torrential crash with change in light intensity
+
 
 
 

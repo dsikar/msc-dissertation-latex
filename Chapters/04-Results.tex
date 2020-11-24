@@ -3,13 +3,13 @@
 % LC 25pgs
 \label{Results} 
 
-This chapter presents the outputs that you produced, by applying the methods that you have selected, including e.g. analysis, design, prototyping, experimental work, evaluation, etc.  
+%This chapter presents the outputs that you produced, by applying the methods that you have selected, including e.g. analysis, design, prototyping, experimental work, evaluation, etc.  
   
-How you report these results will depend on the nature of the work. It may be helpful to divide them into basic data (e.g., for a project that developed a software product, requirements specification, test data, etc.) and analysis of the data (e.g. statistical analyses, evaluation analyses, etc.). Remember that you are informing the reader of what you have produced and found and emphasising the interesting parts, so summarising at the end of each major section is useful.  
+%How you report these results will depend on the nature of the work. It may be helpful to divide them into basic data (e.g., for a project that developed a software product, requirements specification, test data, etc.) and analysis of the data (e.g. statistical analyses, evaluation analyses, etc.). Remember that you are informing the reader of what you have produced and found and emphasising the interesting parts, so summarising at the end of each major section is useful.  
   
-It is usually very helpful for the readers to include graphics and diagrams, for instance to clarify software design or requirements, identify key trends and relationships in empirical data, etc. If you do so, be sure to refer to these figures in the text and use them as evidence to support what you are explaining or arguing; and be sure that your figures are well designed and clearly presented – do not just use default settings of the software you are using in producing them.  
+%It is usually very helpful for the readers to include graphics and diagrams, for instance to clarify software design or requirements, identify key trends and relationships in empirical data, etc. If you do so, be sure to refer to these figures in the text and use them as evidence to support what you are explaining or arguing; and be sure that your figures are well designed and clearly presented – do not just use default settings of the software you are using in producing them.  
   
-It is essential that you identify clearly what you accomplished or produced yourself, as opposed to what existed before you started your individual project or was provided by others. For instance, some projects build new software on top of an existing code base, add new data to an existing body of data, or are executed by a student as a member of a team. It is essential to indicate what parts of the activities and results which you report are your own work. If this is left unclear, the markers are instructed not to give credit for work that they cannot attribute to you. Ambiguity would attract penalties for poor academic practice, with delays caused by any investigation (deception would be treated as academic misconduct, of course, which may lead to expulsion).
+%It is essential that you identify clearly what you accomplished or produced yourself, as opposed to what existed before you started your individual project or was provided by others. For instance, some projects build new software on top of an existing code base, add new data to an existing body of data, or are executed by a student as a member of a team. It is essential to indicate what parts of the activities and results which you report are your own work. If this is left unclear, the markers are instructed not to give credit for work that they cannot attribute to you. Ambiguity would attract penalties for poor academic practice, with delays caused by any investigation (deception would be treated as academic misconduct, of course, which may lead to expulsion).
 
 %-----------------------------------
 %	Network training
@@ -17,31 +17,91 @@ It is essential that you identify clearly what you accomplished or produced your
 
 
 
-\section{Network training}
-
+\section{Network training and simulator testing}
+\label{results:net-training} 
 % write up, label runs and make reference
-The first working model (able to successfully self-drive around the Generated Track
+The first working model (able to successfully self-drive around the Generated Track) was   20201107210627\_nvidia1.h5. A video was generated using the recording screen utility Kazam (\cite{Kazam2020}), recording at 15fps (frames per second), and published at  \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc}. Figure \ref{fig:SimTCPPred}
+shows 3 stills from the video containing from left to right, the game engine, the TCP debug output and the prediction engine running.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/SimTCPPred.png}
+\caption{Stills of video \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc} showing left to right: SDSandbox simulated car going around the Generated Track course, TCP Debug (tcpflow) and prediction engine (predict\_ client.py) running}
+\label{fig:SimTCPPred}
+\end{figure}
+
+The video shows the TCP debugging, prediction engine and the game engine simulated car steering with predictions received over the TCP network. The actual code used to generate the model was not logged at the time the experiment log entry was written in the appendix log (\ref{AppendixD}). By verifying git hash commits (4 commits were made on November 7th) as documented in appendix  a second sanity check model \ref{app_res:36} (20201120171015\_sanity.h5) was created and found to self-drive successfully around the generated track. A video was made from tcpflow frames as decribed at the end of \ref{app_res:36}, and uploaded to \href{https://youtu.be/JaSkkh-2xtI}{https://youtu.be/JaSkkh-2xtI}.
+The video shows (fps discrepancies considered) that the \ref{app_res:36} model had a better lap around the track.
+Model 37 (\ref{app_res:37}) trained with genRoad (including outliers seen in Figure \ref{fig:GeneratedRoadPlusHist}) ) did not do well. The oversteering can be seen in video \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}. The steering angle bins and graph plots can be seen in  Figures \ref{fig:tcpflow_20201120184912_bins}  and \ref{fig:tcpflow_20201120184912_graph} in the results appendix.
+
+% a number of runs (e.g. commit 2e5bf1b7 failed prematuraly, most failing to generate a model. Doing a diff on one of them shows that batch size was set to 128
+% Could this also be an issue?
+% Note in original Alexnet which we assume NVIDIA were using as a design reference, used batch size 128 for TWO channels - TODO write-up in Discussion.
+
+%$ git diff master..2e5bf1b7 train.py | grep batch_size
+%-    batch_size = conf.batch_size
+%+    batch_size = conf.training_batch_size
+%(base) simbox@simbox-wifi-server:~/src(master)$ git diff master..2e5bf1b7 conf.py | grep %batch_size
+%+training_batch_size = 128
+%-batch_size = 64
+%+batch_size = 128 # nvidia1 = 64
+%@@ -50,7 +49,5 @@ batch_size = 64
+Figure \ref{fig:SkewCleanup} shows from left to right, an overlay of all plots of normalized histogram plots for steering values contained in unity/genRoad directory, the folder containing most outliers (logs\_Thu\_Jul\_ \_9\_16\_00\_15\_2020) and the resulting plot once the outliers' folder was removed from unity/genRoad. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/SkewCleanup.png}
+\caption{Left to right, normalized histograms of all genRoad folders, outlier's folder and all data with outliers removed.}
+\label{fig:SkewCleanup}
+\end{figure}
+
+Once the outliers were removed, another model was generated with five epochs of training to test if there was any difference in the loss values observed. The resulting model proved useful and was able to drive along the Generated Road course during a few seconds until the simulation was stopped. Below are the normalized histogram and bins recovered from tcplow logs for model  
+  
+20201120184912\_sanity.h5 referenced in \ref{app_res:37}. The video generated from tcpflow log was uploaded to \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_graph.png}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201120184912\_sanity\_tcpflow.log for model 20201120184912\_sanity.h5 driving on Generated Road}
+ \label{fig:tcpflow_20201120184912_graph}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_bins.png}
+ \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201120184912\_ sanity \_ tcpflow.log for model 20201120184912\_ sanity.log driving on Generated Road}
+ \label{fig:tcpflow_20201120184912_bins} 
+\end{figure}
+
 
 % probably best to more this to results section and reference here
-\begin{verbatim}
-# data: genRoad (log2 renamed)
-# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
-$ python train.py --model=sanity --outdir=../trained_models
-\end{verbatim}
-this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
-and run as per procedure described in (TODO add reference).
+%\begin{verbatim}
+%# data: genRoad (log2 renamed)
+%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+%$ python train.py --model=sanity --outdir=../trained_models
+%\end{verbatim}
+%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+% and run as per procedure described in (TODO add reference).
 
 
 
-\begin{verbatim}
-# data: genRoad (log2 renamed)
-# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
-$ python train.py --model=sanity --outdir=../trained_models
-\end{verbatim}
-this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
-and run as per procedure described in (TODO add reference).
+%\begin{verbatim}
+%# data: genRoad (log2 renamed)
+%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+%$ python train.py --model=sanity --outdir=../trained_models
+%\end{verbatim}
+%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+%and run as per procedure described in (TODO add reference).
 
-\subsection{Modifications to original source code}
+\subsection{Modifications to original source codes}
+Three libraries used:
+\begin{itemize}
+    \item SDSandbox
+    \item Naoki Augmentation
+    \item Automold
+\end{itemize}
+TODO git diff (in appendix) and itemize modifications.
+    
 Models are trained with code written in train.py, models.py and conf.py. This code has been modified from the original. To compare changes a git diff can be copying the original code over the source code used in this project and performing a "git diff"
 \begin{verbatim}
 # clone repository for dissertation

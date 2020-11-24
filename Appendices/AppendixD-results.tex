@@ -108,7 +108,7 @@ This will load the Unity Hub application. A project can be added, which will be 
 TODO ADD IMAGE SEQUENCE  
 Once a number of laps have been completed, the images can be moved to a labelled folder using prepare\_data.py script. This will move images to a user defined directory, create a sub-directory named with a date and timestamp
 
-The sky colour can be changed via Windows > Renderer > Lighting menu, then under Environment changing "Skybox Material".
+The sky colour can be changed via Window > Renderering > Lighting settings, then under Environment changing "Skybox Material". Default Skybox Material is "Default-Skybox". Suggested for darker background is "Usa\_Number\_M" - blue.
 
 Changing camera sensor image output size
 
@@ -119,7 +119,7 @@ There are two ways to change the size of images output by simulator camera senso
 \end{verbatim}
 The other was is through Unity
 Changing sky colour
-The sky colour can be changed via Windows > Renderer > Lighting Settings menu, then under Environment changing "Skybox Material" chossing a different material.  
+The sky colour can be changed via Windows > Renderer > Lighting Settings menu, then under Environment changing "Skybox Material" chossing a different material.  Suggested for darker background is "Usa\_Number\_M".
 The simulator lighting can be made darker, in the same menu, under Environment Lighting > Intensity MUltiplier. A value of 1 is chosen to generate training datasets, and a value of 0.26 when running the simulator in NN Control over Network mode, that is using the prediction engine to predict steering angles.
 \section{Udacity}
 
@@ -280,7 +280,7 @@ No loss graph, again, no augmentation trained quicker that previous
 commit 6439a8758d8b46a1cbc3bcefc9db4c15f70820df
 model nvidia1
 outputs 2
-dataset log 2
+dataset log2
 command:
 train.py --model=nvidia1 --outdir=../trained_models
 Epoch 1/100
@@ -570,7 +570,7 @@ Epoch 2/100
 Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
 Model: nvidia_baseline
 Outputs: 2
-Dataset: smallLoopingCourse (jungle1) (34443)
+Dataset: smallLoopingCourse (jungle1 renamed) (34443)
 Command: 
 train.py --model=nvidia_baseline
 --outdir=../trained_models
@@ -604,7 +604,7 @@ This run produced a usable model.
 
 This run consisted of a sanity check to determine if training would generate a loss value different from NaN (not a number). This was not the case as per results in comments.
 
-\subsection{35 - 20201120124421\_nvidia\_baseline.h5}
+\subsection{Run 35 - 20201120124421\_nvidia\_baseline.h5}
 \begin{verbatim}
 Commit: 1f5c64bc219b31cf8654d2cceec910f0dea5ecbf
 Model: nvidia_baseline
@@ -656,7 +656,16 @@ https://youtu.be/ZwP53IhBO20
 
 Given previous results, this run reverts code to commit 436f635f
 
-\subsection{36 - 20201120171015\_sanity.h5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 36
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 36 - 20201120171015\_sanity.h5}
+(Referenced from \ref{results:net-training})
+Long story short: Forensics are conducted in this run to find out what code generated model 
+20201107210627\_nvidia1.h5, determining that outliers present in genRoad create problems. The outliers have since been quarantined.
+
+\label{app_res:36}
+
 \begin{verbatim}
 Commit: 436f635fa183740832270ea7db6869918a786d55
 Model: nvidia1
@@ -667,10 +676,19 @@ Environment: simbox
 Comment: This model was trained with the committed code from November 7th, which produced the first success lap drive with not crashes or steering off the track.
 There is no record of what commit generated the model, though on video:
 https://youtu.be/9z0mMtOnUUc
-One section shows:
+One section in the video shows:
 python predict_client.py \
 --model=../trained_models/nvidia1/20201107210627\_nvidia1.h5
+The model name contains date and time created.
 
+The sanity check model trained in under five minutes, and the best model saved was
+most likely (subject to double checking Keras source code) generated on the third epoch.
+
+cat 20201120171015_sanity.log
+Model name: ../trained_models/sanity/20201120171015_sanity.h5
+Total training time: 0:04:38 (...)
+
+A record of the training output is displayed below:
 
 Epoch 1/100
 80/80 [==============================] - 35s 432ms/step - loss: 0.0822 - acc: 0.6293 - val_loss: 0.0300 - val_acc: 0.8109
@@ -689,27 +707,107 @@ Epoch 7/100
 Epoch 8/100
 80/80 [==============================] - 34s 428ms/step - loss: nan - acc: 0.4285 - val_loss: nan - val_acc: 0.4922
 
-Trying to find what code generated model 20201107210627_nvidia1.h5
+Further forensic examination of commits:
+
+Trying to find what data and code generated model 20201107210627_nvidia1.h5
 This was generated on November 7th. There are 4 commits for that day:
 
+src(master)$ git log > gitlog.txt
+src(master)$ vim gitlog.txt 
+/Nov 7
+ESC
+:q
 
-commit 436f635fa183740832270ea7db6869918a786d55 
+commit 436f635fa183740832270ea7db6869918a786d55 * commit used for this run
 commit 9908eb32975fe33075fefad73f411896456b4a84 
 commit 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
 commit 8ebd02ab9556a0c2869e9b551417a6e28d5f86cf
 
-Data added on November 7th includes:
-smallLoopingCourse/log/logs_Sat_Nov__7_11_11_06_2020
-so this could be it.
+$ git diff master..436f635 train.py | grep "\-\-inputs"
+-    parser.add_argument('--inputs', default='../dataset/unity/genRoad/log/*.jpg',
++    parser.add_argument('--inputs', default='../dataset/unity/log_sample/*.jpg', 
+
+$ git diff master..9908eb3297 train.py | grep "\-\-inputs"
+-    parser.add_argument('--inputs', default='../dataset/unity/genRoad/log/*.jpg' (...)
++    parser.add_argument('--inputs', default='../dataset/unity/log_sample/*.jpg' (...)
+
+$ git diff master..1ad187d4b train.py | grep "\-\-inputs"
+-    parser.add_argument('--inputs', default='../dataset/unity/genRoad/log/*.jpg'
++    parser.add_argument('--inputs', default='../dataset/unity/log2/*.jpg', 
+
+$ git diff master..8ebd02ab train.py | grep "\-\-inputs"
+-    parser.add_argument('--inputs', default='../dataset/unity/genRoad/log/*.jpg'
++    parser.add_argument('--inputs', default='../dataset/unity/log2/*.jpg',
+
+The plus signal indicates lines added in the commit to the right, minus indicates what does
+not exist in the commit to the right (9908eb3297) , where master is commit
+436f635fa (current commit).
+
+First two commits indicate log_sample dataset was used containing 38684 images files of
+"small looping course" course
+/log_sample(master)$ grep -nr jpg . | wc -l
+38684
+was used, 
+second two commits indicate log2 dataset (renamed genRoad) containing 280747 image 
+files on the "Generated Road" course.
+/genRoad(master)$ grep -nr jpg . | wc -l
+280747 (files)
+
+The commits are listed in descending  chronological order, that is the first two datasets 
+used to train on that day were log2 (later renamed genRoad), the following two datasets used were log_sample. The commit history suggests one of the two were used to generate
+the Nov 7 successful model. Since the test was run on "Generated Track" course, and genRoad
+contains images for "Generated Road" course, the assumption is sample_log dataset was used.
+
+The sanity check model was then used to run predictions:
+python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
+(...)
+connecting to 127.0.0.1 9091
+fps 10.416671685462958
+fps 10.405931675595545
+fps 11.030877564739708
+fps 11.092089084017463
+fps 11.466601323987536
+fps 11.362325028068517
+fps 11.359920970581536
+fps 10.861855550070638
+fps 10.50113576298416
+(...)
+
+The tcpflow log was saved to:
+
+tcpflow(master)$ ls
+20201107210627_sanity_tcpflow.log
+
+And a video generated (from /tmp copy) with script src/MakeVideo.py
+$ python MakeVideo.py --filename=/tmp/tcpflow.log \ 
+--model=20201120171015_sanity.h5 
+and the video.avi output uploaded to https://youtu.be/JaSkkh-2xtI
+
+Qualitatively (by observation) had a better lap than 20201107210627_nvidia1.h5 
+(https://youtu.be/9z0mMtOnUUc) as it keeps to a single lane and the vehicle wheels
+never touch the road markings
+
+Noting that the prior predict_client.py fps logs indicate that frames-per-second at
+varying ratios (e.g. fps 10.50113576298416), while MakeVideo.py records at 11 frames per second.
+The video generated by MakeVideo.py is going around the track slightly faster
+than the SDSandbox simulator steering with 20201120171015_sanity.h5 predictions.
+between logged frames (tcpflow) and rendered frames (MakeVideo.py).
+The frame rate logged with tcpflow is the frame rate SDSandbox is sending frames over 
+the TCP network.
 
 \end{verbatim}
 
-\subsection{37 - 20201120184912\_sanity.h5}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 37
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 37 - 20201120184912\_sanity.h5}
+Referenced from \ref{results:net-training} 
+\label{app_res:37}
 \begin{verbatim}
 Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
 Model: nvidia1
 Outputs: 2
-Dataset: smallLoopingCourse (jungle1) (34443 images) small_looping_course
+Dataset: log2 (genRoad)
 Command: python train.py --model=sanity --outdir=../trained\_models
 Environment: simbox
 Comment: This was the 3rd commit of the day
@@ -718,45 +816,193 @@ being used. To be confirmed. Now running nvidia1 on genRoad
 both on simbox and camber, loss still converging to 0
 and not in NAN range. 
 
-This model took see ../trained_models/sanity/20201120184912\_sanity.log
+Training log:  ../trained_models/sanity/20201120184912\_sanity.log
 Total training time: 16:08:01
 Training loss: 0.010
 Validation loss: 0.008
 Training accuracy: 0.858
 Validation accuracy: 0.858
 
+This model took over 16 hours to train on 280727 images. It did not perform well.
+Could it be due to the outliers?
+
+$ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow.log
+$ python predict_client.py --model=../trained_models/sanity/20201120184912_sanity.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201120184912_sanity.h5
+
+The angles were plotted using notebook GetSteeringAnglesFromtcpflow.ipynb
+sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201120184912_sanity.log')
+sarr = np.asarray(sa)
+p = sarr[:,0]
+g = sarr[:,1]
+plotSteeringAngles(p, g, 25, False, "Generated Road", "20201120184912_sanity.h5")
 
 \end{verbatim}
 %PAUSE HERE - WRITING FUNCTION TO PLOT STEERING ANGLES AND BINS FROM LOGS
+Below are the normalized histogram and bins recovered from tcplow logs for model  
+  
+20201120184912\_sanity.h5 referenced in \ref{results:net-training}. The video generated from tcpflow log was uploaded to \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}.
 
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_graph.png}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201120184912\_sanity\_tcpflow.log for model 20201120184912\_sanity.h5 driving on Generated Road}
+ \label{fig:tcpflow_20201120184912_graph}
+\end{figure}
 
-\subsection{38 - }
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_bins.png}
+ \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201120184912\_ sanity \_ tcpflow.log for model 20201120184912\_ sanity.log driving on Generated Road}
+ \label{fig:tcpflow_20201120184912_bins} 
+\end{figure}
+
+\subsection{Run 38 - 20201123162643\_sanity.h5}
 \begin{verbatim}
-Commit: e9c493508acc6e053742a5e1d9d6e0128a477735
-Model: 
-Outputs: 
-Dataset: 
-Command: 
-Environment: 
-Comment: 
-Command
+Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+Model: nvidia1
+Outputs: 2
+Dataset: genRoad (clean - logs_Thu_Jul__9_16_00_15_2020 quarantined)
+Command: python train.py --model=sanity --outdir=../trained\_models --epochs=5
+NB Trained for 5 epochs
+Environment: simbox
+Comment: Rerunning commit 1ad187d4bf with cleaned data.
+$ git checkout nov7 (this branch is commit 1ad187d4bff5b6936c065a1aaa15a654ef4d368c)
+NB a simlink was created in unity/log2 pointing to unity/genRoad for the sake of
+not changing committed source code.
+ln -s ~/git/msc-data/unity/genRoad/ ~/git/msc-data/unity/log2
 
+Epoch 1/5
+1616/1616 [==============================] - 689s 427ms/step - loss: 0.0254 - acc: 0.8033 - val_loss: 0.0167 - val_acc: 0.8365
+Epoch 2/5
+1616/1616 [==============================] - 681s 421ms/step - loss: 0.0186 - acc: 0.8251 - val_loss: 0.0148 - val_acc: 0.8411
+Epoch 3/5
+1616/1616 [==============================] - 634s 393ms/step - loss: 0.0170 - acc: 0.8288 - val_loss: 0.0139 - val_acc: 0.8428
+Epoch 4/5
+1616/1616 [==============================] - 635s 393ms/step - loss: 0.0161 - acc: 0.8327 - val_loss: 0.0129 - val_acc: 0.8505
+Epoch 5/5
+1616/1616 [==============================] - 665s 411ms/step - loss: 0.0154 - acc: 0.8365 - val_loss: 0.0125 - val_acc: 0.8451
+
+$ cat ../trained_models/sanity/20201123162643_sanity.log
+Model name: ../trained_models/sanity/20201123162643_sanity.h5
+Total training time: 0:55:10
+Training loss: 0.015
+Validation loss: 0.013
+Training accuracy: 0.836
+Validation accuracy: 0.845
+
+The batch size used by generator function was 64:
+src(nov7)$ cat train.py | grep batch
+def generator(samples, is_training, batch_size=64):
+
+Running the predictions:
+
+$ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow.log
+$ python predict_client.py --model=../trained_models/sanity/20201123162643\_sanity.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201123162643\_sanity.h5
+Video uploaded to https://youtu.be/uG2HvAbg2U4
+
+tcpflow log file moved:
+cp /tmp/tcpflow.log ../dataset/unity/genRoad/tcpflow/20201123162643_sanity.log
+
+Plotting the bins with GetSteeringAnglesFromtcpflow.ipynb
+
+sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201123162643_sanity.log')
+sarr = np.asarray(sa)
+p = sarr[:,0]
+p = sarr[:,0]  
+plotSteeringAngles(p, g, 25, False, "Generated Road", "20201123162643_sanity.h5")
+plotBinsFromArray(p, 25, "20201123162643_sanity.h5", "tcpflow/20201123162643_sanity.log") 
 \end{verbatim}
 
-\subsection{XX - }
+Steering data recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanity.log
+This was running with commit 1ad187d4bf where frame \textbf{is not preprocessed} for prediction (predict\_ client.py) (Figures  \ref{fig:tcpflow_20201123162643_graph} and  \ref{fig:tcpflow_20201123162643_bins}). 
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_graph.png}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanity.log for model 20201123162643\_sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/uG2HvAbg2U4}{https://youtu.be/uG2HvAbg2U4}
+ \label{fig:tcpflow_20201123162643_graph}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_bins.png}
+ \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201123162643\_ sanity.log for model 20201123162643\_ sanity.log driving on Generated Road}
+ \label{fig:tcpflow_20201123162643_bins} 
+\end{figure} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 39
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 39 - 20201123162643\_sanity.h5}
+\begin{verbatim}
+Commit: 7f3086490118fec1a20e99e93cc1b853a91272b6
+Model:  N/A (trained model)
+Outputs:N/A (trained model)
+Dataset: N/A (trained model)
+Command: 
+Environment: 
+Comment: Same as previous run, but on branch 7f308649 (predict_client.py) with preprocessing
+
+$ sudo tcpflow -i lo -c port 9091 (right angle bracket) /tmp/tcpflow.log
+$ python predict_client.py --model=../trained_models/sanity/20201123162643\_sanity.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201123162643\_sanity.h5
+
+Link: https://youtu.be/377O2E_LwyU
+
+tcpflow log file moved:
+cp /tmp/tcpflow.log ../dataset/unity/genRoad/tcpflow/20201123162643_sanity_pp.log
+
+sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201123162643_sanity_pp.log')
+sarr = np.asarray(sa)
+p = sarr[:,0]
+p = sarr[:,0]  
+plotSteeringAngles(p, g, 25, False, "Generated Road", "20201123162643_sanity_pp.h5")
+plotBinsFromArray(p, 25, "20201123162643_sanity.h5", "tcpflow/20201123162643_sanity_pp.log")
+
+Video: https://youtu.be/377O2E_LwyU
+\end{verbatim}
+
+Steering data recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanit\_ppy.log
+This was running with commit 7f308649 where frame \textbf{is preprocessed} for prediction (predict\_ client.py) (Figures  \ref{fig:tcpflow_20201123162643_pp_graph} and  \ref{fig:tcpflow_20201123162643_pp_bins}). 
+Note the steering angles are a much tighter range. Bias toward positive 6 is due to road bending right.
+The bins show a left skewed distribution, due to the right turn.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_pp_graph.png}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_  pp.log for model 20201123162643\_ sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/377O2E\_LwyU}{https://youtu.be/377O2E\_LwyU}
+ \label{fig:tcpflow_20201123162643_pp_graph}
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_pp_bins.png}
+ \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_ pp.log for model 20201123162643\_sanity.h5 driving on Generated Road}
+ \label{fig:tcpflow_20201123162643_pp_bins} 
+\end{figure} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 40
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 40 - }
 \begin{verbatim}
 Commit: 
 Model: 
-Outputs: 
-Dataset: 
+Outputs: 2
+Dataset: N/A
 Command: 
-Environment: 
+Environment: simbox
 Comment: 
 Command
 
 \end{verbatim}
 
-\subsection{XX - }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN XX
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run XX - }
 \begin{verbatim}
 Commit: 
 Model: 

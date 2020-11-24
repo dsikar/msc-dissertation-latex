@@ -167,12 +167,12 @@ The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHi
  \label{fig:GeneratedTrackPlusHist}
 \end{figure}
 
-Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers removed was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
+Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers omitted from the plot (not excluded from data at this stage) was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
 
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/GeneratedRoadPlusHistogram.png}
- \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right}
+ \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right. Outliers is due to oversteering when running off the end of track and sim left recording.}
  \label{fig:GeneratedRoadPlusHist}
 \end{figure}
 
