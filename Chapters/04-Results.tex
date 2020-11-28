@@ -30,7 +30,7 @@ shows 3 stills from the video containing from left to right, the game engine, th
 \label{fig:SimTCPPred}
 \end{figure}
 
-The video shows the TCP debugging, prediction engine and the game engine simulated car steering with predictions received over the TCP network. The actual code used to generate the model was not logged at the time the experiment log entry was written in the appendix log (\ref{AppendixD}). By verifying git hash commits (4 commits were made on November 7th) as documented in appendix  a second sanity check model \ref{app_res:36} (20201120171015\_sanity.h5) was created and found to self-drive successfully around the generated track. A video was made from tcpflow frames as decribed at the end of \ref{app_res:36}, and uploaded to \href{https://youtu.be/JaSkkh-2xtI}{https://youtu.be/JaSkkh-2xtI}.
+The video shows the TCP debugging, prediction engine and the game engine simulated car steering with predictions received over the TCP network. The actual code used to generate the model was not logged at the time the experiment log entry was written in the appendix log (\ref{AppendixD}). By verifying git hash commits (4 commits were made on November 7th) as documented in appendix  a second sanity check model \ref{app_res:36} (20201120171015\_ sanity.h5) was created and found to self-drive successfully around the generated track. A video was made from tcpflow frames as described at the end of \ref{app_res:36}, and uploaded to \href{https://youtu.be/JaSkkh-2xtI}{https://youtu.be/JaSkkh-2xtI}.
 The video shows (fps discrepancies considered) that the \ref{app_res:36} model had a better lap around the track.
 Model 37 (\ref{app_res:37}) trained with genRoad (including outliers seen in Figure \ref{fig:GeneratedRoadPlusHist}) ) did not do well. The oversteering can be seen in video \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}. The steering angle bins and graph plots can be seen in  Figures \ref{fig:tcpflow_20201120184912_bins}  and \ref{fig:tcpflow_20201120184912_graph} in the results appendix.
 
@@ -73,7 +73,68 @@ Once the outliers were removed, another model was generated with five epochs of 
  \label{fig:tcpflow_20201120184912_bins} 
 \end{figure}
 
+\section{Goodness of steer results}
 
+To compare models, the $G_s$ (Eq. \ref{eq:goodness_of_steer}) was used. Figure  \ref{fig:genTrackOneLap_20201120171015_sanity_gos} contains (discuss):
+\begin{itemize}
+    \item[--] The PID effect
+    \item[--] 
+\end{itemize}
+The
+A second data output was created for the Generated Track circuit. (TODO, create another dataset and plot to compare PID to and manual steering angles).
+A video was then created to observe steering angles while recording another dataset on the same lap \href{https://youtu.be/zAmr7a1ImEY}{https://youtu.be/zAmr7a1ImEY}. The video shows steering corrections
+% nb recorded at
+
+
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_20201120171015_sanity.h5.png}
+ \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap .json files and values predicted by model 20201120171015\_ sanity.h5}
+ \label{fig:genTrackOneLap_20201120171015_sanity_gos} 
+\end{figure}
+
+To confirm the observed acute steering angle variations, a second lap was recorded, producing the same plot
+ \label{fig:a_genTrackOneLap_2_20201120171015_sanity} 
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_2_20201120171015_sanity.h5.png}
+ \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap\_ 2 .json files and values predicted by model 20201120171015\_ sanity.h5, confirming the acute steering angles observed in previous dataset}
+ \label{fig:a_genTrackOneLap_2_20201120171015_sanity} 
+\end{figure}
+
+The values of Prop and Diff (Proportional and Derivative components of PID steering) were changed while observing steering 
+% PID 25, Diff 8, max speed 1.6
+
+This had a smoothing effect to the steering, though the $Gs$ increased:
+ \ref{fig:genTrackOneLap_3_20201120171015_sanity_gos} 
+ 
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_3_20201120171015_sanity.h5.png}
+ \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap\_ 3 .json files and values predicted by model 20201120171015\_ sanity.h5, showing the smoothing effect of changing Prop and Diff variables for data capture in Auto w Drive mode}
+ \label{fig:genTrackOneLap_3_20201120171015_sanity_gos} 
+\end{figure}
+
+We added a video of the model running side by side with network:
+\ref{fig:20201120171015_sanity_sim_network}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201120171015_sanity_sim_network.png}
+ \caption{Video still from \href{https://youtu.be/LEmZJJzJkEE}{https://youtu.be/LEmZJJzJkEE} showing simulator image sent over TCP network on the left with CNN steering angle prediction and processed image (as presented to CNN) on the right}
+ \label{fig:20201120171015_sanity_sim_network} 
+\end{figure}
+
+\textbf{STOPPED HERE - NEED TO GENERATE STEERING ANGLE PLOT WITH MEAN AND STD} Looks like we might be picking up the simulator steering angle.  \ref{fig:sa_GeneratedTrack_20201120171015_sanity}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrack_20201120171015_sanity.h5.png}
+ \caption{Video still showing simulator image sent over TCP network on the left with CNN steering angle prediction and processed image (as presented to CNN) on the right}
+ \label{fig:sa_GeneratedTrack_20201120171015_sanity} 
+\end{figure}
 % probably best to more this to results section and reference here
 %\begin{verbatim}
 %# data: genRoad (log2 renamed)

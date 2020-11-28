@@ -867,6 +867,17 @@ So we have the videos of added rain next to processed YUV images. That should be
 
 Let's try to keep it simple.
 
+2020-11-25
+
+20201123162643_sanity.h5 "wobbly" is an interesting model trained over 5 epochs on genRaod manages to keep on the road but zig-zagging from start to finish
+
+2020.11.28
+
+Tasks for the day:
+
+1. Finish the dataset prediction script.
+2. Finish the side-by-side (raw image send from sim and processed image presented to network) create video from tcpflow log.
+
 
 
 

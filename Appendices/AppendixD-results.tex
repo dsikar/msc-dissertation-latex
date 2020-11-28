@@ -795,6 +795,8 @@ between logged frames (tcpflow) and rendered frames (MakeVideo.py).
 The frame rate logged with tcpflow is the frame rate SDSandbox is sending frames over 
 the TCP network.
 
+
+
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -968,7 +970,7 @@ plotBinsFromArray(p, 25, "20201123162643_sanity.h5", "tcpflow/20201123162643_san
 Video: https://youtu.be/377O2E_LwyU
 \end{verbatim}
 
-Steering data recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanit\_ppy.log
+Steering data recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanity\_pp.log
 This was running with commit 7f308649 where frame \textbf{is preprocessed} for prediction (predict\_ client.py) (Figures  \ref{fig:tcpflow_20201123162643_pp_graph} and  \ref{fig:tcpflow_20201123162643_pp_bins}). 
 Note the steering angles are a much tighter range. Bias toward positive 6 is due to road bending right.
 The bins show a left skewed distribution, due to the right turn. Steering goes a bit crazy but model
@@ -977,7 +979,7 @@ manages to keep vehicle on the road.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_pp_graph.png}
- \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_  pp.log for model 20201123162643\_ sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/377O2E\_LwyU}{https://youtu.be/377O2E\_LwyU}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_  pp.log for model 20201123162643\_ sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/377O2E\_ LwyU}{https://youtu.be/377O2E\_ LwyU}
  \label{fig:tcpflow_20201123162643_pp_graph}
 \end{figure}
 
@@ -991,7 +993,7 @@ manages to keep vehicle on the road.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 40
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run 40 - 20201124032017_nvidia2.h5}
+\subsection{Run 40 - 20201124032017\_ nvidia2.h5}
 \begin{verbatim}
 Commit: 7f3086490118fec1a20e99e93cc1b853a91272b6
 Model: nvidia1
@@ -1029,7 +1031,7 @@ geometry
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_20201124032017_nvidia2_graph.png}
- \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201124032017\_ nvidia2.log for model 20201124032017\_ nvidia2.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/RW-luOWQ_qY}{https://youtu.be/RW-luOWQ_qY}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201124032017\_ nvidia2.log for model 20201124032017\_ nvidia2.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/RW-luOWQ\_ qY}{https://youtu.be/RW-luOWQ\_ qY}
  \label{fig:tcpflow_20201124032017_nvidia2_graph}
 \end{figure}
 
@@ -1044,15 +1046,36 @@ geometry
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 41
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run 41 - }
+\subsection{Run 41 - 20201120171015\_ sanity.h5}
 \begin{verbatim}
-Commit: d96040898eb731984aced536f310db546d4e25aa
+Commit: f0d2513
 Model: nvidia1
 Outputs: 2
-Dataset: genRoad
-Command: python train.py --model=nvidia1 --outdir=../trained_models --epochs=100
+Dataset: log_sample (small looping circuit)
+
+Command: 
+
+$ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow_20201120171015_sanity.log
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow_20201120171015_sanity.log --model=20201120171015_sanity.h5
+# mv
+$ mv /tmp/tcpflow_20201120171015_sanity.log \ 
+~/git/sdsandbox/trained_models/sanity/tcpflow/
+
+Generating plot:
+$ python steerlib.py
+$ python 
+>>> import steerlib as sl
+>>> sa = sl.etSteeringFromtcpflow('../../dataset/unity/genRoad/tcpflow/tcpflow_20201120171015_sanity.log')
+>>> sarr = np.asarray(sa)
+>>> p = sarr[:,0]
+
+plot = sl.plotSteeringAngles(p, None, 25, True, "Generated Track", "20201120171015_sanity.h5", 'tcpflow log predicted')
 Environment: simbox
-Comment: Trying to train a model that does well on Generated Road
+Comment: Prediction to generate tcpflow log
+video https://youtu.be/LEmZJJzJkEE
+
+
 \end{verbatim}
 
 
