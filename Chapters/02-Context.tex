@@ -30,7 +30,46 @@ Stochastic Gradient Descent (SGD) has become the standard for training deep neur
 
 One of the main difficulties in training deep neural networks in the vanishing gradient problem, when, during the training phase, gradients become excessively large or small such that the network ceases to learn. This is also known as the degradation problem. 
 
+\section{Related Work}
+To be added, something surely must be happening in the field.
+Work relating to digital noise:
+Removing rain from images, vastly studied, i.e.
+% https://arxiv.org/pdf/1909.08326.pdf
+Adverse weather affecting sensor data including cameras used by AVs was surveyed by \cite{ZangAdverseWetherAVSurvey8666747}.  
+\cite{ClearingSkiesDeepNNRainRemoval7893758}
+\cite{Cord2014DetectingUR} "Advanced driver assistance systems (ADASs) based on video cameras are becoming pervasive in today's automotive industry. However, while most of these systems perform nicely in clear weather conditions, their performances fail drastically in adverse weather and particularly in the rain. We present two novel approaches that aim to detect unfocused raindrops on a car windshield using only images from an in-vehicle camera. Based on the photometric properties of raindrops, the algorithms rely on image processing techniques to highlight them. The results will be used to improve ADAS behavior under rainy conditions. Both approaches are compared with each other and the techniques from the literature."
+\section{Quantifying noise}
+\cite{yoneda2019automated} "There is a possibility that the recognition performance of the object is degraded due to the degradation of image quality. When installing a camera in the front of the vehicle, raindrops can be removed by installing the camera within the movable range of the wiper. However, when a camera is installed on the side or outside of the vehicle to capture images in all directions,the effects of raindrops are inevitable. Therefore, a camera installation that takes into account raindrops and a mechanism for removing them are necessary. In addition, researches on the recognition of rain-drops in the captured image have been reported".  
+\cite{kurihata2005rainy} "We propose a weather recognition method from in-vehicle camera images that uses a
+subspace method to judge rainy weather by detecting raindrops on the windshield."
+Eigendrops" represent the principal components extracted from raindrop images in the
+learning stage. Then the method detects raindrops by template matching. In experiments
+using actual video sequences, our method showed good detection ability of raindrops and
+promising results for rainfall judgment from detection results."  
+  
+ \cite{webster2015improved} "The presence of raindrop induced image distortion has a significant negative impact on the
+performance of a wide range of all-weather visual sensing applications including within the
+increasingly import contexts of visual surveillance and vehicle autonomy. A key part of this
+problem is robust raindrop detection such that the potential for performance degradation in
+effected image regions can be identified. Here we address the problem of raindrop detection
+in colour video imagery using an extended feature descriptor comprising localised shape …"  
+  
+\cite{garg2007vision} "The visual effects of rain are complex. Rain produces sharp intensity changes in images and
+videos that can severely impair the performance of outdoor vision systems. In this paper, we
+provide a comprehensive analysis of the visual effects of rain and the various factors that …"  
+  
+\cite{garg2005does}
 
+"Rain produces sharp intensity fluctuations in images and videos, which degrade the
+performance of outdoor vision systems. These intensity fluctuations depend on various
+factors, such as the camera parameters, the properties of rain, and the brightness of the …"
+
+% on calculating light intensity of RGB value
+
+% https://computergraphics.stackexchange.com/questions/5085/light-intensity-of-an-rgb-value
+
+% on "smoothing" with matlab code provided:
+% https://www.researchgate.net/profile/Manu_Bn2/publication/295235499_Rain_Removal_From_Still_Images_Using_L0_Gradient_Minimization_Technique/links/56c847aa08ae96cdd06acb6f.pdf
 
 % Maybe a bit of history on SVM, HOG, SURF, etc. Perhaps best in introduction, like how this was a step, where manual feature extraction was used, then came end to end applied to computer vision problems.
 

@@ -414,9 +414,24 @@ https://aws.amazon.com/blogs/machine-learning/train-deep-learning-models-on-gpus
 
 \section{Evalutation}
 This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
+We have so far a goodness of steer metric. Additionally, it would be good to have some form of noise measure, to quantify how much the image has been changed by random noise, i.e. rain.
+\cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  
+\cite{gonzalez2018} "Restoration attempts to recover an image that has been degraded by using a priori knowledge of the degradation phenomenon. Thus, restoration techniques are oriented toward modeling the degradation and applying the inverse process in order to recover the original image."
+\begin{equation}
+    \label{eq:g(x,y)}
+    g(x,y) = \matchcal{H} Stopped here
+\end{equation}
+TODO read up on noise models (Gonzalez)
+% https://ebookcentral.proquest.com/lib/city/reader.action?docID=5573669
+
+
+% From https://en.wikipedia.org/wiki/Noise_(electronics)
+%In communication systems, noise is an error or undesired random disturbance of a useful information signal. The noise is a summation of unwanted or disturbing energy from natural and sometimes man-made sources. Noise is, however, typically distinguished from interference,[a] for example in the signal-to-noise ratio (SNR), signal-to-interference ratio (SIR) and signal-to-noise plus interference ratio (SNIR) measures. Noise is also typically distinguished from distortion, which is an unwanted systematic alteration of the signal waveform by the communication equipment, for example in signal-to-noise and distortion ratio (SINAD) and total harmonic distortion plus noise (THD+N) measures.
+
+%While noise is generally unwanted, it can serve a useful purpose in some applications, such as random number generation or dither. 
 
 %% Udacity
 %% see https://arxiv.org/pdf/1912.05440.pdf
-%% for discussion on using rmse as error metric
+%% for discussion on using rmse as error metric - NB This relates to training a network, not the analysis of image noise.
 
 
