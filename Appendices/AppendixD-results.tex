@@ -1047,6 +1047,8 @@ geometry
 % RUN 41
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 41 - 20201120171015\_ sanity.h5}
+\label{app_res:41}
+\label{}
 \begin{verbatim}
 Commit: f0d2513
 Model: nvidia1
@@ -1078,6 +1080,62 @@ video https://youtu.be/LEmZJJzJkEE
 
 \end{verbatim}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 42
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 42 - 20201120171015\_ sanity.h5}
+\label{app_res:42}
+\begin{verbatim}
+Commit: 444c27f 
+Model: Outputs: Dataset: Command: Environment: Same as run 41 
+Comment: Testing conversion of PIL image to numpy array, bypassing saving .jpg to disk and reading from disk.
+
+git diff ef4b48e..444c27f1 MakeVideo.py
+diff --git a/src/utils/MakeVideo.py b/src/utils/MakeVideo.py
+index f469471..8abd3c8 100644
+--- a/src/utils/MakeVideo.py
++++ b/src/utils/MakeVideo.py
+(...)
+                     image = Image.open(BytesIO(base64.b64decode(imgString)))
++                    # try to convert to jpg
++                    image = np.array(image)
+(...)
+
+
+
+\end{verbatim}
+
+Video still (Figure \ref{fig:tcpflow_Run42}) showing effect of converting PIL image directly to numpy array. Colour of sky is different.
+No video was uploaded to youtube.
+
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/tcpflow_Run42.png}
+\caption{tcpflow log image converted directly to numpy array (left) and image presented to network (right).}
+\label{fig:tcpflow_Run42}
+\end{figure}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 43
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 43 - Record triple video}
+On this run we record a video with 3 frames side by side containing the simulator image, simulator image with added rain and the preprocessed image with added rain.
+
+Interesting observation here (pending two tests to be documented), when we change the order of added rain, i.e. added to image before preprocesssing or added to image after preprocessing, this affects the outcome. Conclusion is currently pointing to the fact that moving image space from RGB to YUV is filtering out the rain "noise"
+
+\label{app_res:43}
+\begin{verbatim}
+Commit: 
+Model: Outputs: Dataset: Environment: Same as run 41 
+Command: 
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 \ --rain=torrential --slant=20 --record=true
+
+Comment: 
+\end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX
@@ -1091,8 +1149,6 @@ Dataset:
 Command: 
 Environment: 
 Comment: 
-Command
-
 \end{verbatim}
 
 

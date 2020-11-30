@@ -878,6 +878,9 @@ Tasks for the day:
 1. Finish the dataset prediction script.
 2. Finish the side-by-side (raw image send from sim and processed image presented to network) create video from tcpflow log.
 
+2020.11.30
+
+Add "save video" flag for prediction engine. The intention is to save processed "rainy" images such that, together with tcpflow images, a "side by side" video may be created showing effect of rain on steering.
 
 
 
