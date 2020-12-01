@@ -882,6 +882,21 @@ Tasks for the day:
 
 Add "save video" flag for prediction engine. The intention is to save processed "rainy" images such that, together with tcpflow images, a "side by side" video may be created showing effect of rain on steering.
 
+2020.12.01
+
+Feedback for 1st draft:
+
+"Thank you Daniel.
+It is good to see this.
+I like the proposed structure.
+The most important thing now is to describe clearly (with the right level of detail - not too much, not too little) the technical process (simulator, adding rain, creating the data, choice of network model and architecture/parameters) and evaluation of results (there's a more objective evaluation here of accuracy/speed but also a subjective evaluation that you can discuss in more detail: when a situation changes from "no rain" to "rain" and how that affects the pre-trained network). With those results you will have the material needed for the important discussion chapter which should include your own critical evaluation of results and also point to future work.
+Looking forward to receiving the next version, please, by email and we should certainly organise a meeting after I've read that version.
+Best wishes,
+Artur
+"
+
+This sets the tone for the long weekend, focus on Methods and Results, resubmit draft Monday night.
+
 
 
 
