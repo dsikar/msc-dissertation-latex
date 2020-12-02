@@ -897,6 +897,18 @@ Artur
 
 This sets the tone for the long weekend, focus on Methods and Results, resubmit draft Monday night.
 
+2020.12.02
+
+Models to document, run, upload to youtube and forward to Artur
+
+1. nvidia1 - brightness 4, rain added to processed frame
+2. nvidia1 - brightness 4, rain added to start frame
+3. nvidia1 - brightness 8, rain added to processed frame
+4. nvidia1 - brightness 4, rain added to start frame
+
+Firing order,
+
+Record 1 and 3, add rain to start frame, record 2 and 4
 
 
 
