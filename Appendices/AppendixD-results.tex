@@ -1140,6 +1140,50 @@ Comment: As observed if noise is added to preprocessed image (at the point of be
 
 \end{verbatim}
 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 44
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 44 - Intensity x4}
+\begin{verbatim}
+Commit: 9696f3cee
+Model: Outputs: Dataset: Environment: Same as run 41 
+Command: 
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 \
+--rain=heavy --slant=20 --record=True
+
+Comment: Changed luminosity multiply manually 
+tcpflow file: (TODO plot steering including crash section)
+~/git/sdsandbox/trained_models/sanity/tcpflow/20201120171015_sanity_run44.log
+
+Video: https://youtu.be/UBd38Hlfv4w
+
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 45
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 45 - Intensity x8}
+\begin{verbatim}
+Commit: 20fe20c2e
+Model: Outputs: Dataset: Environment: Same as run 41 
+Command: 
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 \
+--rain=heavy --slant=20 --record=True
+Comment: Changed intensity manually to 8, vehicle stays on road for 2 laps (stopped there).
+Higher intensity means higher contrast between road and non-road, perhaps creating a 
+guiding pattern.
+It suggests there is some generalisation, as road is very unfamiliar.
+
+tcpflow file:
+~/git/sdsandbox/trained_models/sanity/tcpflow/20201120171015_sanity_run45.log
+
+Video https://youtu.be/NerkRCSquiE
+\end{verbatim}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
