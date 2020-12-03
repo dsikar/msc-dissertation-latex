@@ -910,6 +910,10 @@ Firing order,
 
 Record 1 and 3, add rain to start frame, record 2 and 4
 
+2020.12.02
+
+Managed to install unity on a second Ubuntu (20.04) box. Need to check what is python version running on simbox, and get same version on devbox. Appendix methods should document unity install.
+
 
 
 

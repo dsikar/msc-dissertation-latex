@@ -145,6 +145,29 @@ The queue can be checked with watch command:
 \end{verbatim}
 Jobs can run for a maximum of 24 hours, any job exceeding that execution time is terminated automatically. Jobs can be deleted from queue with qdel command.
 
+\section{Unity}
+Unity for Ubuntu is a single image file, that can be downloaded and run:
+\begin{verbatim}
+$ ./UnityHub.AppImage    
+\end{verbatim}
+This will start the Unity Hub app. A license must be installed by downloading a file, logging into Unity, uploading file then downloading a second license file. This is added to Unity Hub. The next step is to get an editor. Editors are available at:
+\begin{verbatim}
+https://unity3d.com/get-unity/download/archive    
+\end{verbatim}
+From archive pages, a link is obtained for desired editor (2019.3.0 is this case).
+To load the editor, Unity Hub must be closed and the re-opened with the obtained link:
+\begin{verbatim}
+$ ./UnityHub.AppImage unityhub://2019.3.0f6/27ab2135bccf
+\end{verbatim}
+Source code for the simulator can then be cloned locally
+\begin{verbatim}
+git clone https://github.com/tawnkramer/sdsandbox.git    
+\end{verbatim}
+The project can then be added to Unity Hub by ADDing and navigating to sdsandbox/sdsim directory. It will then be listed on Unity Hub. Thereafter, Unity Hub can be started with
+\begin{verbatim}
+$ ./UnityHub.AppImage    
+\end{verbatim}
+
 \section{Tensorflow and Keras}
 \label{methods:tensorflow-keras}
 The versions used were 2.2.0 and 2.4.3 respectively. To ensure the same versions are installed in all development platforms, run:
