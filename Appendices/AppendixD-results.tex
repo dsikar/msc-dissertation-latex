@@ -1185,9 +1185,33 @@ Video https://youtu.be/NerkRCSquiE
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 46
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 46 - 20201203164029_nvidia1.h5}
+%\label{app_res:46}
+\begin{verbatim}
+Commit: 2d9e6983
+Model: N/A
+Outputs: N/A
+Dataset: genTrack
+Command: 
+$ python train.py --model=nvidia1 --outdir=../trained_models --epochs=100 --inputs=../dataset/genTrackOneLap/*.jpg --aug=true --preproc=true --inputs=../dataset/unity/genTrack/*.jpg
+Environment: devbox
+Comment: Gathered dataset (35967 files) moved to ../dataset/unity/genTrack
+ls -R | grep .jpg | wc -l
+35967
+Laps recorded with settings:
+Max Speed 1.963599
+Prop: 24
+Diff: 5
+Steer Max: 25
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run XX - }
+%\label{app_res:XX}
 \begin{verbatim}
 Commit: 
 Model: 
