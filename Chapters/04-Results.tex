@@ -11,6 +11,28 @@
   
 %It is essential that you identify clearly what you accomplished or produced yourself, as opposed to what existed before you started your individual project or was provided by others. For instance, some projects build new software on top of an existing code base, add new data to an existing body of data, or are executed by a student as a member of a team. It is essential to indicate what parts of the activities and results which you report are your own work. If this is left unclear, the markers are instructed not to give credit for work that they cannot attribute to you. Ambiguity would attract penalties for poor academic practice, with delays caused by any investigation (deception would be treated as academic misconduct, of course, which may lead to expulsion).
 
+% Feedback from Artur Garcez with respect to Results
+% The most important thing now is to describe clearly (with the right level of detail - not too much, not too little) the (...) evaluation of results (there's a more objective evaluation here of accuracy/speed but also a subjective evaluation that you can discuss in more detail: when a situation changes from "no rain" to "rain" and how that affects the pre-trained network). With those results you will have the material needed for the important discussion chapter which should include your own critical evaluation of results and also point to future work.
+
+\section{Synthetic datasets}
+% This should go in the "Results" section
+The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) corresponding to steering angles. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s  in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being recorded. The maximum steering angle, is set in the simulator with respect to a car. In this case it is plus or minutes 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle. The data shows a high bias towards right turns because the simulated vehicle drives clockwise around the track.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/GeneratedTrackPlusHistogram.png}
+ \caption{Normalized histogram of Unity 3D SDSandbox steering angles for 45410 image frames. The corresponding track (small\_looping\_couse) is shown on the right}
+ \label{fig:GeneratedTrackPlusHist}
+\end{figure}
+
+Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers omitted from the plot (not excluded from data at this stage) was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/GeneratedRoadPlusHistogram.png}
+ \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right. Outliers is due to oversteering when running off the end of track and sim left recording.}
+ \label{fig:GeneratedRoadPlusHist}
+\end{figure}
+
 %-----------------------------------
 %	Network training
 %-----------------------------------

@@ -34,42 +34,85 @@
 
 % Batch normalization - in the context of preprocessing data for our trainng
 
-\cite{ioffe2015batch, 7005077}
-define Internal Covariate Shift as the change in the
-distribution of network activations due to the change in
-network parameters during training. To improve the training, we seek to reduce the internal covariate shift. By
-fixing the distribution of the layer inputs x as the training
-progresses, we expect to improve the training speed. I
-"It has
-been long known (LeCun et al., 1998b; Wiesler \& Ney,
-2011) that the network training converges faster if its inputs are whitened – i.e., linearly transformed to have zero means and unit variances, and decorrelated. "
-However, since x is affected by
-W, b and the parameters of all the layers below, changes
-to those parameters during training will likely move many
-dimensions of x into the saturated regime of the nonlinearity and slow down the convergence. This effect is
-amplified as the network depth increases.
- In practice,
-the saturation problem and the resulting vanishing gradients are usually addressed by using Rectified Linear Units
-(Nair \& Hinton, 2010) ReLU(x) = max(x, 0), careful
-initialization (Bengio \& Glorot, 2010; Saxe et al., 2013),
-and small learning rates. If, however, we could ensure
-that the distribution of nonlinearity inputs remains more
-stable as the network trains, then the optimizer would be
-less likely to get stuck in the saturated regime, and the
-training would accelerate.
+% Feedback from Artuz Garcez relevant to Methods section
+% The most important thing now is to describe clearly (with the right level of detail - not too much, not too little) the technical process (simulator, adding rain, creating the data, choice of network model and architecture/parameters)
 
-\cite{lecun2012efficient}
-Lecun points out:
-Stochastic learning is usually much faster than batch learning, results in better solutions, particularly on large redundant datasets. The idea being since there is a lot of repetition (similar frames is dataset). SGD also works well because nonlinear networks usually have multiple local minima of different depths. The noise present in the updates can results jumping into the basin of another, possibly deeper, local minimum. Networks learn the fastest from the most unexpected sample, so examples should be chosen with the maximum information content by means of shuffling the training set, however care must be taken not to apply this technique with data that contains outliers
-
-In the case of "In Bengio et al.’s paper [6], the analysis of the problem of gradient decays
-is generalized to parameterized dynamical systems (hence including second
-order and other recurrent architectures)" \cite{hochreiter2001gradient}
 % LC - 14 pages
 
+\section{The Unity Game Engine}
 
+SDSandbox was created with Unity, a toolset that generates graphics, physics, interactions and networking.
+
+\section{Creating the simulated dataset}
+
+\begin{itemize}
+    \item Running SDSandbox in Drive w Rec mode
+\end{itemize}
+
+SDSandbox has a built-in \textit{Drive w Rec} feature which enables saving of image frames generated while the simulator is running. In addition to the image, a corresponding json encoded file is also saved for every image, containing metadata which includes the reference image file name, and values for steering and throttle of simulated vehicle at the time image frame was recorded. 
+
+
+\section{Adding rain to images}
+\label{methods:AddingRainToImages}
+At the core of testing self-driving CNNs in the rain is the ability to add rain to images, never seen before by the network, at inference time.
+Rain is added to images using the Automould (\cite{Saxena2017}) library, in turn using opencv-python, a Python port of OpenCV (\cite{mordvintsev2014opencv}), a library for Computer Vision and Machine Learning algorithms. Rain effect is created by adding lines of user defined slant, and random width. The image is then blurred by convolution with a 7x7 normalized box filter (kernel) as shown in equation \ref{eq:blurring-kernel}, taking the average of all the pixels under the kernel area and replacing the central element on the image (\cite{documentationOpenCV2020}) with the result of the convolution operation (Appendix \ref{app:rpmi}, pg 3).
+
+\begin{equation}
+\label{eq:blurring-kernel}
+    K = \frac{1}{49} \begin{bmatrix} 1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
+    1 & 1 & 1 & 1 & 1 & 1 & 1 \end{bmatrix}
+\end{equation}
+The kernel acts as a low pass filter, removing high frequency content (such as noise and edges). The image is then moved from RGB (red, green, blue) to HSL (hue, saturation, lightness) space, where the lightness values are multiplied by 0.7. This has the effect of making the image darker. The process is completed by moving the image back to RGB space. Rain types are \textit{drizzle} (default), \textit{heavy}, and \textit{torrential}. Slant is defined as an angle in degrees from 0 to plus or minus 20.
+
+
+
+
+% Missing an introduction discussing why this is being done
+% The synthetic datasets used contain no rain. To test models with rainy images, rain must % be added. 
+% To add rain to the testing images, \textit{Automold Road Augmentation Library} (\cite{Saxena2017}) is used, consisting of a Python module capable of adding rain-like effect to images. 
+
+Figure \ref{fig:AutomoldRoadAugmentationLibrary} shows on the top row, a real-life image and on the bottom row, an image created by SDSandbox simulator. The columns from left to right have: no rain added, straight falling (0 degree slant) light, heavy with a -10 degree slant added and torrential rain with a 20 degree slant added.  
+During inference (running steering predictions) the image is (in addition to same pre-processing, performed during training time) processed such that it will contain rain never seen before by the network. 
+%The outcome is uncertain, given the effect of random noise on CNNs (see section TODO add section with discussion on one pixel attacks), although the flattening effect of the RGB to YUV transformation (see section TODO add section with RGB to YUV discussion) may have a desirable filtering effect.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/AutomoldRain.png}
+\caption{Left to right: images}
+\label{fig:AutomoldRoadAugmentationLibrary}
+\end{figure}
+
+\section{Data Augmentation and Pre-Processing}
+
+% Missing an introduction on why this is important
+Data augmentation can be used to reduce overfitting, by increasing the amount of data available to to train the model (\cite{perez2017effectiveness}). This is achieved by drawing data from the training data itself. When
+For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/AugmentationPreProcessing.png}
+ \caption{Stages of image augmentation and pre-processing with array dimensions on each step}
+ \label{fig:augpreproc}
+\end{figure}
+
+
+% Prior to presenting pixel colour channel values to the network, a number of pre-processing steps have become standard with neural network classifiers and regressors applied to computer vision.
+
+\section{Network model}
+
+The starting point for the choice of network model and architecture and parameters is the NVIDIA end to end model (\cite{bojarski2016end}).
+The starting point
+
+\section{}
 
 \section{Driving Simulators}
+
+
 
 Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community still uses behavioral learning to train their self-driving CNNs (see correspondence with main maintainer in \ref{corr:ellerbach}
 ).  
@@ -88,6 +131,7 @@ Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \re
 \end{figure}
 
 Setting up the simulator and prediction engine is further detailed in Appendix
+
 \ref{RunningCarSimulatorForInference}.
 
 \subsection{Installing the source code}
@@ -144,37 +188,8 @@ Two graphs are used, steering angle histograms and steering angle plots. A set o
 
 
 
-\section{Data Augmentation and Pre-Processing}
 
-% Missing an introduction on why this is important
 
-For the NVIDIA baseline model, assumed image capture size is 320wx160h pixels (to be confirmed), and the 200wx66h pixel image presented to network is a crop containing road and excluding horizon. The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/AugmentationPreProcessing.png}
- \caption{Stages of image augmentation and pre-processing with array dimensions on each step}
- \label{fig:augpreproc}
-\end{figure}
-
-Prior to presenting pixel colour channel values to the network, a number of pre-processing steps have become standard with neural network classifiers and regressors applied to computer vision.
-
-The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) corresponding to steering angles. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s  in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being recorded. The maximum steering angle, is set in the simulator with respect to a car. In this case it is plus or minutes 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle. The data shows a high bias towards right turns because the simulated vehicle drives clockwise around the track.
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/GeneratedTrackPlusHistogram.png}
- \caption{Normalized histogram of Unity 3D SDSandbox steering angles for 45410 image frames. The corresponding track (small\_looping\_couse) is shown on the right}
- \label{fig:GeneratedTrackPlusHist}
-\end{figure}
-
-Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers omitted from the plot (not excluded from data at this stage) was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/GeneratedRoadPlusHistogram.png}
- \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right. Outliers is due to oversteering when running off the end of track and sim left recording.}
- \label{fig:GeneratedRoadPlusHist}
-\end{figure}
 
 %\section{Data Augmentation}
 %To avoid overfitting, the data is augmented by: cropping the %image to a height band that excluded horizon and car shadow, %resized to required model input size, converted from RGB to YUV, 
@@ -219,21 +234,6 @@ The unlabelled dataset is stored on AWS S3 (\cite{AmazonS3Documentation2020}). A
  \includegraphics[width=\textwidth]{Figures/SageMakerGroundTruth.png}
  \caption{Amazon SageMaker Ground Truth workflow: a dataset is placed on Amazon S3, labeling job is created, workers label data using a labeling user interface resulting in a labeled dataset}
  \label{fig:amazon-ground-truth}
-\end{figure}
-
-
-
-\section{Adding rain to images}
-% Missing an introduction discussing why this is being done
-The synthetic datasets used contain no rain. To test models with rainy images, rain must be added. 
-To add rain to the testing images, \textit{Automold Road Augmentation Library} (\cite{Saxena2017}) is used, consisting of a Python module capable of adding rain-like effect to images. Figure \ref{fig:AutomoldRoadAugmentationLibrary} shows on the top row, a real-life image and on the bottom row, an image created by SDSandbox simulator. The columns from left to right have: no rain added, light rain added, heavy rain with a -10 degree slant added and torrential rain with a 20 degree slant added.  
-During inference (running steering predictions) the image is (in addition to same pre-processing, and excluding augmentation, performed during training time) processed such that it will contain rain never seen before by the network. The outcome is uncertain, given the effect of random noise on CNNs (see section TODO add section with discussion on one pixel attacks), although the flattening effect of the RGB to YUV transformation (see section TODO add section with RGB to YUV discussion) may have a desirable filtering effect.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{Figures/AutomoldRain.png}
-\caption{Left to right: images}
-\label{fig:AutomoldRoadAugmentationLibrary}
 \end{figure}
 
 \section{Development environments}
@@ -412,7 +412,7 @@ We might want to add that training was done on AWS GPUs following
 https://aws.amazon.com/blogs/machine-learning/train-deep-learning-models-on-gpus-using-amazon-ec2-spot-instances/  
 
 
-\section{Evalutation}
+\section{Evaluation}
 This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
 We have so far a goodness of steer metric. Additionally, it would be good to have some form of noise measure, to quantify how much the image has been changed by random noise, i.e. rain.
 \cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  

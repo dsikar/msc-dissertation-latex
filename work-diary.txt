@@ -914,6 +914,20 @@ Record 1 and 3, add rain to start frame, record 2 and 4
 
 Managed to install unity on a second Ubuntu (20.04) box. Need to check what is python version running on simbox, and get same version on devbox. Appendix methods should document unity install.
 
+# checked
+$ python --version
+Python 3.7.4
+
+Other module versions:
+$ pip install importlib_metadata
+
+2020.12.05
+
+Focusing on writing Methods, plus asserting module versions being used on currently 4 training environment (Intel DevCloud, City Camber, simbox and devbox).
+
+
+
+
 
 
 
