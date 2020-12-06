@@ -90,8 +90,10 @@ During inference (running steering predictions) the image is (in addition to sam
 \section{Data Augmentation and Pre-Processing}
 
 % Missing an introduction on why this is important
-Data augmentation can be used to reduce overfitting, by increasing the amount of data available to to train the model (\cite{perez2017effectiveness}). This is achieved by drawing data from the training data itself. When
-For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
+Data augmentation can be used to reduce overfitting, by increasing the amount of data available to to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself, increase by a factor of 1.6 in this study.
+%For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. 
+The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. 
+The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
 
 \begin{figure}[ht]
  \centering 

@@ -1208,6 +1208,67 @@ Steer Max: 25
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 47
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 47 - 20201206171648\_ nvidia1.h5}
+%\label{app_res:47}
+\begin{verbatim}
+Commit: 3f0622c8
+Model: nvidia1
+Outputs: 2
+Dataset: genRoad
+Command: python train.py
+--model=nvidia1
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genRoad/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: Created Augmentation class, handling image sizes for different models.
+Then ran:
+python predict_client.py --model=../trained_models/nvidia1/20201206171648_nvidia1.h5
+
+When running this model (and possibly all previous):
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201206171648_nvidia1.h5
+
+WARNING:tensorflow:Model was constructed with shape (None, 160, 120, 3) for input
+Tensor("img_in:0", shape=(None, 160, 120, 3), dtype=float32), but it was called on an input
+with incompatible shape (None, 120, 160, 3).
+
+As it turns out, it was an assignment mess up. See diff on models.py between runs 48 and 49
+
+Still the "flipped" input model did manage a stretch of Generated Road and surprisingly
+manages to get around Generated Track, which is a total fluke, which may prove serendipitous.
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 48
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 48 - 20201206211122\_ nvidia1.h5}
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: b5ad97f
+Model: nvidia1
+Outputs: 2
+Dataset: genRoad
+Command: python train.py
+--model=nvidia1
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genRoad/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: Based on previous (Run 47 warning), input to network was changed to col, row, channels. NB This was an oversight. In the next run, col, row remain, the assignement
+changes (to fix mix-up).
+
+This model did really well on Generated Road but not well at all on Generated Track.
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run XX - }
