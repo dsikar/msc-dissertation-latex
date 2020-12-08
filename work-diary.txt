@@ -925,34 +925,24 @@ $ pip install importlib_metadata
 
 Focusing on writing Methods, plus asserting module versions being used on currently 4 training environment (Intel DevCloud, City Camber, simbox and devbox).
 
+2020-12-06
 
+Sidetracked with parameterizing train.py and predict_client.py to deal with different networks.
 
+2020-12-07
 
+Focusing on finishing 2nd draft.
 
+Consolidating genTrack files - moved all recordings/captures to genTrack:
 
+$ ls -R ../dataset/unity/genTrack/ | grep .jpg | wc -l
+8274
+$ ls -R ../dataset/unity/genTrack/ | grep .json | wc -l
+8278
+# one extra .json file per capture
 
+# cleansing orphan .jpg files
+$ python jsonclean.py --inputs ../../dataset/unity/genTrack/
+Files deleted: 0
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Good to train nvidia2 (NaokiNet) on genTrack

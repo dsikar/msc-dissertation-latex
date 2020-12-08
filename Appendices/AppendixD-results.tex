@@ -795,8 +795,6 @@ between logged frames (tcpflow) and rendered frames (MakeVideo.py).
 The frame rate logged with tcpflow is the frame rate SDSandbox is sending frames over 
 the TCP network.
 
-
-
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1248,7 +1246,7 @@ manages to get around Generated Track, which is a total fluke, which may prove s
 % RUN 48
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 48 - 20201206211122\_ nvidia1.h5}
-%\label{app_res:XX}
+%\label{app_res:48}
 \begin{verbatim}
 Commit: b5ad97f
 Model: nvidia1
@@ -1269,19 +1267,951 @@ This model did really well on Generated Road but not well at all on Generated Tr
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 49 - PROBABLY BEST NVIDIA1 MODEL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 49 - 20201207091932\_ nvidia1.h5}
+\label{app_res:49}
+\begin{verbatim}
+Commit: 55cb00b
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command: 
+$ python train.py
+--model=nvidia1
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+
+Environment: simbox
+Comment: Trained for 5 epochs, maximum validation accuracy 0.7644. This model
+drives both on Generated Road and Generated Track. This model took 1m23s to
+train.
+
+$ cat ../trained_models/nvidia1/20201207091932_nvidia1.log
+Model name: ../trained_models/nvidia1/20201207091932_nvidia1.h5
+Total training time: 0:01:23
+Training loss: 0.021
+Validation loss: 0.015
+Training accuracy: 0.751
+Validation accuracy: 0.757
+
+Recording with no rain:
+python predict_client.py
+--model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --record=True
+https://youtu.be/S-PBNgJ_mdY
+
+tcpflow log:
+../trained_models/nvidia1/tcpflow/20201207091932_nvidia1_tcpflow.log
+
+\end{verbatim}
+
+Video of image plus network image - no rain - Generated Road:  
+\url{https://youtu.be/S-PBNgJ_mdY} 
+
+Figure \ref{fig:20201207091932_nvidia1_tcpflow} shows a slight positive value (road turning right) to start with, then a negative value (road turning left) steering angle.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207091932_nvidia1_tcpflow.png}
+ \caption{tcpflow steering angle log for model 20201207091932\_ nvidia1.h5 trained over 5 epochs on Generated Track, self-driving in a section of Generated Road}
+ \label{fig:20201207091932_nvidia1_tcpflow}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 50
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 50 - 20201207111940\_ nvidia2.h5}
+%\label{app_res:50}
+\begin{verbatim}
+Commit: f9325ff
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack
+Command: python train.py
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+
+Environment: simbox
+Comment: Model trained with 0.5 dropout in a single layer. nvidia1 is trained
+with 5 dropout layers at 0.1 each.
+
+Running the model:
+$ cd ~/Downloads
+$ ./startunity.sh
+$ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow.log
+python predict_client.py
+--model=../trained_models/nvidia2/20201207111940_nvidia2.h5
+--modelname=nvidia2
+--record=True
+
+Video: https://youtu.be/b6IIoHuiUQ8
+
+\end{verbatim}
+
+Figure \ref{fig:20201207111940_nvidia2_tcpflow} shows a tcpflow of the nvidia2 model driving off the road by over-steering to the left after the first right turn as can be seen in video \url{https://youtu.be/b6IIoHuiUQ8} 
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207111940_nvidia2_tcpflow.png}
+ \caption{tcpflow steering angle log for model 20201207111940\_ nvidia2.h5 trained over 5 epochs on Generated Roard, self-driving off the road after first right turn.}
+ \label{fig:20201207111940_nvidia2_tcpflow}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 51
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 51 - 20201207124146\_ nvidia2.h5 }
+%\label{app_res:51}
+\begin{verbatim}
+Commit: bb66ed7
+Comment: Same as run 50, with dropout set to 0.25
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201207124146_nvidia2.h5 --modelname=nvidia2 --record=True
+
+Video: https://youtu.be/-lDaiodokxw
+
+\end{verbatim}
+
+Figure \ref{fig:20201207124146_nvidia2_tcpflow} shows a tcpflow log of the nvidia2 model driving off the road by over-steering to the left off the first right turn as can be seen in video \url{https://youtu.be/-lDaiodokxw}. The model was trained with a single 0.25 dropout layer
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207124146_nvidia2_tcpflow.png}
+ \caption{tcpflow steering angle log for model 20201207124146\_ nvidia2.h5 trained over 5 epochs on Generated Roard, self-driving off the road after first right turn.}
+ \label{fig:20201207124146_nvidia2_tcpflow}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 52
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 52 - 20201207132429\_ nvidia2.h5}
+%\label{app_res:52}
+\begin{verbatim}
+Commit: cd3aa3a
+Comment: Same as 51, with dropout set to 0.1
+
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207132429_nvidia2.h5 
+--modelname=nvidia2 --record=True
+
+https://youtu.be/I6aB5RxYPsg
+
+\end{verbatim}
+
+Another case where nvidia2 drives off the road on the first right turn (Figure \ref{fig:20201207132429_nvidia2_tcpflow}). \url{https://youtu.be/I6aB5RxYPsg}.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207132429_nvidia2_tcpflow.png}
+ \caption{tcpflow steering angle log for model 220201207132429\_ nvidia2.h5 trained over 5 epochs on Generated Roard, self-driving off the road after first right turn.}
+ \label{fig:220201207132429_nvidia2_tcpflow}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 53
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 53 - 20201207133600\_ nvidia2.h5 }
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: 3e3ff1a
+Comment: Same as 52
+\end{verbatim}
+
+Slightly better but still drives off road past the second left bollard.
+
+The model:
+\begin{verbatim}
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+img_in (InputLayer)          [(None, 66, 200, 3)]      0         
+_________________________________________________________________
+lambda (Lambda)              (None, 66, 200, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824      
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 14, 47, 36)        21636     
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 5, 22, 48)         43248     
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 3, 20, 64)         27712     
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928     
+_________________________________________________________________
+dropout (Dropout)            (None, 1, 18, 64)         0         
+_________________________________________________________________
+flattened (Flatten)          (None, 1152)              0         
+_________________________________________________________________
+dense (Dense)                (None, 100)               115300    
+_________________________________________________________________
+dense_1 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+steering_throttle (Dense)    (None, 2)                 102       
+=================================================================
+Total params: 251,800
+Trainable params: 251,800
+Non-trainable params: 0
+_________________________________________________________________
+[(None, 66, 200, 3)]    
+\end{verbatim}
+
+Video: \url{https://youtu.be/DPxFLukN0Ws}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 54
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 54 - 20201207141017\_ nvidia2.h5}
+%\label{app_res:54}
+\begin{verbatim}
+Commit: a39008c
+Comment: Same as run 53 except dropout layers added as per nvidia1.
+Veers off road a little bit after run 53.
+
+Video: https://youtu.be/SQQJacV622E
+\end{verbatim}
+Video: \url{https://youtu.be/SQQJacV622E}
+
+Network:
+\begin{verbatim}
+import models
+mymodel = models.nvidia_model2(2)
+models.show_model_summary(mymodel)
+Model: "model_1"
+Layer (type)                 Output Shape              Param #   
+=================================================================
+img_in (InputLayer)          [(None, 66, 200, 3)]      0         
+_________________________________________________________________
+lambda (Lambda)              (None, 66, 200, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824      
+_________________________________________________________________
+dropout (Dropout)            (None, 31, 98, 24)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 14, 47, 36)        21636     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 14, 47, 36)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 5, 22, 48)         43248     
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 5, 22, 48)         0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 3, 20, 64)         27712     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 3, 20, 64)         0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928     
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 1, 18, 64)         0         
+_________________________________________________________________
+flattened (Flatten)          (None, 1152)              0         
+_________________________________________________________________
+dense (Dense)                (None, 100)               115300    
+_________________________________________________________________
+dense_1 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+steering_throttle (Dense)    (None, 2)                 102       
+=================================================================
+Total params: 251,800
+Trainable params: 251,800
+Non-trainable params: 0
+_________________________________________________________________
+[(None, 66, 200, 3)]
+(None, 66, 200, 3)
+(None, 31, 98, 24)
+(None, 31, 98, 24)
+(None, 14, 47, 36)
+(None, 14, 47, 36)
+(None, 5, 22, 48)
+(None, 5, 22, 48)
+(None, 3, 20, 64)
+(None, 3, 20, 64)
+(None, 1, 18, 64)
+(None, 1, 18, 64)
+(None, 1152)
+(None, 100)
+(None, 50)
+(None, 2)
+
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 55
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 55 - 20201207142129\_ nvidia2.h5}
+%\label{app_res:55}
+\begin{verbatim}
+Commit: 28ea337
+Comment: Same as 54, except aligned number of nvidia2 feature maps with nvidia1
+\end{verbatim}
+Another crash (\url{https://youtu.be/3ipZZgGtJUA}). Given that nvidia1 () run 52 did so well and every subsequent nvidia2 has crashed. Let's have a look at the actual crop we are presenting to both networks (Figure \ref{fig:2129x1932crops}):
+ 
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/2129x1932crops.png}
+ \caption{Network images presented to networks nvidia2 (20201207142129\_ nvidia2.h5) network (second from left) and nvidia1 (20201207091932\_ nvidia1.h5)}
+ \label{fig:2129x1932crops}
+\end{figure}
+
+What is most noticeable is that the nvidia1 network image seems to somehow augment the road information, by making it cover more of the image.
+If we look at the actual dimension crops up to commit 28ea337 on master branch, in conf.py:
+\begin{verbatim}
+# NVIDIA1
+NVIDIA1 = 'nvidia1' # a.k.a. TawnNet
+nvidia1_img_dims = [160,120,3,160,120,60,-25]
+# NVIDIA2
+NVIDIA2 = 'nvidia2' # a.k.a. NaokiNet
+nvidia2_img_dims = [320,160,3,200,66,70,-35]
+\end{verbatim}
+where the last two digits on the list can be understood as the amount of top and bottom crop. In the case of nvidia1, for a total height of 120, a crop of index 60 till index (120 + (-25)) 95 (pixels) (total crop height = 35 pixels) is being made.
+In the case of nvidia2, for a total height of 160 a crop of index 70 until index (160 + (-35)) 125 (total crop height = 55 pixels) is being made. 
+In the case of nvidia1, the crop, as a proportion of the original image height is $35/120=0.21$.  
+In the case of nvidia1, the crop, as a proportion of the original image height is $55/160=0.34$.
+The bottom crop is the extent required to remove the vehicle shadow (if any) from the frame, so does not change. To change the top crop index (the conf.py IMG\_ TOP\_ CROP\_ IDX index value of nvidia2\_ img\_ dims) such that the proportion of both cropped images presented to networks nvidia1 and nvidia2 is the same, the top crop value of nvidia2 must change to approximately $x/160=0.21, x=34, tc=160-35-34=91$, where tc is the top crop value, that is, setting value of nvidia2\_ img\_ dims to
+\begin{verbatim}
+# NVIDIA2
+NVIDIA2 = 'nvidia2' # a.k.a. NaokiNet
+nvidia2_img_dims = [320,160,3,200,66,91,-35]
+\end{verbatim}
+Figure \ref{fig:nvidia1x1_nvidia2x3_crops} shows from left to right, the nvidia1 cropped image, followed by the nvidia2 cropped images with top crop value set to 70, 81 and 91 pixels. 
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/nvidia1x1_nvidia2x3_crops.png}
+ \caption{Left to right, nvidia1 network crop, nvidia2 network crops at top crop set to 70, 81 and 91 pixels respectively)}
+ \label{fig:nvidia1x1_nvidia2x3_crops}
+\end{figure}
+
+The network architecture for run 55, aligned with nvidia1 convolutional feature maps, is 24, 32, 64, 64 and 64 feature maps in the convolutional layers (conv2d\_ 1 through conv2d\_ 5):
+
+\begin{verbatim}
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+img_in (InputLayer)          [(None, 66, 200, 3)]      0         
+_________________________________________________________________
+lambda (Lambda)              (None, 66, 200, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824      
+_________________________________________________________________
+dropout (Dropout)            (None, 31, 98, 24)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 14, 47, 32)        19232     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 14, 47, 32)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 5, 22, 64)         51264     
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 5, 22, 64)         0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 3, 20, 64)         36928     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 3, 20, 64)         0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928     
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 1, 18, 64)         0         
+_________________________________________________________________
+flattened (Flatten)          (None, 1152)              0         
+_________________________________________________________________
+dense (Dense)                (None, 100)               115300    
+_________________________________________________________________
+dense_1 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+steering_throttle (Dense)    (None, 2)                 102       
+=================================================================
+Total params: 266,628
+Trainable params: 266,628
+Non-trainable params: 0
+_________________________________________________________________
+[(None, 66, 200, 3)]
+(None, 66, 200, 3)
+(None, 31, 98, 24)
+(None, 31, 98, 24)
+(None, 14, 47, 32)
+(None, 14, 47, 32)
+(None, 5, 22, 64)
+(None, 5, 22, 64)
+(None, 3, 20, 64)
+(None, 3, 20, 64)
+(None, 1, 18, 64)
+(None, 1, 18, 64)
+(None, 1152)
+(None, 100)
+(None, 50)
+(None, 2)    
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 56
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 56 - 20201207170938\_ nvidia2.h5}
+%\label{app_res:56}
+\begin{verbatim}
+Commit: 8f163e9
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack
+Command:
+
+Environment: 
+Comment: Changed top crop
+https://youtu.be/I3gkoO1yWkk
+\end{verbatim}
+
+Another crash, changed top crop to 81 in conf.py.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 57
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 57 - 20201207175205\_ nvidia2.h5}
+%\label{app_res:57}
+\begin{verbatim}
+Commit: 485d845
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack
+Command:
+python train.py
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+
+Environment: simbox
+Comment: Same as run 56, done as sanity check. Might have messed up the 
+predict_client.py parameters in 56. This model almost goes off the track on the first corner but actually gets around the track and works with a 81 top crop.
+
+python predict_client.py 
+--model=../trained_models/nvidia2/20201207175205_nvidia2.h5 
+--modelname=nvidia2 --record=True --modelname=nvidia2
+\end{verbatim}
+
+This actually managed to get around the track (\url{https://youtu.be/Vqd2W39CwdA}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 58
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 58 - 20201207184329\_ nvidia2.h5}
+%\label{app_res:58}
+\begin{verbatim}
+Commit: 196f820
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack
+Command:
+python train.py 
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: top crop set to 77. 
+Model drove off the road.
+
+Inference time prediction:
+
+$ python predict_client.py ../trained_models/nvidia2/20201207184329_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+\end{verbatim}
+
+Top crop set to 77, drove off the road (\url{https://youtu.be/jHWX7bi5Okw}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 59
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 58 - 20201207185525\_ nvidia2.h5}
+%\label{app_res:58}
+\begin{verbatim}
+Commit: 0cc41e7
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack   
+Command:
+python train.py 
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+
+Comment: top crop set to 83. Drove off the road
+
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207185525_nvidia2.h5 --modelname=nvidia2 
+--record=True --modelname=nvidia2
+
+\end{verbatim}
+\url{https://youtu.be/dkV0Tbfwr9Q}
+
+
+f1a5263
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 60
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 60 - 20201207190447\_ nvidia2.h5}
+%\label{app_res:60}
+\begin{verbatim}
+Commit: f1a5263
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+
+Environment: simbox
+Comment: Crash
+
+Prediction:
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207190447_nvidia2.h5 --modelname=nvidia2 
+--record=True --modelname=nvidia2
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 61
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 61 - 20201207192309\_ nvidia2.h5 }
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: ae4742b
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+Comment: Not zero centering pixel values, just normalizing.
+\end{verbatim}
+\url{https://youtu.be/5VnNHD0wgFc}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 62 - One of the best nvidia2 architecture models
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run62 - 20201207192948\_ nvidia2.h5}
+%\label{app_res:62}
+\begin{verbatim}
+Commit: df953d2
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+Environment: same as 59
+Comment: Restore last 10 unit fully connected layer. This one drives well around Generated Track.
+
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --modelname=nvidia2
+\end{verbatim}
+\url{https://youtu.be/7-Paz1_PKAo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 63
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 63 - 20201207193607\_ nvidia2.h5}
+%\label{app_res:63}
+\begin{verbatim}
+Commit: 3f65201
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+Environment: same as 59 
+Comment: Only one dropout layer as per original NaokiNet model. Seems to be
+getting around the track ok. Very smooth. Comparable to run 62.
+
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207193607_nvidia2.h5 --modelname=nvidia2 
+--record=True --modelname=nvidia2
+
+\end{verbatim}
+\url{https://youtu.be/MRDp-eAAt18}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 64
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 64 - 20201207194331\_ nvidia2.h5}
+%\label{app_res:64}
+\begin{verbatim}
+commit: 3cc0a1bfb8
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+Environment: same as 59 
+Comment: No Dropout layers
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201207194331_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+
+\end{verbatim}
+\url{https://youtu.be/jHhszDocnu4}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 65
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 65 - 20201207194331\_ nvidia2.h5 }
+%\label{app_res:65}
+\begin{verbatim}
+Comment: Model 65 on Generated Road - handles ok-ish-ish
+\end{verbatim}
+\url{https://youtu.be/WA2uLtRn3Z0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 66
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 66 - 20201207193607\_ nvidia2.h5}
+%\label{app_res:65}
+\begin{verbatim}
+Comment: Model 64 (only one dropout layer) on Generated Road. Also a bit wobbly but manages to stay on the road for a while (drop off in the end).
+\end{verbatim}
+\url{https://youtu.be/WA2uLtRn3Z0}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 67
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 67 - 20201207195804\_ nvidia2.h5}
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: 957d14c
+Model:  Same as 59
+Outputs:  Same as 59
+Dataset:  Same as 59
+Command: Same as 59
+Environment: same as 59 
+Comment: zero centered pixel values, drove off the road. This seems to be
+the change that most impacts model performance, followed by image size.
+
+Prediction:
+$ python predict_client.py --model=../trained_models/nvidia2/20201207195804_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+
+\end{verbatim}
+\url{https://youtu.be/ZSgKMGL7azY}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 68
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 68 - 20201207201157\_ nvidia\_ baseline.h5 }
+%\label{app_res:68}
+\begin{verbatim}
+Commit: b1af57c
+Model: nvidia_baseline
+Outputs: 2
+Dataset: genTrack
+Command:
+python train.py
+--model=nvidia_baseline
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: Drove off the road. Looks like geometry of input image must be known.
+\end{verbatim}
+\url{https://youtu.be/RxcC9tHCVUo}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 69
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 69 - }
+%\label{app_res:69}
+\begin{verbatim}
+Commit: 4831a1b
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack
+Command:
+python train.py
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: set second convolutional layer to 32 feature maps failed to predict.
+
+    ValueError: Input 0 of layer dense is incompatible with the layer: expected axis -1 of input shape to have value 6656 but received input with shape [None, 1152]
+
+Was still zero centering (sanity checking)
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201102090041_nvidia2.h5  --record=True --modelname=nvidia2
+
+
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 70
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 70 - 20201207203451\_ nvidia2.h5 }
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: 5e313d6 
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack   
+Command:
+python train.py
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+
+Environment: simbox
+Comment: Weird how a change in feature map size changes model performance. It is still going ok but not the best.
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201207203451_nvidia2.h5  --record=True --modelname=nvidia2
+
+\end{verbatim}
+\url{https://youtu.be/3h_Lp3gtHnw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 71 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 71 - }
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: bc76eb3 
+Model: alexnet
+Outputs: 2 
+Dataset: genTrack
+Command:
+python train.py
+--model=alexnet
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
+
+Environment: 
+Comment: Error - Input to reshape is a tensor with 495616 values, but the
+requested shape requires a multiple of 6336. Need to sort out shapes.
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 72
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 72 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:72}
+\begin{verbatim}
+Commit: bc76eb3 
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_light_rain_mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1
+--rain='light' --slant=0 --record=True
+
+Environment: simbox
+Comment: light rain
+
+
+\end{verbatim}
+\url{https://youtu.be/V5GrdPGTPZs}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 73
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 73 - 20201207091932\_ nvidia1.h5}
+%\label{app_res:73}
+\begin{verbatim}
+Commit: bc76eb3 
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_heavy_10_mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1
+--rain='heavy' --slant=10 --record=True
+
+Environment: simbox
+Comment: heavy rain 10 degree slant
+\end{verbatim}
+\url{https://youtu.be/Yff1s3RYFSg}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 74
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 74 - 20201207091932\_ nvidia1.h5}
+%\label{app_res:74}
+\begin{verbatim}
+Commit: 
+Model: 
+Outputs: 
+Dataset: 
+Command:
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_torrential_20__mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1
+--rain='torrential' --slant=20 --record=True
+
+Environment: simbox
+Comment: Torrential rain, 20 degree slant
+\end{verbatim}
+\url{https://youtu.be/Hn4fXr1a89I}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 75
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 75 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:75}
+\begin{verbatim}
+Commit: 4d2c67e
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_light_rain_mult_4_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='light' --slant=0 --record=True
+
+Environment: simbox
+Comment: Light rain, intensity multiply 4
+\end{verbatim}
+\url{https://youtu.be/qdTA5ho5VOE}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 76
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 76 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:76}
+\begin{verbatim}
+Commit: 4d2c67e
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_heavy_10_mult_4_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='heavy' --slant=10 --record=True
+
+Environment: simbox
+Comment: Heavy rain, slant -+10, intensity multiply 4
+\end{verbatim}
+\url{https://youtu.be/sKyoke3IO84}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 77
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 77 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:77}
+\begin{verbatim}
+Commit: 4d2c67e
+Model: nvidia1
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_torrential_20_mult_4_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='torrential' --slant=20 --record=True
+
+Environment: simbox
+Comment: Torrential rain, slant -+20, intensity multiply 4
+\end{verbatim}
+\url{https://youtu.be/mDjtnnVZdic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 78
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 78 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:78}
+\begin{verbatim}
+Commit: 8d3745c 
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_light_rain_mult_8_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='light' --slant=0 --record=True
+
+Environment: simbox
+Comment: Light rain, intensity multiply 8
+\end{verbatim}
+\url{https://youtu.be/31Dt8RafE8o}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 79
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 79 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:79}
+\begin{verbatim}
+Commit: 8d3745c 
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_heavy_10_mult_8_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='heavy' --slant=20 --record=True
+
+Environment: simbox
+Comment: Heavy rain, +-10 degree slant, intensity multiply 8
+\end{verbatim}
+\url{https://youtu.be/RwWftJeJagY}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 80
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 80 - 20201207091932\_ nvidia1.h5 }
+%\label{app_res:80}
+\begin{verbatim}
+Commit: 8d3745c 
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_torrential_20_mult_8_tcpflow.log
+
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='torrential' --slant=20 --record=True
+
+Environment: simbox
+Comment: Torrential rain, +-20 degree slant, intensity multiply 8
+\end{verbatim}
+\url{https://youtu.be/ta40jlqdZ04}
+
+STOPPED HERE - CONTINUE TOMORROW WITH NVIDIA2, same 9 cases Mult 1,4,8,
+light, heavy, torrential
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run XX - }
+\subsection{Run XX -  }
 %\label{app_res:XX}
 \begin{verbatim}
 Commit: 
 Model: 
 Outputs: 
 Dataset: 
-Command: 
-Environment: 
+Command:
+Environment:
 Comment: 
 \end{verbatim}
+
+
 
 
 
