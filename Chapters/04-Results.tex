@@ -149,12 +149,12 @@ We added a video of the model running side by side with network as shown in figu
  \label{fig:20201120171015_sanity_sim_network} 
 \end{figure}
 
-\textbf{STOPPED HERE - NEED TO GENERATE STEERING ANGLE PLOT WITH MEAN AND STD} Looks like we might be picking up the simulator steering angle.  \ref{fig:sa_GeneratedTrack_20201120171015_sanity}
-
+% \textbf{STOPPED HERE - NEED TO GENERATE STEERING ANGLE PLOT WITH MEAN AND STD} Looks like we might be picking up the simulator steering angle.  \ref{fig:sa_GeneratedTrack_20201120171015_sanity}
+Figure \ref{fig:sa_GeneratedTrack_20201120171015_sanity} shows the predicted steering angles around Generated Track, where the first dip is the sharp right corner, the second dip is the slight right turn followed by a slight left turn plateauing at a negative steering angle (gentle left turn followed by two sharp right turn and finally the straight until the finish line with steering angles close to zero degrees.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrack_20201120171015_sanity.h5.png}
- \caption{Video still showing simulator image sent over TCP network on the left with CNN steering angle prediction and processed image (as presented to CNN) on the right}
+ \caption{Steering angle plot for figure \ref{fig:20201120171015_sanity_sim_network}}
  \label{fig:sa_GeneratedTrack_20201120171015_sanity} 
 \end{figure}
 % probably best to more this to results section and reference here
@@ -166,12 +166,12 @@ We added a video of the model running side by side with network as shown in figu
 %this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
 % and run as per procedure described in (TODO add reference).
 More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (Figure 
- \ref{fig:tcpflow_Run43})
+ \ref{fig:tcpflow_Run43}). This was a first attempt to add rain, where the effect is added to the image presented to network. Although the procedure introduces noise to images, it is somewhat unrealistic, as rain is expected to be present on the acquired image. It is left here to document the work development.
  
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_Run43.png}
- \caption{Video still TODO add explaination \href{https://youtu.be/57jwwcjbfdE}{https://youtu.be/57jwwcjbfdE}}
+ \caption{Video still showing torrential rain added to the image presented to the network \href{https://youtu.be/57jwwcjbfdE}{https://youtu.be/57jwwcjbfdE}}
  \label{fig:tcpflow_Run43} 
 \end{figure}
 %\begin{verbatim}
@@ -181,6 +181,64 @@ More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (
 %\end{verbatim}
 %this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
 %and run as per procedure described in (TODO add reference).
+
+After the attempt illustrated in Figure \ref{fig:tcpflow_Run43}, the rain-adding workflow was modified such that rain was added to the acquired image, and that image then processed further downstream. Some results can be seen in Figures
+
+
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia.h5.png}
+ \caption{Description}
+ \label{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia.h5.png}
+ \caption{Description}
+ \label{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia.h5.png}
+ \caption{Description}
+ \label{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia} 
+\end{figure}
+
+Figure \ref{fig:youtube20201207091932 nvidia1lightrainmult_4_h5} (\url{https://youtu.be/qdTA5ho5VOE}) shows a still containing three images pertaining to the orange line in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia}. The vehicle steer off the road and fails to turn right.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1lightrainmult_4_h5.png}
+ \caption{Still from video \url{https://youtu.be/qdTA5ho5VOE} showing a self-driving simulated vehicle driving off the Generated Track, where the Unity scene is set to a darker horizon (TODO ADD HORIZON) and the intensity multiplier is set to 4. Rain is set to light. The image sent from the network over the TCP network is shown on the right, the middle figure has added rain and the figure on the right is the image presented to the network.}
+ \label{fig:youtube20201207091932 nvidia1lightrainmult_4_h5} 
+\end{figure}
+
+Figure \ref{fig:youtube20201207091932 nvidia1heavy10mult_4_h5} contains a set of stills taken from youtube video \url{https://youtu.be/sKyoke3IO84}
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1heavy10mult_4_h5.png}
+ \caption{Green line in taken from tcpflow log, the corresponding video \url{https://youtu.be/sKyoke3IO84} refencing figure (TODO REFERENCE)}
+ \label{fig:youtube20201207091932 nvidia1heavy10mult_4_h5} 
+\end{figure}
+
+
+Figure  \ref{fig:youtube20201207091932 nvidia1torrential20mult_4_h5} shows still from youtube video \url{https://youtu.be/mDjtnnVZdic}.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1torrential20mult_4_h5.png}
+ \caption{This one has torrential rain (orange line in mult 4 plot), and actually crashes into the first left hand bollard \url{https://youtu.be/mDjtnnVZdic}}
+ \label{fig:youtube20201207091932 nvidia1torrential20mult_4_h5} 
+\end{figure}
+
+% Image template
+%\begin{figure}[ht]
+% \centering 
+% \includegraphics[width=\textwidth]{Figures/a}
+% \caption{Description}
+% \label{fig:} 
+%\end{figure}
 
 \subsection{Modifications to original source codes}
 Three libraries used:

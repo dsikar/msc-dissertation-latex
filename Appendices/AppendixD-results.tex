@@ -2193,6 +2193,27 @@ Comment: Torrential rain, +-20 degree slant, intensity multiply 8
 \end{verbatim}
 \url{https://youtu.be/ta40jlqdZ04}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 81
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 81 - 20201207091932\_ nvidia1.h5}
+%\label{app_res:XX}
+\begin{verbatim}
+Commit: 356fe8f 
+Outputs: 2
+Dataset: genTrack
+Command:
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1__no_rain_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 
+--record=True
+Environment: simbox
+Comment: Run to create a tcpflow ground truth file (best steering around lap)
+\end{verbatim}
+
+
+
 STOPPED HERE - CONTINUE TOMORROW WITH NVIDIA2, same 9 cases Mult 1,4,8,
 light, heavy, torrential
 
