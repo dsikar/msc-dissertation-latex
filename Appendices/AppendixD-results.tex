@@ -2100,7 +2100,7 @@ Comment: Light rain, intensity multiply 4
 % RUN 76
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 76 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:76}
+\label{app_res:76}
 \begin{verbatim}
 Commit: 4d2c67e
 Model: nvidia1
@@ -2120,7 +2120,7 @@ Comment: Heavy rain, slant -+10, intensity multiply 4
 % RUN 77
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 77 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:77}
+\label{app_res:77}
 \begin{verbatim}
 Commit: 4d2c67e
 Model: nvidia1
@@ -2140,7 +2140,7 @@ Comment: Torrential rain, slant -+20, intensity multiply 4
 % RUN 78
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 78 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:78}
+\label{app_res:78}
 \begin{verbatim}
 Commit: 8d3745c 
 Outputs: 2
@@ -2159,7 +2159,7 @@ Comment: Light rain, intensity multiply 8
 % RUN 79
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 79 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:79}
+\label{app_res:79}
 \begin{verbatim}
 Commit: 8d3745c 
 Outputs: 2
@@ -2178,7 +2178,7 @@ Comment: Heavy rain, +-10 degree slant, intensity multiply 8
 % RUN 80
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 80 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:80}
+\label{app_res:80}
 \begin{verbatim}
 Commit: 8d3745c 
 Outputs: 2
@@ -2197,7 +2197,7 @@ Comment: Torrential rain, +-20 degree slant, intensity multiply 8
 % RUN 81
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 81 - 20201207091932\_ nvidia1.h5}
-%\label{app_res:XX}
+\label{app_res:81}
 \begin{verbatim}
 Commit: 356fe8f 
 Outputs: 2
@@ -2212,21 +2212,248 @@ Environment: simbox
 Comment: Run to create a tcpflow ground truth file (best steering around lap)
 \end{verbatim}
 
+%STOPPED HERE - CONTINUE TOMORROW WITH NVIDIA2, same 9 cases Mult 1,4,8,
+%light, heavy, torrential
 
 
-STOPPED HERE - CONTINUE TOMORROW WITH NVIDIA2, same 9 cases Mult 1,4,8,
-light, heavy, torrential
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RUN XX
+% RUN 82
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run XX -  }
-%\label{app_res:XX}
+\subsection{Run 82 - 20201207192948\_ nvidia2.h5 }
+\label{app_res:82}
+\begin{verbatim}
+Commit: 156e1a3f3bb007cbf7090402a9c276c6a9cc835a
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True
+Environment: simbox
+Comment: No rain lap for best nvidia2 model
+Video: https://youtu.be/iePt2HJPXP0
+\end{verbatim}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 83
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 83 - 20201207192948\_ nvidia2.h5 }
+nvidia2 actually managed to get around
+\label{app_res:83}
+\begin{verbatim}
+Commit: 156e1a3f3bb007cbf7090402a9c276c6a9cc835a
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_light_rain_mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='light' slant=0
+Environment: simbox
+Comment: light rain lap for best nvidia2 model
+Video: https://youtu.be/d-yY9M2fO4U
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 84
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 84 - 20201207192948\_ nvidia2.h5 }
+nvidia2 actually managed to get around again, practically same path
+\label{app_res:84}
+\begin{verbatim}
+Commit: 156e1a3f3bb007cbf7090402a9c276c6a9cc835a
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_heavy_10_mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='heavy' slant=10
+Environment: simbox
+Comment: Heavy rain slant 10 lap for best nvidia2 model
+Video: https://youtu.be/3AhcVqdV6KM
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 85
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 85 - 20201207192948\_ nvidia2.h5 }
+
+%label{app_res:85}
+\begin{verbatim}
+Commit: 156e1a3f3bb007cbf7090402a9c276c6a9cc835a
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_torrential_20_mult_1_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='torrential' slant=20
+Environment: simbox
+Comment: Torrential rain slant 20 lap for best nvidia2 model
+Video: https://youtu.be/zk6XalCoOrw
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 86
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 86 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 4
+\label{app_res:86}
+\begin{verbatim}
+Commit: c501da2
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_light_rain_mult_4_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='light' slant=0
+Environment: simbox
+Comment: light rain lap mult 4 for best nvidia2 model
+Video: https://youtu.be/nmD8wnVtdoo
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 87
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 87 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 4
+\label{app_res:87}
+\begin{verbatim}
+Commit: c501da2
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_heavy_10_mult_4_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='heavy' slant=10
+Environment: simbox
+Comment: heavy rain slant 10 mult 4
+Video: https://youtu.be/LTTNYyDFFDk
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 88
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 88 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 4
+\label{app_res:88}
+\begin{verbatim}
+Commit: c501da2
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_torrential_20_mult_4_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='torrential' slant=20
+Environment: simbox
+Comment: torrential rain slant 20 mult 4
+Video: https://youtu.be/jBB4q1JK3oA
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 89
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 89 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 8
+\label{app_res:88}
+\begin{verbatim}
+Commit: fbd3448
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_light_rain_mult_8_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='light' slant=0
+Environment: simbox
+Comment: light rain slant 0 mult 8
+Video: https://youtu.be/qY8eL-9V-hM
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 90
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 90 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 8
+\label{app_res:90}
+\begin{verbatim}
+Commit: fbd3448
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_heavy_10_mult_8_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='heavy' slant=10
+Environment: simbox
+Comment: heavy rain slant 10 mult 8
+Video: https://youtu.be/1PpfHLwOx9M
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 91
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 91 - 20201207192948\_ nvidia2.h5 }
+Same batch of 3 with multiplier set to 8
+\label{app_res:91}
+\begin{verbatim}
+Commit: fbd3448
+Model: nvidia2 
+Outputs: 2
+Dataset: genTrack
+Command:
+$ sudo tcpflow -i lo -c port 9091 > 
+/tmp/20201207192948_nvidia2_torrential_20_mult_8_tcpflow.log
+
+$ python predict_client.py
+--model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
+--record=True --rain='torrential' slant=20
+Environment: simbox
+Comment: Torrential rain slant 20 mult 8
+Video: https://youtu.be/W1eRN5DWPXw
+\end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 92
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 92 - TBA }
+%\label{app_res:92}
 \begin{verbatim}
 Commit: 
-Model: 
-Outputs: 
-Dataset: 
+Model: nvidia1 
+Outputs: 2
+Dataset: genRoad
 Command:
 Environment:
 Comment: 
