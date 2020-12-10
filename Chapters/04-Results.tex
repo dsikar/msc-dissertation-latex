@@ -183,54 +183,90 @@ More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (
 %and run as per procedure described in (TODO add reference).
 
 After the attempt illustrated in Figure \ref{fig:tcpflow_Run43}, the rain-adding workflow was modified such that rain was added to the acquired image, and that image then processed further downstream. Some results can be seen in Figures
-
+\ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1}, \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} and
+\ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1}.
 
 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia.h5.png}
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1.h5.png}
  \caption{Description}
- \label{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia} 
+ \label{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} 
 \end{figure}
 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia.h5.png}
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1.h5.png}
  \caption{Description}
- \label{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia} 
+ \label{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} 
 \end{figure}
 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia.h5.png}
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1.h5.png}
  \caption{Description}
- \label{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia} 
+ \label{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1} 
 \end{figure}
 
-Figure \ref{fig:youtube20201207091932 nvidia1lightrainmult_4_h5} (\url{https://youtu.be/qdTA5ho5VOE}) shows a still containing three images pertaining to the orange line in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia}. The vehicle steer off the road and fails to turn right.
+Figure \ref{fig:youtube20201207091932nvidia1lightrainmult_4_h5} (\url{https://youtu.be/qdTA5ho5VOE}) shows a still containing three images pertaining to the orange line in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia}. The vehicle steer off the road and fails to turn right.
+
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1lightrainmult_4_h5.png}
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1lightrainmult_4_h5.png}
  \caption{Still from video \url{https://youtu.be/qdTA5ho5VOE} showing a self-driving simulated vehicle driving off the Generated Track, where the Unity scene is set to a darker horizon (Setting Skybox Material to SkyCarLightCoversGrey) and the intensity multiplier is set to 4. Rain is set to light. The image sent from the network over the TCP network is shown on the right, the middle figure has added rain and the figure on the right is the image presented to the network.}
- \label{fig:youtube20201207091932 nvidia1lightrainmult_4_h5} 
+ \label{fig:youtube20201207091932nvidia1lightrainmult_4_h5} 
 \end{figure}
 
-Figure \ref{fig:youtube20201207091932 nvidia1heavy10mult_4_h5} contains a set of stills taken from youtube video \url{https://youtu.be/sKyoke3IO84}
+Figure \ref{fig:youtube20201207091932nvidia1heavy10mult_4_h5} contains a set of stills taken from youtube video \url{https://youtu.be/sKyoke3IO84}
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1heavy10mult_4_h5.png}
- \caption{Green line in taken from tcpflow log, the corresponding video \url{https://youtu.be/sKyoke3IO84} refencing figure (TODO REFERENCE)}
- \label{fig:youtube20201207091932 nvidia1heavy10mult_4_h5} 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1heavy10mult_4_h5.png}
+ \caption{Green line in taken from tcpflow log, the corresponding video \url{https://youtu.be/sKyoke3IO84} referencing figure (TODO REFERENCE)}
+ \label{fig:youtube20201207091932nvidia1heavy10mult_4_h5} 
 \end{figure}
 
 
-Figure  \ref{fig:youtube20201207091932 nvidia1torrential20mult_4_h5} shows still from youtube video \url{https://youtu.be/mDjtnnVZdic}.
+Figure  \ref{fig:youtube20201207091932nvidia1torrential20mult_4_h5} shows still from youtube video \url{https://youtu.be/mDjtnnVZdic}.
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/youtube20201207091932 nvidia1torrential20mult_4_h5.png}
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1torrential20mult_4_h5.png}
  \caption{This one has torrential rain (orange line in mult 4 plot), and actually crashes into the first left hand bollard \url{https://youtu.be/mDjtnnVZdic}}
- \label{fig:youtube20201207091932 nvidia1torrential20mult_4_h5} 
+ \label{fig:youtube20201207091932nvidia1torrential20mult_4_h5} 
 \end{figure}
+
+Another set of results for the best performing nvidia2 architecture. TODO ADD DISCUSSION, nearly steering off at large negative spike - link to video time, for three videos.  
+Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} shows
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2.h5}
+ \caption{nvidia2 20201207192948\_ nvidia2.h5 intensity multiplier 1}
+ \label{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} 
+\end{figure}
+
+Figure \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2} shows again three types of rain, light, heavy and torrential.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2.h5}
+ \caption{nvidia2 20201207192948\_ nvidia2.h5 intensity multiplier 4}
+ \label{fig:sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2} 
+\end{figure}
+
+Figure \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2} shows the 3 drives with intensity multiplie (sic) set to 8.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2.h5}
+ \caption{nvidia2 20201207192948\_ nvidia2.h5 intensity multiplier 8}
+ \label{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207192948_nvidia2torrential20mult_8_h5.png}
+ \caption{Youtube video still showing the 20201207192948\_ nvidia2.h5 model predictions around Generated Track in torrential +-2- degree slant rain (\url{https://youtu.be/W1eRN5DWPXw})}
+ \label{fig:youtube20201207192948_nvidia2torrential20mult_8_h5} 
+\end{figure}
+
+% NB All 6 Generated Track rain/multiplier plots generated with code from commit 610939215 (result_plots.py) 
 
 % Image template
 %\begin{figure}[ht]

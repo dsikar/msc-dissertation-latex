@@ -2447,19 +2447,53 @@ Video: https://youtu.be/W1eRN5DWPXw
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 92
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run 92 - TBA }
+\subsection{Run 92 - 20201209001926\_ nvidia1.h5 }
 %\label{app_res:92}
 \begin{verbatim}
-Commit: 
+Commit: 20201209001926_nvidia1.h5
 Model: nvidia1 
 Outputs: 2
 Dataset: genRoad
 Command:
-Environment:
-Comment: 
+python train.py
+--model=nvidia1
+--outdir=../trained_models
+--epochs=100
+--inputs=../dataset/unity/genRoad/*.jpg
+--aug=True
+--preproc=True
+
+Epoch 42/100
+3229/3229 [==== (...)
+
+Total training time: 6:35:44
+Training loss: nan
+Validation loss: nan
+Training accuracy: 0.206
+Validation accuracy: 0.204
+
+Environment: simbox
+Comment: Very wobbly on the road
+
+python predict_client.py --model=../trained_models/nvidia1/20201209001926_nvidia1.h5 --modelname=nvidia1
 \end{verbatim}
+Starts well then wobbles and goes off road (\url{https://youtu.be/K5FmPq0_OdE})
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201209001926_nvidia1_accuracy.png}
+ \caption{nvidia1 trained on genRoad data for 100 epochs - stopped at 42 (best model saved)}
+ \label{fig:20201209001926_nvidia1_accuracy} 
+\end{figure}
 
 
+%%% RUN 93 NVIDIA1 GEN ROAD 5 EPOCHS - STOPPED HERE - DOCUMENT
+\begin{verbatim}
+Epoch 4/5
+3232/3232 [==============================] - 560s 173ms/step - loss: 0.0142 - acc: 0.8396 - val_loss: 0.0106 - val_acc: 0.8559
+Epoch 5/5
+3232/3232 [==============================] - 560s 173ms/step - loss: 0.0136 - acc: 0.8422 - val_loss: 0.0101 - val_acc: 0.8494
+    
+\end{verbatim}
 
 
 

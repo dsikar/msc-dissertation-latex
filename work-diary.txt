@@ -946,3 +946,9 @@ $ python jsonclean.py --inputs ../../dataset/unity/genTrack/
 Files deleted: 0
 
 Good to train nvidia2 (NaokiNet) on genTrack
+
+2020.12.09
+
+This Keras model looks tidy and promissing:
+https://github.com/raghakot/keras-resnet
+
