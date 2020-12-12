@@ -1835,7 +1835,7 @@ $ python predict_client.py
 --record=True --modelname=nvidia2
 
 \end{verbatim}
-\url{https://youtu.be/MRDp-eAAt18}
+\url{https://youtu.be/p2Y6FZX4hNA}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 64
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1852,8 +1852,12 @@ Comment: No Dropout layers
 
 $ python predict_client.py --model=../trained_models/nvidia2/20201207194331_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
 
+TODO - time allowing, run predictions on Generated Track and compare steering
+for networks trained with none, one, and several dropout layers (runs 63, 64
+and 49).
+
 \end{verbatim}
-\url{https://youtu.be/jHhszDocnu4}
+\url{https://youtu.be/N9xyRizMJvI}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2027,7 +2031,7 @@ Comment: light rain
 
 
 \end{verbatim}
-\url{https://youtu.be/V5GrdPGTPZs}
+\url{https://youtu.be/ulMMgQyMwNI}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 73
@@ -2451,6 +2455,7 @@ Video: https://youtu.be/W1eRN5DWPXw
 %\label{app_res:92}
 \begin{verbatim}
 Commit: 20201209001926_nvidia1.h5
+
 Model: nvidia1 
 Outputs: 2
 Dataset: genRoad
@@ -2477,6 +2482,7 @@ Comment: Very wobbly on the road
 
 python predict_client.py --model=../trained_models/nvidia1/20201209001926_nvidia1.h5 --modelname=nvidia1
 \end{verbatim}
+
 Starts well then wobbles and goes off road (\url{https://youtu.be/K5FmPq0_OdE})
 \begin{figure}[ht]
  \centering 
@@ -2489,13 +2495,131 @@ Starts well then wobbles and goes off road (\url{https://youtu.be/K5FmPq0_OdE})
 %%% RUN 93 NVIDIA1 GEN ROAD 5 EPOCHS - STOPPED HERE - DOCUMENT
 \begin{verbatim}
 Epoch 4/5
-3232/3232 [==============================] - 560s 173ms/step - loss: 0.0142 - acc: 0.8396 - val_loss: 0.0106 - val_acc: 0.8559
+3232/3232 [==============================] - 560s 173ms/step - loss: 0.0142 - 
+acc: 0.8396 - val_loss: 0.0106 - val_acc: 0.8559
 Epoch 5/5
-3232/3232 [==============================] - 560s 173ms/step - loss: 0.0136 - acc: 0.8422 - val_loss: 0.0101 - val_acc: 0.8494
+3232/3232 [==============================] - 560s 173ms/step - loss: 0.0136 - 
+acc: 0.8422 - val_loss: 0.0101 - val_acc: 0.8494
     
 \end{verbatim}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 93
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 93 - 20201209221402\_ nvidia1.h5 }
+%\label{app_res:93}
+\begin{verbatim}
+Commit: 173d74b
+Model: nvidia1
+Outputs: 2
+Dataset: genRoad
+Command:
+python train.py
+--model=nvidia1
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genRoad/*.jpg
+--aug=True
+--preproc=True
+Environment: simbox
+Comment: Same results training for 5 epochs (run 93) and 100 epochs (run 92).
 
+sudo tcpflow -i lo -c port 9091 >
+../trained_models/nvidia1/tcpflow/20201209221402_nvidia1_genRoad_dry.log
+
+python3 predict_client.py 
+--model=../trained_models/nvidia1/20201209221402_nvidia1.h5 --record=True
+\end{verbatim}
+
+Video: \url{https://youtu.be/L6I84lpoAyI}. Starts straight, then wobbles. 
+Figure \ref{fig:20201209221402_nvidia1_genRoad_dry} shows the erratic steering starting after frame 100.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201209221402_nvidia1_genRoad_dry.png}
+ \caption{nvidia1 trained on genRoad data for 5 epochs - same results as trained with 100 epochs}
+ \label{fig:20201209221402_nvidia1_genRoad_dry} 
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 94 - 20201207192948_nvidia2.h5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 94 - 20201207192948\_ nvidia2.h5 }
+\label{app_res:94}
+\begin{verbatim}
+Commit: b0b10e3
+Model: nvidia2
+Outputs: 2 
+Dataset: genTrack
+Command: Same as 59
+Environment: simbox
+Comment: Running a prediction on genRoad data with model trained on genTrack data. Drives quite smoothly. Recommendation for future work: investigate why this is the case, model trained on genTrack drives well on genRoad.
+
+sudo tcpflow -i lo -c port 9091 > ../trained_models/nvidia2/tcpflow/20201207192948_nvidia2_dry_genRoad.log
+
+python3 predict_client.py --model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --record=True --modelname=nvidia2
+
+\end{verbatim}
+Video: \url{https://youtu.be/EhTCJ_e-RpM}. 
+
+Figure \ref{fig:20201207192948_nvidia2_dry_genRoad} shows the smoother steering starting centered around 0 degrees, as well as as more even spread in the histogram.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad.png}
+ \caption{nvidia2 trained on genTrack dataset (from the Generated Track circuit) driving well on the randomly generated Generated Road circuit shown in figure \ref{fig:run-93-94-generated-road}}
+ \label{fig:20201207192948_nvidia2_dry_genRoad} 
+\end{figure}
+
+Figure \ref{fig:run-93-94-generated-road} shows a randomly Generated Road used for runs 93 and 94, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on right. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/run-93-94-generated-road.png}
+ \caption{The randomly generated Generated Road circuit used in runs 93 and 94.}
+ \label{fig:run-93-94-generated-road} 
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 95 - 20201207192948_nvidia2.h5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 95 - 20201207192948\_ nvidia2.h5 }
+%\label{app_res:95}
+\begin{verbatim}
+Commit: c4158dd
+Model: nvidia2
+Outputs: 2
+Dataset: genTrack   
+Command: same as 59
+Environment: simbox
+Comment: One of the best nvidia2 models self-driving the entirety of a randomly
+generated road.
+
+\end{verbatim}
+Video: \url{https://youtu.be/APsnTa1ZqfQ}.
+
+Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. This run (95) is much smoother than run 93 (\ref{app_res:93}) which seems also to be suggested in the distributions shown in the related histograms, although run 93 represents a much shorter section.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad_full.png}
+ \caption{Steering angle and normalized histogram plots of the 20201207192948\_ nvidia2.h5 model driving the full length of Generated Track presented in figure \ref{fig:run-93-94-generated-road} }
+ \label{fig:20201207192948_nvidia2_dry_genRoad_full} 
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN XX - TEMPLATE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run XX -  }
+%\label{app_res:XX}
+\begin{verbatim}
+Commit:
+Model: 
+Outputs: 
+Dataset: 
+Command:
+Environment: 
+Comment: 
+\end{verbatim}
 
 
 

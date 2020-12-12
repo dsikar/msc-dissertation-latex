@@ -112,13 +112,9 @@ The image is then cropped to remove car and horizon, resized to the dimensions d
 The starting point for the choice of network model and architecture and parameters is the NVIDIA end to end model (\cite{bojarski2016end}).
 The starting point
 
-\section{}
-
 \section{Driving Simulators}
 
-
-
-Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community still uses behavioral learning to train their self-driving CNNs (see correspondence with main maintainer in \ref{corr:ellerbach}
+Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community still uses behavioral learning to train their self-driving CNNs (see correspondence with main code maintainer in \ref{corr:ellerbach}
 ).  
  
 Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file (\cite{SDSandboxSim}). The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
@@ -187,7 +183,8 @@ Models are trained with the src/train.py script.
 \subsection{Generating graphs}
 
 Two graphs are used, steering angle histograms and steering angle plots. A set of functions have been written for this purpose in steerlib.py. For example to generate a histogram of steering angles from a 
-% maybe move to methods or results, explaining here for now
+
+% maybe move to appendix or results, explaining here for now
 
 
 

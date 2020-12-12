@@ -952,3 +952,6 @@ Good to train nvidia2 (NaokiNet) on genTrack
 This Keras model looks tidy and promissing:
 https://github.com/raghakot/keras-resnet
 
+2020.12.12
+
+Writing methods.
