@@ -2067,9 +2067,10 @@ Generated Track. This last layer, perhaps together with non-zero centered pixel
 values and multi-dropout layers may have made the difference. Or perhaps just the 
 final 10 hidden units? Will probably not have time to test so leaving as 
 recommendation for future work i.e. does last ten hidden units before output neurons 
-work with zero-centered normalised inputs?
+work with zero-centered normalised inputs? Note, answered this question in 
+run 70.
 
-$ python predict_client.pymake up 
+$ python predict_client.py 
 --model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
 --record=True --modelname=nvidia2
 \end{verbatim}
@@ -2079,7 +2080,7 @@ $ python predict_client.pymake up
 % RUN 63
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 63 - 20201207193607\_ nvidia2.h5}
-%\label{app_res:63}
+\label{app_res:63}
 \begin{verbatim}
 Commit: 3f65201
 Model:  Same as 59
@@ -2145,18 +2146,18 @@ Comment: Duplicate entry, same as 64.
 \label{app_res:65}
 \begin{verbatim}
 Comment: Model 63 (only one dropout layer) on Generated Road. Also a bit wobbly but
-manages to stay on the road for a while (drop off in the end).
+manages to stay on the road for a while (drove off road in the end).
 \end{verbatim}
 This is a duplicate entry to run 63 - video is \url{https://youtu.be/p2Y6FZX4hNA}
 The previously attributed video log \url{https://youtu.be/WA2uLtRn3Z0} refers to an incorrectly labelled upload. 
-Another upload was made for run 66 \url{https://youtu.be/v34aJKjeiNs} which is in fact a duplicate to run 63, bar an extra second at the end.
-
+Another upload was made for run 66 \url{https://youtu.be/v34aJKjeiNs} which is in fact a duplicate of run 63, bar an extra second's duration in the video length.
+For previous edit (with errors) see diff for this file  between commit d68c4be5 and previous commit 2f93c98 on submitted repository msc-dissertation-latex.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 67
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 67 - 20201207195804\_ nvidia2.h5}
-%\label{app_res:XX}
+\label{app_res:XX}
 \begin{verbatim}
 Commit: 957d14c
 Model:  Same as 59
@@ -2190,21 +2191,20 @@ $ cat models.py | grep Dense\(10
     x = Dense(10, activation='elu')(x) # Added in Naoki's model
 (...)
 
-    x = Dense(10, activation='elu')(x) # Added in Naoki's model
-
-Also worth noting, it used elu as activation function for all except output layer.
+Also worth noting, nvidia2 (NaokiNet) uses elu as activation function for all except
+output layer.
 Prediction:
 $ python predict_client.py --model=../trained_models/nvidia2/20201207195804_nvidia2.h5
 --modelname=nvidia2 --record=True --modelname=nvidia2
 
 \end{verbatim}
-\url{https://youtu.be/ZSgKMGL7azY}
+Video: \url{https://youtu.be/ZSgKMGL7azY}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 68
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 68 - 20201207201157\_ nvidia\_ baseline.h5 }
-%\label{app_res:68}
+\label{app_res:68}
 \begin{verbatim}
 Commit: b1af57c
 Model: nvidia_baseline
@@ -2219,17 +2219,19 @@ python train.py
 --aug=True
 --preproc=True
 Environment: simbox
-Comment: Drove off the road. Looks like geometry of input image must be known.
+Comment: Drove off the road. Looks like geometry of input image must be known.  
+That is to say, the size of actual acquired image and consequentially, the size of top 
+and bottom crop, and the size of image (after being cropped) presented to network.
 \end{verbatim}
-\url{https://youtu.be/RxcC9tHCVUo}
+Video: \url{https://youtu.be/RxcC9tHCVUo}
 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 69
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\subsection{Run 69 - }
-%\label{app_res:69}
+\subsection{Run 69 - 20201102090041\_ nvidia2.h5}
+\label{app_res:69}
 \begin{verbatim}
 Commit: 4831a1b
 Model: nvidia2
@@ -2246,11 +2248,41 @@ python train.py
 Environment: simbox
 Comment: set second convolutional layer to 32 feature maps failed to predict.
 
-    ValueError: Input 0 of layer dense is incompatible with the layer: expected axis -1 of input shape to have value 6656 but received input with shape [None, 1152]
+    ValueError: Input 0 of layer dense is incompatible with the layer: expected axis -1 of
+    input shape to have value 6656 but received input with shape [None, 1152]
 
 Was still zero centering (sanity checking)
 
-$ python predict_client.py --model=../trained_models/nvidia2/20201102090041_nvidia2.h5  --record=True --modelname=nvidia2
+$ python predict_client.py --model=../trained_models/nvidia2/20201102090041_nvidia2.h5 
+--record=True --modelname=nvidia2
+
+Not sure what happened here. Investigating:
+
+$ git diff --name-only b1af57c..4831a1b
+src/conf.py
+src/models.py
+
+Changes related to nvidia_baseline.
+
+Reran prediction:
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201102090041_nvidia2.h5
+--record=True --modelname=nvidia2
+
+Got error:
+WARNING:tensorflow:Model was constructed with shape (None, 120, 160, 3) for input
+Tensor("img_in:0", shape=(None, 120, 160, 3), dtype=float32), but it was called on an
+input with incompatible shape (None, 66, 200, 3).
+
+as 200x66 is the actual expected network size:
+# in conf.py
+# NVIDIA2
+NVIDIA2 = 'nvidia2' # a.k.a. NaokiNet
+nvidia2_img_dims = [320,160,3,200,66,81,-35]
+
+There might have been an issue fixed with no commits to show the fix, changing the 
+prediction workflow, such that image is resized to expected network dimensions,
+based on parameters in conf.py.
 
 
 \end{verbatim}
@@ -2259,7 +2291,7 @@ $ python predict_client.py --model=../trained_models/nvidia2/20201102090041_nvid
 % RUN 70
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 70 - 20201207203451\_ nvidia2.h5 }
-%\label{app_res:XX}
+\label{app_res:XX}
 \begin{verbatim}
 Commit: 5e313d6 
 Model: nvidia2
@@ -2275,18 +2307,63 @@ python train.py
 --preproc=True
 
 Environment: simbox
-Comment: Weird how a change in feature map size changes model performance. It is still going ok but not the best.
+Comment: Weird how a change in feature map size changes model performance. It is still
+going ok but not the best.
 
-$ python predict_client.py --model=../trained_models/nvidia2/20201207203451_nvidia2.h5  --record=True --modelname=nvidia2
+$ python predict_client.py --model=../trained_models/nvidia2/20201207203451_nvidia2.h5 
+--record=True --modelname=nvidia2
 
+Video not uploaded, rerunning:
+
+sudo tcpflow -i lo -c port 9091 >
+../trained_models/nvidia2/tcpflow/20201207203451_nvidia2_rerun_70.log
+
+$ python predict_client.py --model=../trained_models/nvidia2/20201207203451_nvidia2.h5
+--modelname=nvidia2
+
+$ python MakeVideo.py 
+--filename=../../trained_models/nvidia2/tcpflow/20201207203451_nvidia2_rerun_70.log
+--model=20201120171015_sanity.h5 
+
+Actually, two things changed in code:
+
+$ git diff 4831a1b..5e313d6 models.py
+diff --git a/src/models.py b/src/models.py
+index 6e82c2b..a749a2b 100644
+--- a/src/models.py
++++ b/src/models.py
+@@ -148,11 +148,11 @@ def nvidia_model2(num_outputs):
+     img_in = Input(shape=(row, col, ch), name='img_in')
+     x = img_in
+     # x = Cropping2D(cropping=((10,0), (0,0)))(x) #trim 10 pixels off top
+-    x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
+-    # x = Lambda(lambda x: x / 255.0)(x)
++    # x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
++    x = Lambda(lambda x: x / 255.0)(x)
+     x = Conv2D(24, (5, 5), strides=(2, 2), activation='elu', name="conv2d_1")(x)
+     #x = Dropout(drop)(x)
+-    x = Conv2D(36, (5, 5), strides=(2, 2), activation='elu', name="conv2d_2")(x)
++    x = Conv2D(32, (5, 5), strides=(2, 2), activation='elu', name="conv2d_2")(x)
+
+Size of second set of feature maps changed from 36 to 32 (Naoki Shibuya's original
+NaokiNet size was 32. 
+https://github.com/naokishibuya/car-behavioral-cloning/blob/master/model.py
+And data is being centered. This is significant. In run 62 the question was asked:
+will a model with centered and normalized pixel values also perform well, when
+the the "missing" NaokiNet original design 10-unit hidden layer had been added?
+Then answer is, yes, but not as well as non-centered (run 62). The difference being
+run 70 nearly drives off the road on first left turn, then rights itself and completes
+the circuit on the opposite (left) lane, whereas run 62 completes the entire circuit
+on the right hand lane.
 \end{verbatim}
-\url{https://youtu.be/3h_Lp3gtHnw}
+% Video: \url{https://youtu.be/3h_Lp3gtHnw}
+Video: \url{https://youtu.be/zaeQnImVTsk}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RUN 71 
+% RUN 71 - ALEXNET failed to train - more work needed
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 71 - }
-%\label{app_res:XX}
+\label{app_res:XX}
 \begin{verbatim}
 Commit: bc76eb3 
 Model: alexnet
@@ -2301,7 +2378,7 @@ python train.py
 --aug=True
 --preproc=True
 
-Environment: 
+Environment: simbox
 Comment: Error - Input to reshape is a tensor with 495616 values, but the
 requested shape requires a multiple of 6336. Need to sort out shapes.
 \end{verbatim}
@@ -2310,7 +2387,7 @@ requested shape requires a multiple of 6336. Need to sort out shapes.
 % RUN 72
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 72 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:72}
+\label{app_res:72}
 \begin{verbatim}
 Commit: bc76eb3 
 Model: nvidia1
@@ -2325,17 +2402,15 @@ $ python predict_client.py
 --rain='light' --slant=0 --record=True
 
 Environment: simbox
-Comment: light rain
-
-
+Comment: light rain. Drove off the road on next to last right turn.
 \end{verbatim}
-\url{https://youtu.be/ulMMgQyMwNI}
+Video: \url{https://youtu.be/ulMMgQyMwNI}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 73
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 73 - 20201207091932\_ nvidia1.h5}
-%\label{app_res:73}
+\label{app_res:73}
 \begin{verbatim}
 Commit: bc76eb3 
 Model: nvidia1
@@ -2350,9 +2425,10 @@ $ python predict_client.py
 --rain='heavy' --slant=10 --record=True
 
 Environment: simbox
-Comment: heavy rain 10 degree slant
+Comment: heavy rain 10 degree slant. Drove off the road on same spot as run
+72.
 \end{verbatim}
-\url{https://youtu.be/Yff1s3RYFSg}
+Video: \url{https://youtu.be/Yff1s3RYFSg}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 74
@@ -2373,16 +2449,17 @@ $ python predict_client.py
 --rain='torrential' --slant=20 --record=True
 
 Environment: simbox
-Comment: Torrential rain, 20 degree slant
+Comment: Torrential rain, 20 degree slant. Drove off the road on same spot as
+runs 72 and 73.
 \end{verbatim}
-\url{https://youtu.be/Hn4fXr1a89I}
+Video: \url{https://youtu.be/Hn4fXr1a89I}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 75
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 75 - 20201207091932\_ nvidia1.h5 }
-%\label{app_res:75}
+\label{app_res:75}
 \begin{verbatim}
 Commit: 4d2c67e
 Model: nvidia1
@@ -2391,12 +2468,13 @@ Dataset: genTrack
 Command:
 sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_light_rain_mult_4_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='light' --slant=0 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='light' --slant=0 --record=True
 
 Environment: simbox
-Comment: Light rain, intensity multiply 4
+Comment: Light rain, intensity multiply 4. Drove off the road on first right turn.
 \end{verbatim}
-\url{https://youtu.be/qdTA5ho5VOE}
+Video: \url{https://youtu.be/qdTA5ho5VOE}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 76
@@ -2411,12 +2489,14 @@ Dataset: genTrack
 Command:
 sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_heavy_10_mult_4_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='heavy' --slant=10 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='heavy' --slant=10 --record=True
 
 Environment: simbox
-Comment: Heavy rain, slant -+10, intensity multiply 4
+Comment: Heavy rain, slant -+10, intensity multiply 4. Drove off the road on same
+spot as run 75 and hit the side of bollard.
 \end{verbatim}
-\url{https://youtu.be/sKyoke3IO84}
+Video: \url{https://youtu.be/sKyoke3IO84}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 77
@@ -2429,14 +2509,17 @@ Model: nvidia1
 Outputs: 2
 Dataset: genTrack
 Command:
-sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_torrential_20_mult_4_tcpflow.log
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_torrential_20_mult_4_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='torrential' --slant=20 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='torrential' --slant=20 --record=True
 
 Environment: simbox
-Comment: Torrential rain, slant -+20, intensity multiply 4
+Comment: Torrential rain, slant -+20, intensity multiply 4. Same as 76, and
+crashed straight into the bollard.
 \end{verbatim}
-\url{https://youtu.be/mDjtnnVZdic}
+Video: \url{https://youtu.be/mDjtnnVZdic}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 78
@@ -2448,14 +2531,16 @@ Commit: 8d3745c
 Outputs: 2
 Dataset: genTrack
 Command:
-sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_light_rain_mult_8_tcpflow.log
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_light_rain_mult_8_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='light' --slant=0 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='light' --slant=0 --record=True
 
 Environment: simbox
-Comment: Light rain, intensity multiply 8
+Comment: Light rain, intensity multiply 8. Managed to get around, swapping lanes.
 \end{verbatim}
-\url{https://youtu.be/31Dt8RafE8o}
+Video: \url{https://youtu.be/31Dt8RafE8o}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 79
@@ -2469,12 +2554,14 @@ Dataset: genTrack
 Command:
 sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_heavy_10_mult_8_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='heavy' --slant=20 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='heavy' --slant=20 --record=True
 
 Environment: simbox
-Comment: Heavy rain, +-10 degree slant, intensity multiply 8
+Comment: Heavy rain, +-10 degree slant, intensity multiply 8. Managed to get around,
+swapping lanes.
 \end{verbatim}
-\url{https://youtu.be/RwWftJeJagY}
+Video: \url{https://youtu.be/RwWftJeJagY}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 80
@@ -2486,17 +2573,21 @@ Commit: 8d3745c
 Outputs: 2
 Dataset: genTrack
 Command:
-sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_torrential_20_mult_8_tcpflow.log
+sudo tcpflow -i lo -c port 9091 >
+/tmp/20201207091932_nvidia1_torrential_20_mult_8_tcpflow.log
 
-$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 --rain='torrential' --slant=20 --record=True
+$ python predict_client.py --model=../trained_models/nvidia1/20201207091932_nvidia1.h5
+--modelname=nvidia1 --rain='torrential' --slant=20 --record=True
 
 Environment: simbox
-Comment: Torrential rain, +-20 degree slant, intensity multiply 8
+Comment: Torrential rain, +-20 degree slant, intensity multiply 8. Managed to get 
+around, swapping lanes.
 \end{verbatim}
-\url{https://youtu.be/ta40jlqdZ04}
+Video \url{https://youtu.be/ta40jlqdZ04}. 
+% TODO comment on runs 78. 79 and 80 in results.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RUN 81
+% RUN 81 - 2020.12.13 - STOPPED HERE
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 81 - 20201207091932\_ nvidia1.h5}
 \label{app_res:81}
@@ -2513,11 +2604,6 @@ $ python predict_client.py
 Environment: simbox
 Comment: Run to create a tcpflow ground truth file (best steering around lap)
 \end{verbatim}
-
-%STOPPED HERE - CONTINUE TOMORROW WITH NVIDIA2, same 9 cases Mult 1,4,8,
-%light, heavy, torrential
-
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 82
