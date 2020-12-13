@@ -1,5 +1,7 @@
 \chapter{Results} % Main appendix title
 
+This appendix contains notes related to obtaining results that were and were not used in the final dissertation. Results that were not used are left for completeness, as they may be used for future work.
+
 \label{AppendixD} % For referencing this appendix elsewhere, use \ref{AppendixX}
 
 \section{Ford AV Dataset steering angles}
@@ -46,11 +48,20 @@ encoding: "8UC3"
 is_bigendian: 0
 (...)
 \end{verbatim}
-Thus a timestamp can be obtained for each image extracted. This is done with script parse\_yaml\_time.py:
+Thus a timestamp can be obtained for each image extracted. This is done with script  
+  
+parse\_yaml\_time.py:
 \begin{verbatim}
-    
+$ python ./ford/sample/parse_ford_yaml_time.py
+header -> {'seq': 213414, 'stamp': {'secs': 1501822147, 'nsecs': 684951066}, 'frame_id':
+'camera_front_left'}
+1501822147,684951066
+header -> {'seq': 213415, 'stamp': {'secs': 1501822147, 'nsecs': 820741891}, 'frame_id':
+'camera_front_left'}
+1501822147,820741891
+(...)
 \end{verbatim}
-While the steering angles are extracted 
+While the steering angles are extracted (TODO ADD QUATERNION CORRESPONDENCE)
 The image can be matched with a steering angle by obtaining the timestamp of image, the full secs 
 
 \section{Audi}
@@ -60,7 +71,8 @@ authors (\cite{geyer2020a2d2}) are motivated by the fact that research in machin
 The A2D2 data was acquired with a human-driven Audi Q7 e-tron equipped with six cameras (front left, front center, front right, back left, back center, back right) and five LiDAR sensors. The authors claim this resulted in  360$^{\circ}$ camera and LiDAR coverage. Additionally, several bus data signals from the vehicle were recorded such as velocity, acceleration and steering wheel angle. 
 The total size is 2.3TB. Our datasets of interest are the  Though, since we are interested in image and steering angle only, our data can be narrowed to 
 \begin{verbatim}
-    https://aev-autonomous-driving-dataset.s3.eu-central-1.amazonaws.com/README-SensorFusion.txt
+https://aev-autonomous-driving-dataset.s3.eu-central-1.amazonaws.com/
+README-SensorFusion.txt
     
 - steering_angle_calculated
 - steering_angle_calculated_sign
@@ -68,7 +80,9 @@ The total size is 2.3TB. Our datasets of interest are the  Though, since we are 
 - 'cam_front_center'
 \end{verbatim}
 
-The dataset total size is approximately 2.3TB and provides (...) TBC following https://www.a2d2.audi/a2d2/en/download.html
+The dataset total size is approximately 2.3TB, although the majority is sensor fusion data note used in this study. The data can be dwonloaded from   
+  
+\url{https://www.a2d2.audi/a2d2/en/download.html}
 
 This was supplied for three cities: Gaimersheim, Ingolstadt and Munich. To perform initial investigations we chose data from Munich and downloaded the "Camera - Front Center" images, constituting 27451 images 3.2MB in size each and dimension 1920x1208 pixels, total size on disk is about 92GB. We also downloaded the 176MB "Bus Signals" file. The image naming convention uses a timestamp in the format:
 \begin{verbatim}
@@ -96,6 +110,7 @@ date = datetime.datetime.fromtimestamp(audi_timestamp / 1e3)
 print(date)
 # ValueError: year 51217 is out of range    
 \end{verbatim}
+(TODO ADD CORRESPONDENCE WITH AUTHOR)
 
 %% TODO add correspondence with Mentar
 
@@ -134,27 +149,20 @@ https://github.com/udacity/self-driving-car/tree/master/datasets
 3. Rosbag
 
 \section{utbm}
-More stuff from german uni?
+More stuff from german uni? TODO ADD AND COMPLETE OR REMOVE
 \begin{verbatim}
 https://epan-utbm.github.io/utbm_robocar_dataset/
 \end{verbatim}
 
-TODO ADD BINS
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/bins.png}
- \caption{Diagram showing bins centered around zero degrees, meaning most of time car is driving straight. Binning diagrams for all datasets can be found in appendix B}
- \label{fig:bins-placeholder}
-\end{figure}
+\section{Training and Testing Log}
 
-\section{Training Log}
+The first two entries are incomplete, have been commented out and can be seen in the latex AppendixD-results.tex file.
+%\begin{verbatim}
+%Run ID  Data       Network Acc. Error Saved Best Model 
+%3       log_sample NVIDIA1
+%\end{verbatim}
 
-\begin{verbatim}
-Run ID  Data       Network Acc. Error Saved Best Model 
-3       log_sample NVIDIA1
-\end{verbatim}
-
-Run ID  Data    Network Training    Acc Error   Saved Best Model    Saved History
+%Run ID  Data    Network Training    Acc Error   Saved Best Model    Saved History
 %1       Udacity 1       SGD Adam    .95 .06     model_01            history_01
 
 \subsection{Run 3}
@@ -284,9 +292,11 @@ dataset log2
 command:
 train.py --model=nvidia1 --outdir=../trained_models
 Epoch 1/100
-1755/1755 [==============================] - 682s 389ms/step - loss: 0.0271 - acc: 0.8049 - val_loss: 0.0172 - val_acc: 0.8351
+1755/1755 [==============================] - 682s 389ms/step - loss: 0.0271
+- acc: 0.8049 - val_loss: 0.0172 - val_acc: 0.8351
 Epoch 84/100
-1755/1755 [==============================] - 559s 318ms/step - loss: 0.0099 - acc: 0.8581 - val_loss: 0.0083 - val_acc: 0.8662
+1755/1755 [==============================] - 559s 318ms/step - loss: 0.0099 
+- acc: 0.8581 - val_loss: 0.0083 - val_acc: 0.8662
 problems with loss graph (probably a bug introduced in adding info to graph?)
 
 \end{verbatim}
@@ -300,10 +310,12 @@ dataset log2 (280746)
 command:
 train.py --model=nvidia_baseline --outdir=../trained_models
 
-There is an issue with the aspect ratio and cropping, need to investigate with augment.ipynb
+There is an issue with the aspect ratio and cropping, need to investigate with
+augment.ipynb
 
-Note log2 was renamed genRoad as it is exactly that and a more descriptive name.
-ls
+Note unity dataset log2 was renamed genRoad as it is obtained from a number of
+randomly generated Generated Road circuits.
+
 \end{verbatim}
 
 \subsection{Run 13}
@@ -359,7 +371,7 @@ train.py --model=nvidia_baseline
 --inputs=../dataset/unity/log/*.jpg
 --aug=True
 --preproc=True
-Comment: Started at loss: nan - acc: 0.4305. Two outputs definitely helps. Why?
+Comment: Started at loss: nan - acc: 0.4305. Two outputs definitely help. Why?
 Perhaps because model is not going around track at constant speed?
 
 \end{verbatim}
@@ -469,7 +481,8 @@ Model, Outputs, Dataset and Command: Same as 19
 Comment: Using Glorot Uniform (Xavier) kernel initializer.
 Loss in Nan on first epoch. Training stopped.
 Epoch 1/100
-284/284 [==============================] - 101s 357ms/step - loss: nan - acc: 0.4609
+284/284 [==============================] - 101s 357ms/step - loss: nan 
+- acc: 0.4609
 \end{verbatim}
 
 \subsection{Run 23}
@@ -500,7 +513,8 @@ Epoch 1/100
 285/285 [==============================] - 100s 352ms/step 
 - loss: 0.0660 - acc: 0.6910 - val_loss: 0.0299 - val_acc: 0.7809
 Epoch 2/100
-285/285 [==============================] - 100s 350ms/step - loss: nan - acc: 0.5000
+285/285 [==============================] - 100s 350ms/step - loss: nan 
+- acc: 0.5000
 \end{verbatim}
 
 \subsection{Run 26}
@@ -612,7 +626,8 @@ Outputs: 2
 Dataset: log_sample (12894 - small looping track)
 Environment: simbox (local)
 Command: 
---model=nvidia_baseline --outdir=../trained_models --epochs=100 --inputs=../dataset/unity/log_sample/*.jpg --aug=True --preproc=True
+--model=nvidia_baseline --outdir=../trained_models --epochs=100
+--inputs=../dataset/unity/log_sample/*.jpg --aug=True --preproc=True
 
 Comment: Sanity check run, with the aim of
 establishing a repeatable training session, aiming
@@ -620,7 +635,8 @@ at debbugging Keras when the need arises, that is
 when Keras is suspected of somehow having become 
 corrupted. 
 
-Note before running, all .jpg images were found to have corresponding steering angles:
+Note before running, all .jpg images were found to have corresponding 
+steering angles:
 
 $ python ~/git/sdsandbox/src/utils/jsonclean.py \
 --inputs=/home/simbox/git/sdsandbox/dataset/unity/log_sample/*.jpg
@@ -673,7 +689,8 @@ Outputs: 2
 Dataset: log_sample (12894) 
 Command: python train.py --model=sanity --outdir=../trained\_models
 Environment: simbox
-Comment: This model was trained with the committed code from November 7th, which produced the first success lap drive with not crashes or steering off the track.
+Comment: This model was trained with the committed code from November 7th, which
+produced the first success lap drive with not crashes or steering off the track.
 There is no record of what commit generated the model, though on video:
 https://youtu.be/9z0mMtOnUUc
 One section in the video shows:
@@ -681,8 +698,9 @@ python predict_client.py \
 --model=../trained_models/nvidia1/20201107210627\_nvidia1.h5
 The model name contains date and time created.
 
-The sanity check model trained in under five minutes, and the best model saved was
-most likely (subject to double checking Keras source code) generated on the third epoch.
+The sanity check model trained in under five minutes, and the best model saved 
+was most likely (subject to double checking Keras source code) generated on the
+third epoch.
 
 cat 20201120171015_sanity.log
 Model name: ../trained_models/sanity/20201120171015_sanity.h5
@@ -691,21 +709,29 @@ Total training time: 0:04:38 (...)
 A record of the training output is displayed below:
 
 Epoch 1/100
-80/80 [==============================] - 35s 432ms/step - loss: 0.0822 - acc: 0.6293 - val_loss: 0.0300 - val_acc: 0.8109
+80/80 [==============================] - 35s 432ms/step - loss: 0.0822 
+- acc: 0.6293 - val_loss: 0.0300 - val_acc: 0.8109
 Epoch 2/100
-80/80 [==============================] - 34s 425ms/step - loss: 0.0650 - acc: 0.7127 - val_loss: 0.0264 - val_acc: 0.8129
+80/80 [==============================] - 34s 425ms/step - loss: 0.0650 
+- acc: 0.7127 - val_loss: 0.0264 - val_acc: 0.8129
 Epoch 3/100
-80/80 [==============================] - 34s 423ms/step - loss: 0.0539 - acc: 0.7429 - val_loss: 0.0276 - val_acc: 0.8133
+80/80 [==============================] - 34s 423ms/step - loss: 0.0539 
+- acc: 0.7429 - val_loss: 0.0276 - val_acc: 0.8133
 Epoch 4/100
-80/80 [==============================] - 34s 424ms/step - loss: nan - acc: 0.5398 - val_loss: nan - val_acc: 0.4930
+80/80 [==============================] - 34s 424ms/step - loss: nan 
+- acc: 0.5398 - val_loss: nan - val_acc: 0.4930
 Epoch 5/100
-80/80 [==============================] - 34s 427ms/step - loss: nan - acc: 0.4228 - val_loss: nan - val_acc: 0.4910
+80/80 [==============================] - 34s 427ms/step - loss: nan 
+- acc: 0.4228 - val_loss: nan - val_acc: 0.4910
 Epoch 6/100
-80/80 [==============================] - 34s 428ms/step - loss: nan - acc: 0.4245 - val_loss: nan - val_acc: 0.4963
+80/80 [==============================] - 34s 428ms/step - loss: nan 
+- acc: 0.4245 - val_loss: nan - val_acc: 0.4963
 Epoch 7/100
-80/80 [==============================] - 34s 431ms/step - loss: nan - acc: 0.4216 - val_loss: nan - val_acc: 0.4934
+80/80 [==============================] - 34s 431ms/step - loss: nan 
+- acc: 0.4216 - val_loss: nan - val_acc: 0.4934
 Epoch 8/100
-80/80 [==============================] - 34s 428ms/step - loss: nan - acc: 0.4285 - val_loss: nan - val_acc: 0.4922
+80/80 [==============================] - 34s 428ms/step - loss: nan 
+- acc: 0.4285 - val_loss: nan - val_acc: 0.4922
 
 Further forensic examination of commits:
 
@@ -739,27 +765,31 @@ $ git diff master..8ebd02ab train.py | grep "\-\-inputs"
 -    parser.add_argument('--inputs', default='../dataset/unity/genRoad/log/*.jpg'
 +    parser.add_argument('--inputs', default='../dataset/unity/log2/*.jpg',
 
-The plus signal indicates lines added in the commit to the right, minus indicates what does
-not exist in the commit to the right (9908eb3297) , where master is commit
-436f635fa (current commit).
+The plus signal indicates lines added in the commit to the right, minus indicates
+what does not exist in the commit to the right (9908eb3297) , where master is 
+commit 436f635fa (current commit at time or forensic code analysis).
 
-First two commits indicate log_sample dataset was used containing 38684 images files of
+First two commits indicate log_sample dataset was used containing 38684 images 
+files of
 "small looping course" course
 /log_sample(master)$ grep -nr jpg . | wc -l
 38684
 was used, 
-second two commits indicate log2 dataset (renamed genRoad) containing 280747 image 
-files on the "Generated Road" course.
+second two commits indicate log2 dataset (renamed genRoad) containing 280747 
+image files on the "Generated Road" course.
 /genRoad(master)$ grep -nr jpg . | wc -l
 280747 (files)
 
-The commits are listed in descending  chronological order, that is the first two datasets 
-used to train on that day were log2 (later renamed genRoad), the following two datasets used were log_sample. The commit history suggests one of the two were used to generate
-the Nov 7 successful model. Since the test was run on "Generated Track" course, and genRoad
-contains images for "Generated Road" course, the assumption is sample_log dataset was used.
+The commits are listed in descending  chronological order, that is the first 
+two datasets used to train on that day were log2 (later renamed genRoad), the
+following two datasets used were log_sample. The commit history suggests one
+of the two were used to generate the Nov 7 successful model. Since the test 
+was run on "Generated Track" course, and genRoad contains images for "Generated
+Road" course, the assumption is sample_log dataset was used.
 
 The sanity check model was then used to run predictions:
-python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
+python predict_client.py 
+--model=../trained_models/sanity/20201120171015_sanity.h5
 (...)
 connecting to 127.0.0.1 9091
 fps 10.416671685462958
@@ -787,8 +817,9 @@ Qualitatively (by observation) had a better lap than 20201107210627_nvidia1.h5
 (https://youtu.be/9z0mMtOnUUc) as it keeps to a single lane and the vehicle wheels
 never touch the road markings
 
-Noting that the prior predict_client.py fps logs indicate that frames-per-second at
-varying ratios (e.g. fps 10.50113576298416), while MakeVideo.py records at 11 frames per second.
+Noting that the prior predict_client.py fps logs indicate that frames-per-second 
+at varying ratios (e.g. fps 10.50113576298416), while MakeVideo.py records at 11
+frames per second.
 The video generated by MakeVideo.py is going around the track slightly faster
 than the SDSandbox simulator steering with 20201120171015_sanity.h5 predictions.
 between logged frames (tcpflow) and rendered frames (MakeVideo.py).
@@ -877,15 +908,20 @@ not changing committed source code.
 ln -s ~/git/msc-data/unity/genRoad/ ~/git/msc-data/unity/log2
 
 Epoch 1/5
-1616/1616 [==============================] - 689s 427ms/step - loss: 0.0254 - acc: 0.8033 - val_loss: 0.0167 - val_acc: 0.8365
+1616/1616 [==============================] - 689s 427ms/step - loss: 0.0254 
+- acc: 0.8033 - val_loss: 0.0167 - val_acc: 0.8365
 Epoch 2/5
-1616/1616 [==============================] - 681s 421ms/step - loss: 0.0186 - acc: 0.8251 - val_loss: 0.0148 - val_acc: 0.8411
+1616/1616 [==============================] - 681s 421ms/step - loss: 0.0186 
+- acc: 0.8251 - val_loss: 0.0148 - val_acc: 0.8411
 Epoch 3/5
-1616/1616 [==============================] - 634s 393ms/step - loss: 0.0170 - acc: 0.8288 - val_loss: 0.0139 - val_acc: 0.8428
+1616/1616 [==============================] - 634s 393ms/step - loss: 0.0170 
+- acc: 0.8288 - val_loss: 0.0139 - val_acc: 0.8428
 Epoch 4/5
-1616/1616 [==============================] - 635s 393ms/step - loss: 0.0161 - acc: 0.8327 - val_loss: 0.0129 - val_acc: 0.8505
+1616/1616 [==============================] - 635s 393ms/step - loss: 0.0161 
+- acc: 0.8327 - val_loss: 0.0129 - val_acc: 0.8505
 Epoch 5/5
-1616/1616 [==============================] - 665s 411ms/step - loss: 0.0154 - acc: 0.8365 - val_loss: 0.0125 - val_acc: 0.8451
+1616/1616 [==============================] - 665s 411ms/step - loss: 0.0154 
+- acc: 0.8365 - val_loss: 0.0125 - val_acc: 0.8451
 
 $ cat ../trained_models/sanity/20201123162643_sanity.log
 Model name: ../trained_models/sanity/20201123162643_sanity.h5
@@ -947,10 +983,12 @@ Outputs:N/A (trained model)
 Dataset: N/A (trained model)
 Command: 
 Environment: 
-Comment: Same as previous run, but on branch 7f308649 (predict_client.py) with preprocessing
+Comment: Same as previous run, but on branch 7f308649 (predict_client.py) with
+preprocessing
 
 $ sudo tcpflow -i lo -c port 9091 (right angle bracket) /tmp/tcpflow.log
-$ python predict_client.py --model=../trained_models/sanity/20201123162643\_sanity.h5
+$ python predict_client.py
+--model=../trained_models/sanity/20201123162643\_sanity.h5
 $ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201123162643\_sanity.h5
 
 Link: https://youtu.be/377O2E_LwyU
@@ -958,12 +996,15 @@ Link: https://youtu.be/377O2E_LwyU
 tcpflow log file moved:
 cp /tmp/tcpflow.log ../dataset/unity/genRoad/tcpflow/20201123162643_sanity_pp.log
 
-sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201123162643_sanity_pp.log')
+sa = GetSteeringFromtcpflow('../dataset/unity/genRoad/tcpflow/20201123162643_
+sanity_pp.log')
 sarr = np.asarray(sa)
 p = sarr[:,0]
 p = sarr[:,0]  
-plotSteeringAngles(p, g, 25, False, "Generated Road", "20201123162643_sanity_pp.h5")
-plotBinsFromArray(p, 25, "20201123162643_sanity.h5", "tcpflow/20201123162643_sanity_pp.log")
+plotSteeringAngles(p, g, 25, False, "Generated Road", "20201123162643
+_sanity_pp.h5")
+plotBinsFromArray(p, 25, "20201123162643_sanity.h5",
+"tcpflow/20201123162643_sanity_pp.log")
 
 Video: https://youtu.be/377O2E_LwyU
 \end{verbatim}
@@ -1008,7 +1049,8 @@ Also, one single dropout layer. Need to try with different image size to match
 original design.
 
 $ sudo tcpflow -i lo -c port 9091 (right angle bracket) /tmp/tcpflow.log
-$ python predict_client.py --model=../trained_models/devcloud/nvidia2/20201124032017_nvidia2.h5
+$ python predict_client.py
+--model=../trained_models/devcloud/nvidia2/20201124032017_nvidia2.h5
 $ python MakeVideo.py --filename=/tmp/tcpflow.log --model=20201124032017\_nvidia2.h5
 
 https://youtu.be/RW-luOWQ_qY
@@ -1057,7 +1099,8 @@ Command:
 
 $ sudo tcpflow -i lo -c port 9091 > /tmp/tcpflow_20201120171015_sanity.log
 $ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
-$ python MakeVideo.py --filename=/tmp/tcpflow_20201120171015_sanity.log --model=20201120171015_sanity.h5
+$ python MakeVideo.py --filename=/tmp/tcpflow_20201120171015_sanity.log
+--model=20201120171015_sanity.h5
 # mv
 $ mv /tmp/tcpflow_20201120171015_sanity.log \ 
 ~/git/sdsandbox/trained_models/sanity/tcpflow/
@@ -1066,16 +1109,16 @@ Generating plot:
 $ python steerlib.py
 $ python 
 >>> import steerlib as sl
->>> sa = sl.etSteeringFromtcpflow('../../dataset/unity/genRoad/tcpflow/tcpflow_20201120171015_sanity.log')
+>>> sa = sl.etSteeringFromtcpflow('../../dataset/unity/genRoad/tcpflow/tcpflow_20201
+120171015_sanity.log')
 >>> sarr = np.asarray(sa)
 >>> p = sarr[:,0]
 
-plot = sl.plotSteeringAngles(p, None, 25, True, "Generated Track", "20201120171015_sanity.h5", 'tcpflow log predicted')
+plot = sl.plotSteeringAngles(p, None, 25, True, "Generated Track",
+"20201120171015_sanity.h5", 'tcpflow log predicted')
 Environment: simbox
 Comment: Prediction to generate tcpflow log
 video https://youtu.be/LEmZJJzJkEE
-
-
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1086,7 +1129,8 @@ video https://youtu.be/LEmZJJzJkEE
 \begin{verbatim}
 Commit: 444c27f 
 Model: Outputs: Dataset: Command: Environment: Same as run 41 
-Comment: Testing conversion of PIL image to numpy array, bypassing saving .jpg to disk and reading from disk.
+Comment: Testing conversion of PIL image to numpy array, bypassing saving .jpg to
+disk and reading from disk.
 
 git diff ef4b48e..444c27f1 MakeVideo.py
 diff --git a/src/utils/MakeVideo.py b/src/utils/MakeVideo.py
@@ -1130,11 +1174,13 @@ Interesting observation here (pending two tests to be documented), when we chang
 Commit: b0a77d2
 Model: Outputs: Dataset: Environment: Same as run 41 
 Command: 
-$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 \ --rain=torrential --slant=20 --record=true
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
+--rain=torrential --slant=20 --record=true
 
 Video https://youtu.be/57jwwcjbfdE
 
-Comment: As observed if noise is added to preprocessed image (at the point of being presented to network), sim crashes.
+Comment: As observed if noise is added to preprocessed image (at the point of being
+presented to network), sim crashes.
 
 \end{verbatim}
 
@@ -1168,11 +1214,11 @@ Video: https://youtu.be/UBd38Hlfv4w
 Commit: 20fe20c2e
 Model: Outputs: Dataset: Environment: Same as run 41 
 Command: 
-$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5 \
+$ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
 --rain=heavy --slant=20 --record=True
-Comment: Changed intensity manually to 8, vehicle stays on road for 2 laps (stopped there).
-Higher intensity means higher contrast between road and non-road, perhaps creating a 
-guiding pattern.
+Comment: Changed intensity manually to 8, vehicle stays on road for 2 laps.
+Higher intensity means higher contrast between road and non-road, perhaps creating 
+a guiding pattern.
 It suggests there is some generalisation, as road is very unfamiliar.
 
 tcpflow file:
@@ -1193,7 +1239,9 @@ Model: N/A
 Outputs: N/A
 Dataset: genTrack
 Command: 
-$ python train.py --model=nvidia1 --outdir=../trained_models --epochs=100 --inputs=../dataset/genTrackOneLap/*.jpg --aug=true --preproc=true --inputs=../dataset/unity/genTrack/*.jpg
+$ python train.py --model=nvidia1 --outdir=../trained_models --epochs=100
+--inputs=../dataset/genTrackOneLap/*.jpg --aug=true --preproc=true
+--inputs=../dataset/unity/genTrack/*.jpg
 Environment: devbox
 Comment: Gathered dataset (35967 files) moved to ../dataset/unity/genTrack
 ls -R | grep .jpg | wc -l
@@ -1232,13 +1280,17 @@ When running this model (and possibly all previous):
 $ python predict_client.py --model=../trained_models/nvidia1/20201206171648_nvidia1.h5
 
 WARNING:tensorflow:Model was constructed with shape (None, 160, 120, 3) for input
-Tensor("img_in:0", shape=(None, 160, 120, 3), dtype=float32), but it was called on an input
-with incompatible shape (None, 120, 160, 3).
+Tensor("img_in:0", shape=(None, 160, 120, 3), dtype=float32), but it was called on
+an input with incompatible shape (None, 120, 160, 3).
 
-As it turns out, it was an assignment mess up. See diff on models.py between runs 48 and 49
+As it turns out, it was an assignment mess up. See diff on models.py between runs 
+48 and 49.
 
-Still the "flipped" input model did manage a stretch of Generated Road and surprisingly
-manages to get around Generated Track, which is a total fluke, which may prove serendipitous.
+Still the "flipped" input model did manage a stretch of Generated Road and
+surprisingly manages to get around Generated Track, which is a total fluke, which
+may prove serendipitous.
+
+TODO ADD TO DISCUSSION (TOTAL FLUKE FLIP)
 \end{verbatim}
 
 
@@ -1260,7 +1312,8 @@ Command: python train.py
 --aug=True
 --preproc=True
 Environment: simbox
-Comment: Based on previous (Run 47 warning), input to network was changed to col, row, channels. NB This was an oversight. In the next run, col, row remain, the assignement
+Comment: Based on previous (Run 47 warning), input to network was changed to col, row,
+channels. NB This was an oversight. In the next run, col, row remain, the assignment
 changes (to fix mix-up).
 
 This model did really well on Generated Road but not well at all on Generated Track.
@@ -1373,7 +1426,8 @@ Figure \ref{fig:20201207111940_nvidia2_tcpflow} shows a tcpflow of the nvidia2 m
 Commit: bb66ed7
 Comment: Same as run 50, with dropout set to 0.25
 
-$ python predict_client.py --model=../trained_models/nvidia2/20201207124146_nvidia2.h5 --modelname=nvidia2 --record=True
+$ python predict_client.py --model=../trained_models/nvidia2/20201207124146_nvidia2.h5
+--modelname=nvidia2 --record=True
 
 Video: https://youtu.be/-lDaiodokxw
 
@@ -1384,7 +1438,7 @@ Figure \ref{fig:20201207124146_nvidia2_tcpflow} shows a tcpflow log of the nvidi
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/20201207124146_nvidia2_tcpflow.png}
- \caption{tcpflow steering angle log for model 20201207124146\_ nvidia2.h5 trained over 5 epochs on Generated Roard, self-driving off the road after first right turn.}
+ \caption{tcpflow steering angle log for model 20201207124146\_ nvidia2.h5 trained over 5 epochs on Generated Track, with droupout set to 0.25, self-driving off the road after first right turn.}
  \label{fig:20201207124146_nvidia2_tcpflow}
 \end{figure}
 
@@ -1393,7 +1447,7 @@ Figure \ref{fig:20201207124146_nvidia2_tcpflow} shows a tcpflow log of the nvidi
 % RUN 52
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 52 - 20201207132429\_ nvidia2.h5}
-%\label{app_res:52}
+\label{app_res:52}
 \begin{verbatim}
 Commit: cd3aa3a
 Comment: Same as 51, with dropout set to 0.1
@@ -1410,8 +1464,8 @@ Another case where nvidia2 drives off the road on the first right turn (Figure \
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/20201207132429_nvidia2_tcpflow.png}
- \caption{tcpflow steering angle log for model 220201207132429\_ nvidia2.h5 trained over 5 epochs on Generated Roard, self-driving off the road after first right turn.}
- \label{fig:220201207132429_nvidia2_tcpflow}
+ \caption{tcpflow steering angle log for model 220201207132429\_ nvidia2.h5 trained over 5 epochs on Generated Road, with dropout set to 0.1, self-driving off the road after first right turn.}
+ \label{fig:20201207132429_nvidia2_tcpflow}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1421,7 +1475,23 @@ Another case where nvidia2 drives off the road on the first right turn (Figure \
 %\label{app_res:XX}
 \begin{verbatim}
 Commit: 3e3ff1a
-Comment: Same as 52
+Comment: Same as 52 except last dense layer (10 units) removed
+$ git diff --name-only cd3aa3a..3e3ff1a
+src/GetSteeringAnglesFromtcpflow.ipynb
+src/models.py
+
+$ git diff cd3aa3a..3e3ff1a models.py
+diff --git a/src/models.py b/src/models.py
+index 0ef889e..8efe891 100644
+--- a/src/models.py
++++ b/src/models.py
+@@ -165,7 +165,7 @@ def nvidia_model2(num_outputs):
+     # x = Dropout(drop)(x)
+     x = Dense(50, activation='elu')(x)
+     # x = Dropout(drop)(x)
+-    x = Dense(10, activation='elu')(x) # Added in Naoki's model
++    # x = Dense(10, activation='elu')(x) # Added in Naoki's model
+
 \end{verbatim}
 
 Slightly better but still drives off road past the second left bollard.
@@ -1471,10 +1541,33 @@ Video: \url{https://youtu.be/DPxFLukN0Ws}
 %\label{app_res:54}
 \begin{verbatim}
 Commit: a39008c
-Comment: Same as run 53 except dropout layers added as per nvidia1.
-Veers off road a little bit after run 53.
+Comment: Same as run 53 except dropout layers added as per nvidia1. Note
+zero-centered pixel values in git diff below:
 
-Video: https://youtu.be/SQQJacV622E
+$ git diff 3e3ff1a..a39008c models.py
+diff --git a/src/models.py b/src/models.py
+index 8efe891..28e6d62 100644
+--- a/src/models.py
++++ b/src/models.py
+@@ -149,13 +149,13 @@ def nvidia_model2(num_outputs):
+     x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
+     # x = Lambda(lambda x: x / 255.0)(x)
+     x = Conv2D(24, (5, 5), strides=(2, 2), activation='elu', name="conv2d_1")(x)
+-    # x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(36, (5, 5), strides=(2, 2), activation='elu', name="conv2d_2")(x)
+-    #x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(48, (5, 5), strides=(2, 2), activation='elu', name="conv2d_3")(x)
+-    #x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(64, (3, 3), activation='elu', name="conv2d_4")(x) # default strides=(1,1)
+-    #x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(64, (3, 3), activation='elu', name="conv2d_5")(x)
+     x = Dropout(drop)(x)
+
+Veers off road a little bit after run 53.
 \end{verbatim}
 Video: \url{https://youtu.be/SQQJacV622E}
 
@@ -1555,7 +1648,7 @@ Another crash (\url{https://youtu.be/3ipZZgGtJUA}). Given that nvidia1 () run 52
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/2129x1932crops.png}
- \caption{Network images presented to networks nvidia2 (20201207142129\_ nvidia2.h5) network (second from left) and nvidia1 (20201207091932\_ nvidia1.h5)}
+ \caption{Network images presented to networks nvidia2 (20201207142129\_ nvidia2.h5) network (second from left) and nvidia1 (20201207091932\_ nvidia1.h5), first on right}
  \label{fig:2129x1932crops}
 \end{figure}
 
@@ -1651,26 +1744,49 @@ _________________________________________________________________
 % RUN 56
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 56 - 20201207170938\_ nvidia2.h5}
-%\label{app_res:56}
+\label{app_res:56}
 \begin{verbatim}
 Commit: 8f163e9
 Model: nvidia2
 Outputs: 2
 Dataset: genTrack
-Command:
+Command: Assumed to be the same as previous, which can be backtracked to run 50:
+Command: python train.py
+--model=nvidia2
+--outdir=../trained_models
+--epochs=5
+--inputs=../dataset/unity/genTrack/*.jpg
+--aug=True
+--preproc=True
 
-Environment: 
-Comment: Changed top crop
-https://youtu.be/I3gkoO1yWkk
+Environment: simbox
+Comment: Changed top crop for nvidia2
+
+$ git diff 28ea337..8f163e9 conf.py
+diff --git a/src/conf.py b/src/conf.py
+index 0ccb633..0b97b8e 100644
+--- a/src/conf.py
++++ b/src/conf.py
+@@ -42,10 +42,10 @@ NVIDIA1 = 'nvidia1' # a.k.a. TawnNet
+ nvidia1_img_dims = [160,120,3,160,120,60,-25]
+ # NVIDIA2
+ NVIDIA2 = 'nvidia2' # a.k.a. NaokiNet
+-nvidia2_img_dims = [320,160,3,200,66,70,-35]
++nvidia2_img_dims = [320,160,3,200,66,81,-35]
+ # NVIDIA_BASELINE
+ NVIDIA_BASELINE = 'nvidia_baseline' # a.k.a. NaokiNet
+-nvidia_baseline_img_dims = [320,160,3,200,66,70,-35]
++nvidia_baseline_img_dims = [320,160,3,200,66,91,-35]
+
 \end{verbatim}
 
-Another crash, changed top crop to 81 in conf.py.
+Another crash (\url{https://youtu.be/I3gkoO1yWkk}), changed top crop to 81 in conf.py.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 57
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 57 - 20201207175205\_ nvidia2.h5}
-%\label{app_res:57}
+\label{app_res:57}
 \begin{verbatim}
 Commit: 485d845
 Model: nvidia2
@@ -1687,20 +1803,106 @@ python train.py
 
 Environment: simbox
 Comment: Same as run 56, done as sanity check. Might have messed up the 
-predict_client.py parameters in 56. This model almost goes off the track on the first corner but actually gets around the track and works with a 81 top crop.
+predict_client.py parameters in 56. This model almost goes off the track on the first
+corner but actually gets around the track and works with a 81 top crop.
 
 python predict_client.py 
 --model=../trained_models/nvidia2/20201207175205_nvidia2.h5 
 --modelname=nvidia2 --record=True --modelname=nvidia2
 \end{verbatim}
 
-This actually managed to get around the track (\url{https://youtu.be/Vqd2W39CwdA}
+This actually managed to get around the track (\url{https://youtu.be/Vqd2W39CwdA}.
+Investigating the logs for the run 57 model:
+\begin{verbatim}
+/trained_models/nvidia2(master)$ ls -l *20201207175205*
+-rw-rw-r-- 1 simbox simbox   41146 Dec  7 17:53 20201207175205_nvidia2_accuracy.png
+-rw-rw-r-- 1 simbox simbox 3278432 Dec  7 17:53 20201207175205_nvidia2.h5
+-rw-rw-r-- 1 simbox simbox     258 Dec  7 17:53 20201207175205_nvidia2.history
+-rw-rw-r-- 1 simbox simbox     195 Dec  7 17:53 20201207175205_nvidia2.log
 
+$ cat 20201207175205_nvidia2.log
+Model name: ../trained_models/nvidia2/20201207175205_nvidia2.h5
+Total training time: 0:01:41
+Training loss: 0.028
+Validation loss: 0.014
+Training accuracy: 0.716
+Validation accuracy: 0.768
+\end{verbatim}
+And the equivalent for run 56:
+\begin{verbatim}
+/trained_models/nvidia2(master)$ ls -l *20201207170938*
+-rw-rw-r-- 1 simbox simbox   42312 Dec  7 17:11 20201207170938_nvidia2_accuracy.png
+-rw-rw-r-- 1 simbox simbox 3278432 Dec  7 17:11 20201207170938_nvidia2.h5
+-rw-rw-r-- 1 simbox simbox     258 Dec  7 17:11 20201207170938_nvidia2.history
+-rw-rw-r-- 1 simbox simbox     195 Dec  7 17:11 20201207170938_nvidia2.log
+
+/trained_models/nvidia2(master)$ cat 20201207170938_nvidia2.log
+Model name: ../trained_models/nvidia2/20201207170938_nvidia2.h5
+Total training time: 0:01:40
+Training loss: 0.031
+Validation loss: 0.016
+Training accuracy: 0.689
+Validation accuracy: 0.772
+\end{verbatim}
+Looking at the training history for run 56 (Figure \ref{fig:20201207175205_nvidia2_accuracy}) and run 57 (Figure \ref{fig:20201207170938_nvidia2_accuracy}):
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207170938_nvidia2_accuracy.png}
+ \caption{nvidia2 20201207170938\_ nvidia2.h5 (Run 56) model training accuracy for 5 epochs. Refer to \ref{fig:20201207175205_nvidia2_accuracy} for explanation of plot title}
+ \label{fig:20201207170938_nvidia2_accuracy} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207175205_nvidia2_accuracy.png}
+ \caption{nvidia2 20201207175205\_ nvidia2.h5 (Run 57) model training accuracy for 5 epochs showing in the title the training loss (l), validation loss (vl), training accuracy (a) and validation accuracy (va) recorded for the last (5th - zero indexed) epoch (0.028, 0.014, 0.716 and 0.768, respectively.}
+ \label{fig:20201207175205_nvidia2_accuracy} 
+\end{figure}
+
+As a final sanity check, a rerun of the inference time drive is done for both models (Run 56 and Run 57, generating the video only from tcpflow data:
+\begin{verbatim}
+# Run 56
+# record tcpflow log
+$ sudo tcpflow -i lo -c port 9091 >
+../trained_models/nvidia2/tcpflow/20201207170938_Rerun_56_nvidia2.log
+# predict
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207170938_nvidia2.h5 --modelname=nvidia2
+# make video - had to copy augmentation.py and conf.py to utils (at commit c4158dd), where MakeVideo.py now
+# lives
+$ python MakeVideo.py 
+--filename=../../trained_models/nvidia2/tcpflow/20201207170938_Rerun_56_nvidia2.log
+--model="20201207170938_nvidia2.h5"
+\end{verbatim}
+This produced video \url{https://youtu.be/XGA2oL8QVms} which matches run 56.  
+  
+Now the same for run 57:
+\begin{verbatim}
+# Run 57
+# record tcpflow log
+$ sudo tcpflow -i lo -c port 9091 >
+../trained_models/nvidia2/tcpflow/20201207175205_Rerun_57_nvidia2.log
+# predict
+$ python predict_client.py 
+--model=../trained_models/nvidia2/20201207175205_nvidia2.h5 --modelname=nvidia2
+# make video - had to copy augmentation.py and conf.py to utils, where MakeVideo.py now
+# lives
+$ python MakeVideo.py 
+--filename=../../trained_models/nvidia2/tcpflow/20201207175205_Rerun_57_nvidia2.log
+--model="20201207170938_nvidia2.h5"
+\end{verbatim}
+This produced video \url{https://youtu.be/cUDiz7v_o3Y} which matches run 57. The result is
+mystifying, as it succeeds and precedes a succession of failed nvidia2 architecture runs until the (in hindsight) best "wet" performing model produced in Run 62 \ref{app_res:62} ). One possibility is that the
+last 10-unit hidden layer had been commented in for run 57, then commented out, with no commit to show the change. The 10-unit hidden layer made "a", perhaps "the" difference in run 62 \ref{app_res:62}.
+% TODO Add to results, after a succession of experiments changing top crop values,
+% dropout layers, dropout values and normalizing schemes, a best nvidia2 model
+% was produced
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 58
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 58 - 20201207184329\_ nvidia2.h5}
-%\label{app_res:58}
+\label{app_res:58}
 \begin{verbatim}
 Commit: 196f820
 Model: nvidia2
@@ -1720,17 +1922,17 @@ Model drove off the road.
 
 Inference time prediction:
 
-$ python predict_client.py ../trained_models/nvidia2/20201207184329_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+$ python predict_client.py ../trained_models/nvidia2/20201207184329_nvidia2.h5
+--modelname=nvidia2 --record=True --modelname=nvidia2
 \end{verbatim}
 
 Top crop set to 77, drove off the road (\url{https://youtu.be/jHWX7bi5Okw}).
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 59
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 58 - 20201207185525\_ nvidia2.h5}
-%\label{app_res:58}
+\label{app_res:58}
 \begin{verbatim}
 Commit: 0cc41e7
 Model: nvidia2
@@ -1753,16 +1955,13 @@ $ python predict_client.py
 --record=True --modelname=nvidia2
 
 \end{verbatim}
-\url{https://youtu.be/dkV0Tbfwr9Q}
-
-
-f1a5263
+Video: \url{https://youtu.be/dkV0Tbfwr9Q}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 60
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 60 - 20201207190447\_ nvidia2.h5}
-%\label{app_res:60}
+\label{app_res:60}
 \begin{verbatim}
 Commit: f1a5263
 Model:  Same as 59
@@ -1771,7 +1970,7 @@ Dataset:  Same as 59
 Command: Same as 59
 
 Environment: simbox
-Comment: Crash
+Comment: Crash - another simulated car drives off the road.
 
 Prediction:
 $ python predict_client.py 
@@ -1783,14 +1982,70 @@ $ python predict_client.py
 % RUN 61
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 61 - 20201207192309\_ nvidia2.h5 }
-%\label{app_res:XX}
+\label{app_res:XX}
 \begin{verbatim}
 Commit: ae4742b
 Model:  Same as 59
 Outputs:  Same as 59
 Dataset:  Same as 59
 Command: Same as 59
-Comment: Not zero centering pixel values, just normalizing.
+Comment: Not zero centering pixel values, just normalizing. Crashed.
+
+Investigating the actual changes for the nvidia2 model:
+
+$ git diff --name-only f1a5263..ae4742b
+src/conf.py
+src/models.py
+
+$ git diff f1a5263..ae4742b conf.py
+diff --git a/src/conf.py b/src/conf.py
+index e0efddd..d64e228 100644
+--- a/src/conf.py
++++ b/src/conf.py
+@@ -42,7 +42,7 @@ NVIDIA1 = 'nvidia1' # a.k.a. TawnNet
+ nvidia1_img_dims = [160,120,3,160,120,60,-25]
+ # NVIDIA2
+ NVIDIA2 = 'nvidia2' # a.k.a. NaokiNet
+-nvidia2_img_dims = [320,160,3,200,66,83,-35]
++nvidia2_img_dims = [320,160,3,200,66,81,-35]
+
+$ git diff f1a5263..ae4742b models.py
+diff --git a/src/models.py b/src/models.py
+index adfada8..2539322 100644
+--- a/src/models.py
++++ b/src/models.py
+@@ -141,21 +141,21 @@ def nvidia_model2(num_outputs):
+     row, col, ch = conf.nvidia2_img_dims[conf.IMG_HEIGHT_NET_IDX],
+     conf.nvidia2_img_dims[conf.IMG_WIDTH_NET_IDX], \
+                    conf.nvidia2_img_dims[conf.IMG_DEPTH_IDX]
+ 
+-    drop = 0.5
++    drop = 0.1
+ 
+     img_in = Input(shape=(row, col, ch), name='img_in')
+     x = img_in
+     # x = Cropping2D(cropping=((10,0), (0,0)))(x) #trim 10 pixels off top
+-    x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
+-    # x = Lambda(lambda x: x / 255.0)(x)
++    # x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
++    x = Lambda(lambda x: x / 255.0)(x)
+     x = Conv2D(24, (5, 5), strides=(2, 2), activation='elu', name="conv2d_1")(x)
+-    # x = Dropout(drop)(x)
+-    x = Conv2D(36, (5, 5), strides=(2, 2), activation='elu', name="conv2d_2")(x)
+-    # x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
++    x = Conv2D(32, (5, 5), strides=(2, 2), activation='elu', name="conv2d_2")(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(48, (5, 5), strides=(2, 2), activation='elu', name="conv2d_3")(x)
+-    # x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(64, (3, 3), activation='elu', name="conv2d_4")(x) # default strides=(1,1)
+-    # x = Dropout(drop)(x)
++    x = Dropout(drop)(x)
+     x = Conv2D(64, (3, 3), activation='elu', name="conv2d_5")(x)
+     x = Dropout(drop)(x)
+
+Top crop is set at 81, multiple dropout layers with dropout set at 0.1.
 \end{verbatim}
 \url{https://youtu.be/5VnNHD0wgFc}
 
@@ -1799,7 +2054,7 @@ Comment: Not zero centering pixel values, just normalizing.
 % RUN 62 - One of the best nvidia2 architecture models
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run62 - 20201207192948\_ nvidia2.h5}
-%\label{app_res:62}
+\label{app_res:62}
 \begin{verbatim}
 Commit: df953d2
 Model:  Same as 59
@@ -1807,9 +2062,14 @@ Outputs:  Same as 59
 Dataset:  Same as 59
 Command: Same as 59
 Environment: same as 59
-Comment: Restore last 10 unit fully connected layer. This one drives well around Generated Track.
+Comment: Restore last 10 unit fully connected layer. This one drives well around 
+Generated Track. This last layer, perhaps together with non-zero centered pixel 
+values and multi-dropout layers may have made the difference. Or perhaps just the 
+final 10 hidden units? Will probably not have time to test so leaving as 
+recommendation for future work i.e. does last ten hidden units before output neurons 
+work with zero-centered normalised inputs?
 
-$ python predict_client.py 
+$ python predict_client.pymake up 
 --model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
 --record=True --modelname=nvidia2
 \end{verbatim}
@@ -1827,15 +2087,17 @@ Outputs:  Same as 59
 Dataset:  Same as 59
 Command: Same as 59
 Environment: same as 59 
-Comment: Only one dropout layer as per original NaokiNet model. Seems to be
-getting around the track ok. Very smooth. Comparable to run 62.
+Comment: Only one dropout layer as per original NaokiNet model. Seemed to be
+getting around the road ok, until it drove off the road. Otherwise, Very smooth.
+Comparable to run 62.
 
 $ python predict_client.py 
 --model=../trained_models/nvidia2/20201207193607_nvidia2.h5 --modelname=nvidia2 
 --record=True --modelname=nvidia2
 
 \end{verbatim}
-\url{https://youtu.be/p2Y6FZX4hNA}
+Video: \url{https://youtu.be/p2Y6FZX4hNA}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 64
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1848,37 +2110,46 @@ Outputs:  Same as 59
 Dataset:  Same as 59
 Command: Same as 59
 Environment: same as 59 
-Comment: No Dropout layers
+Comment: No Dropout layers. This model although trained on Generated Track data,
+drives well on Generated Road circuit.
 
-$ python predict_client.py --model=../trained_models/nvidia2/20201207194331_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+$ python predict_client.py --model=../trained_models/nvidia2/20201207194331_nvidia2.h5
+--modelname=nvidia2 --record=True --modelname=nvidia2
 
 TODO - time allowing, run predictions on Generated Track and compare steering
 for networks trained with none, one, and several dropout layers (runs 63, 64
-and 49).
-
+and 49). Or move this paragraph to reflections section.
 \end{verbatim}
-\url{https://youtu.be/N9xyRizMJvI}
+Video (\url{https://youtu.be/N9xyRizMJvI}) showing the first few hundred frames of model  
+nvidia2 20201207194331\_ nvidia2.h5 on the randomly Generated Road circuit.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RUN 65
+% RUN 65 - problem here video is the same as Run 66
+% although video title (named after file is 20201207193607 nvidia2 h5
+% If however we look at video file: 20201207193607_nvidia2.h5'
+% it refers to network 20201207193607_nvidia2.h5
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 65 - 20201207194331\_ nvidia2.h5 }
 %\label{app_res:65}
 \begin{verbatim}
-Comment: Model 65 on Generated Road - handles ok-ish-ish
+Comment: Duplicate entry, same as 64.
 \end{verbatim}
-\url{https://youtu.be/WA2uLtRn3Z0}
+% \url{https://youtu.be/WA2uLtRn3Z0}
+% https://youtu.be/WA2uLtRn3Z0 is the same for runs 65 and 66
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% RUN 66
+% RUN 66 - problem here 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 66 - 20201207193607\_ nvidia2.h5}
-%\label{app_res:65}
+\label{app_res:65}
 \begin{verbatim}
-Comment: Model 64 (only one dropout layer) on Generated Road. Also a bit wobbly but manages to stay on the road for a while (drop off in the end).
+Comment: Model 63 (only one dropout layer) on Generated Road. Also a bit wobbly but
+manages to stay on the road for a while (drop off in the end).
 \end{verbatim}
-\url{https://youtu.be/WA2uLtRn3Z0}
+This is a duplicate entry to run 63 - video is \url{https://youtu.be/p2Y6FZX4hNA}
+The previously attributed video log \url{https://youtu.be/WA2uLtRn3Z0} refers to an incorrectly labelled upload. 
+Another upload was made for run 66 \url{https://youtu.be/v34aJKjeiNs} which is in fact a duplicate to run 63, bar an extra second at the end.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1896,8 +2167,35 @@ Environment: same as 59
 Comment: zero centered pixel values, drove off the road. This seems to be
 the change that most impacts model performance, followed by image size.
 
+$ git diff 3cc0a1bfb8..957d14c models.py
+diff --git a/src/models.py b/src/models.py
+index 7d4618e..fc143e2 100644
+--- a/src/models.py
++++ b/src/models.py
+@@ -146,8 +146,8 @@ def nvidia_model2(num_outputs):
+     img_in = Input(shape=(row, col, ch), name='img_in')
+     x = img_in
+     # x = Cropping2D(cropping=((10,0), (0,0)))(x) #trim 10 pixels off top
+-    # x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
+-    x = Lambda(lambda x: x / 255.0)(x)
++    x = Lambda(lambda x: x/127.5 - 1.0)(x) # normalize and re-center
++    # x = Lambda(lambda x: x / 255.0)(x)
+
+This nvidia2 model does have the last dense(10) hidden layer:
+
+$ git checkout -b looksee 957d14c
+Switched to a new branch 'looksee'
+$ cat models.py | grep Dense\(10
+(...)
+    x = Dense(10, activation='elu')(x) # Added in Naoki's model
+(...)
+
+    x = Dense(10, activation='elu')(x) # Added in Naoki's model
+
+Also worth noting, it used elu as activation function for all except output layer.
 Prediction:
-$ python predict_client.py --model=../trained_models/nvidia2/20201207195804_nvidia2.h5 --modelname=nvidia2 --record=True --modelname=nvidia2
+$ python predict_client.py --model=../trained_models/nvidia2/20201207195804_nvidia2.h5
+--modelname=nvidia2 --record=True --modelname=nvidia2
 
 \end{verbatim}
 \url{https://youtu.be/ZSgKMGL7azY}
@@ -2595,7 +2893,7 @@ Comment: One of the best nvidia2 models self-driving the entirety of a randomly
 generated road.
 
 \end{verbatim}
-Video: \url{https://youtu.be/APsnTa1ZqfQ}.
+Video: \url{https://youtu.be/z9nILq9dQfI}.
 
 Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. This run (95) is much smoother than run 93 (\ref{app_res:93}) which seems also to be suggested in the distributions shown in the related histograms, although run 93 represents a much shorter section.
 \begin{figure}[ht]
