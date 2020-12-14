@@ -4,6 +4,8 @@
 
 \section{NVIDIA baseline architecture}
 \label{NVIDIA_baseline}
+\label{arc:nvidia_baseline}
+
 This is the starting point after the work of \cite{bojarski2016end}
 
 \begin{verbatim}
@@ -85,12 +87,13 @@ _________________________________________________________________
 (None, 10)
 (None, 1)
 \end{verbatim}
-\section{NVIDIA1 architecture}
 
-The network architecture is as shown, with a total of 817,028 trainable parameters.
+\section{NVIDIA1 architecture}
+\label{arc:nvidia1}
+The network architecture is as shown, with a total of 817,028 trainable parameters. The design is exactly as used by \cite{SDSandboxSim}.
 \begin{verbatim}
 >>> import models
->>> mymodel = models.get_nvidia_model1(2)
+>>> mymodel = models.nvidia_model1(2)
 >>> models.show_model_summary(mymodel)
 Model: "model_3"
 _________________________________________________________________
@@ -149,6 +152,79 @@ _________________________________________________________________
 (None, 50)
 (None, 2)    
 \end{verbatim}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{NVIDIA2 Architecture}
+\label{arc:nvidia2}
+\begin{verbatim}
+>>> import models
+>>> mymodel = models.nvidia_model2(2)
+>>> models.show_model_summary(mymodel)
+Model: "model"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+img_in (InputLayer)          [(None, 66, 200, 3)]      0         
+_________________________________________________________________
+lambda (Lambda)              (None, 66, 200, 3)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 31, 98, 24)        1824      
+_________________________________________________________________
+dropout (Dropout)            (None, 31, 98, 24)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 14, 47, 32)        19232     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 14, 47, 32)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 5, 22, 48)         38448     
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 5, 22, 48)         0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 3, 20, 64)         27712     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 3, 20, 64)         0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 1, 18, 64)         36928     
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 1, 18, 64)         0         
+_________________________________________________________________
+flattened (Flatten)          (None, 1152)              0         
+_________________________________________________________________
+dense (Dense)                (None, 100)               115300    
+_________________________________________________________________
+dense_1 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+dense_2 (Dense)              (None, 10)                510       
+_________________________________________________________________
+steering_throttle (Dense)    (None, 2)                 22        
+=================================================================
+Total params: 245,026    
+Trainable params: 245,026
+Non-trainable params: 0
+_________________________________________________________________
+[(None, 66, 200, 3)]
+(None, 66, 200, 3)
+(None, 31, 98, 24)
+(None, 31, 98, 24)
+(None, 14, 47, 32)
+(None, 14, 47, 32)
+(None, 5, 22, 48)
+(None, 5, 22, 48)
+(None, 3, 20, 64)
+(None, 3, 20, 64)
+(None, 1, 18, 64)
+(None, 1, 18, 64)
+(None, 1152)
+(None, 100)
+(None, 50)
+(None, 10)
+(None, 2)
+
+\end{verbatim}
+
+
 
 \section{Alexnet}
 

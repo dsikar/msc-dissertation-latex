@@ -14,8 +14,35 @@
 % Feedback from Artur Garcez with respect to Results
 % The most important thing now is to describe clearly (with the right level of detail - not too much, not too little) the (...) evaluation of results (there's a more objective evaluation here of accuracy/speed but also a subjective evaluation that you can discuss in more detail: when a situation changes from "no rain" to "rain" and how that affects the pre-trained network). With those results you will have the material needed for the important discussion chapter which should include your own critical evaluation of results and also point to future work.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRODUCING A SELF-DRIVING MODEL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Producing a self-driving model}
+
+That was hard. Detail the bits that were used from TawnNet (augmentation added) and NaokiNet (crop changed). in the end two outputs were required for NaokiNet to work. Maybe move this to discussion. Here we show results.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVALUATION OF SELF-DRIVING CARS USING CNNS IN THE RAIN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Evaluation of self-driving cars using CNNs in the rain}
+
+Once the best models were narrowed down to nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}), a number of test runs were conducted to generate outputs for evaluation. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OUTPUTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Outputs}
+Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with differente levels of rain and light intensity multipliers.
+A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SYNTHETIC DATASETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Synthetic datasets}
-% This should go in the "Results" section
 The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) corresponding to steering angles. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s  in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being recorded. The maximum steering angle, is set in the simulator with respect to a car. In this case it is plus or minutes 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle. The data shows a high bias towards right turns because the simulated vehicle drives clockwise around the track.
 \begin{figure}[ht]
  \centering 
@@ -33,11 +60,10 @@ Another simulated circuit used was the \textit{Generated Road}, which creates a 
  \label{fig:GeneratedRoadPlusHist}
 \end{figure}
 
-%-----------------------------------
-%	Network training
-%-----------------------------------
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NETWORK TRAINING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Network training and simulator testing}
 \label{results:net-training} 
@@ -95,49 +121,11 @@ Once the outliers were removed, another model was generated with five epochs of 
  \label{fig:tcpflow_20201120184912_bins} 
 \end{figure}
 
-\section{Goodness of steer results}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRODUCING A SELF-DRIVING MODEL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-To compare models, the $G_s$ (Eq. \ref{eq:goodness_of_steer}) was used. Figure  \ref{fig:genTrackOneLap_20201120171015_sanity_gos} contains (discuss):
-\begin{itemize}
-    \item[--] The PID effect
-    \item[--] 
-\end{itemize}
-The
-A second data output was created for the Generated Track circuit. (TODO, create another dataset and plot to compare PID to and manual steering angles).
-A video was then created to observe steering angles while recording another dataset on the same lap \href{https://youtu.be/zAmr7a1ImEY}{https://youtu.be/zAmr7a1ImEY}. The video shows steering corrections
-% nb recorded at
-
-
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_20201120171015_sanity.h5.png}
- \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap .json files and values predicted by model 20201120171015\_ sanity.h5}
- \label{fig:genTrackOneLap_20201120171015_sanity_gos} 
-\end{figure}
-
-To confirm the observed acute steering angle variations, a second lap was recorded, producing the same plot
- \label{fig:a_genTrackOneLap_2_20201120171015_sanity} 
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_2_20201120171015_sanity.h5.png}
- \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap\_ 2 .json files and values predicted by model 20201120171015\_ sanity.h5, confirming the acute steering angles observed in previous dataset}
- \label{fig:a_genTrackOneLap_2_20201120171015_sanity} 
-\end{figure}
-
-The values of Prop and Diff (Proportional and Derivative components of PID steering) were changed while observing steering 
-% PID 25, Diff 8, max speed 1.6
-
-This had a smoothing effect to the steering, though the $Gs$ increased:
- \ref{fig:genTrackOneLap_3_20201120171015_sanity_gos} 
- 
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/sa_genTrackOneLap_3_20201120171015_sanity.h5.png}
- \caption{Plot containing ground truth steering values recorded in dataset genTrackOneLap\_ 3 .json files and values predicted by model 20201120171015\_ sanity.h5, showing the smoothing effect of changing Prop and Diff variables for data capture in Auto w Drive mode}
- \label{fig:genTrackOneLap_3_20201120171015_sanity_gos} 
-\end{figure}
+\section{Producing a self-driving model}
 
 We added a video of the model running side by side with network as shown in figure 
 \ref{fig:20201120171015_sanity_sim_network}, using a procedure as described in \ref{app_res:41}.
@@ -150,7 +138,7 @@ We added a video of the model running side by side with network as shown in figu
 \end{figure}
 
 % \textbf{STOPPED HERE - NEED TO GENERATE STEERING ANGLE PLOT WITH MEAN AND STD} Looks like we might be picking up the simulator steering angle.  \ref{fig:sa_GeneratedTrack_20201120171015_sanity}
-Figure \ref{fig:sa_GeneratedTrack_20201120171015_sanity} shows the predicted steering angles around Generated Track, where the first dip is the sharp right corner, the second dip is the slight right turn followed by a slight left turn plateauing at a negative steering angle (gentle left turn followed by two sharp right turn and finally the straight until the finish line with steering angles close to zero degrees.
+Figure \ref{fig:sa_GeneratedTrack_20201120171015_sanity} shows the predicted steering angles around Generated Track, where the first dip is the sharp right corner, the second dip is the slight right turn followed by a slight left turn plateauing at a negative steering angle (gentle left turn followed by two sharp right turns and finally the straight until the finish line with steering angles close to zero degrees.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrack_20201120171015_sanity.h5.png}
@@ -213,7 +201,7 @@ Figure \ref{fig:youtube20201207091932nvidia1lightrainmult_4_h5} (\url{https://yo
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1lightrainmult_4_h5.png}
- \caption{Still from video \url{https://youtu.be/qdTA5ho5VOE} showing a self-driving simulated vehicle driving off the Generated Track, where the Unity scene is set to a darker horizon (Setting Skybox Material to SkyCarLightCoversGrey) and the intensity multiplier is set to 4. Rain is set to light. The image sent from the network over the TCP network is shown on the right, the middle figure has added rain and the figure on the right is the image presented to the network.}
+ \caption{Still from video \url{https://youtu.be/qdTA5ho5VOE} showing a self-driving simulated vehicle driving off the Generated Track, where the Unity scene is set to a darker horizon (Setting Skybox Material to SkyCarLightCoversGrey) and the intensity multiplier is set to 4. Rain is set to light. The image sent from the network over the TCP network is shown on the left, the middle image has added rain and the image on the right is the image presented to the network.}
  \label{fig:youtube20201207091932nvidia1lightrainmult_4_h5} 
 \end{figure}
 
@@ -266,6 +254,8 @@ Figure \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2} sh
  \label{fig:youtube20201207192948_nvidia2torrential20mult_8_h5} 
 \end{figure}
 
+% TODO ADD TO RESULTS. Sky was changed for nvidia 1 for all rain runs.
+
 % NB All 6 Generated Track rain/multiplier plots generated with code from commit 610939215 (result_plots.py) 
 
 % Image template
@@ -302,9 +292,7 @@ $ git diff
 Starting with the NVIDIA baseline, a number of hyperparameters were trialed. The initial setup failed to generate usable models. 
 The table below presents training results for best trained models.
 
-% training with one parameter
 
-\section{Simulated self-driving car}
 
 Using the baseline neural network architecture as described in 
 Models trained with no image pre-processing, did not perform well, leading to cars driving off the road, as shown in Fig.  sequence.
@@ -336,26 +324,7 @@ SDSandbox   unity/genRoad 280727 From "Generated Road" course
 
 Following the list of data deliverables (\ref{Deliverables-Datasets}) the Udacity data consisting of two files 
 
-\subsection{Locating rainy sections with Mechanical Turk}
-For Mechanical Turk, the data that looked most promising was Ford V2 Log 1 and V3 Log 1, both described as "freeway, overpass, bridge, cloudy". We drew 50 images uniformly from each log and added 5 images with rain that were expected to be labelled as such. The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
-% rainy files created with automold/RainyImagesDissertationPlot.ipynb
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
-\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications.}
-\label{fig:MechTurkCreateJob}
-\end{figure}
-Labeling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
-The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
-There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
-The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
-The images were labelled by Mechanical Turk workers and results made available in a json encoded file (datasets/mechanical-turk/2020-11-21\_22 45 37.json) showing no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain". Figure \ref{fig:MechTurkLabeledImages}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
-\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
-\label{fig:MechTurkLabeledImages}
-\end{figure}
+
 
 %-----------------------------------
 %	Network running

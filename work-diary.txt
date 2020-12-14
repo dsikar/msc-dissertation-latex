@@ -955,3 +955,8 @@ https://github.com/raghakot/keras-resnet
 2020.12.12
 
 Writing methods.
+
+2020.12.14
+
+Finished results appendix. Started polishing up results. for 2020.12.15 need to
+finish results, provide a story of how best models were found, training times (short), parameters, and the plots and images of working models. Also need to generate appendix with source code.

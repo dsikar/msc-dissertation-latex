@@ -223,6 +223,36 @@ ROS was used to store data from the FORD AV dataset.
 % \section{Extracting steering angles with ROS}
 Info on how to get a steering angle (YAW) using quaternions and the IMU data.
 
+\section{Correspondence with supervisor}
+\label{corr_with_super}
+\subsection{Correspondence with Artur Garcez 1}
+\begin{verbatim}
+Garcez, Artur
+Fri 14/02/2020 09:59
+Hi Daniel,
+See if you can find a data set which would offer you a systematic way of evaluating
+how CNNs can be fooled by visual illusions caused by rain drops on the windscreen.
+Artur
+________________________________________
+From: PG-Sikar, Daniel <Daniel.Sikar@city.ac.uk>
+Sent: 14 February 2020 08:56
+To: Garcez, Artur
+Subject: MSC Data Science - Final year project
+
+Hi Artur,
+
+I am currently shopping around for a project. I have spoken to a couple of companies
+but not sure data will be available in good time - ML applied to signal processing.
+
+So I ask if you have any projects, ideally related to some kind of signal processing,
+alternatively, anything related to computer vision which could potentially provide a
+good hook for the self-driving car project we spoke (briefly) about?
+
+Kind regards
+
+Daniel - PT2    
+\end{verbatim}
+
 \section{Correspondence with authors}
 \label{corr_with_authors}
 
@@ -413,3 +443,27 @@ Daniel
 
 \end{verbatim}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mechanical Turk
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Locating rainy sections with Mechanical Turk}
+For Mechanical Turk, the data that looked most promising was Ford V2 Log 1 and V3 Log 1, both described as "freeway, overpass, bridge, cloudy". We drew 50 images uniformly from each log and added 5 images with rain that were expected to be labelled as such. The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
+% rainy files created with automold/RainyImagesDissertationPlot.ipynb
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
+\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications.}
+\label{fig:MechTurkCreateJob}
+\end{figure}
+Labeling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
+The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
+There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
+The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
+The images were labelled by Mechanical Turk workers and results made available in a json encoded file (datasets/mechanical-turk/2020-11-21\_22 45 37.json) showing no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain". Figure \ref{fig:MechTurkLabeledImages}
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
+\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
+\label{fig:MechTurkLabeledImages}
+\end{figure}
