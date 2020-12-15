@@ -4,9 +4,9 @@
 
 Procedures used to set up experiments are detailed in this appendix.
 
-\section{Cleaning data}
+\section{Cleaning SDSandbox data}
 
-Data corruption was found with Unity3D generated datasets where some .json files were not generated, leading to missing steering angles and throttle values for some images. There "orphaned" images were deleted with script src/utils/jsonclean.py
+Data corruption was found with SDSandbox generated datasets where some .json files (containing steering angles and throttle for a corresponding image)  were not generated, the missing values leading to training failure. There "orphaned" images were deleted with custom script src/utils/jsonclean.py
 
 \section{Running the car simulator}
 \label{RunningCarSimulatorForInference}
@@ -31,13 +31,13 @@ Once the menu scene runs, one of 5 circuits can be chosen. Once the chosen circu
 
 
 
-\section{Network monitoring and debugging}
+\section{Network monitoring and debugging with tcpflow}
 \label{NetMonDebug}
-tcpflow (\cite{garfinkel2013passive}) was used to monitor network traffic between car simulator and neural network prediction engine. Once the simulator is setup to run in neural network mode and before the predict\_client.py prediction engine starts, tcpflow is launched set to listen on the loopback interface port 9091, and output network traffic packets to console:
+tcpflow (\cite{garfinkel2013passive}) was used to monitor network traffic between car simulator and neural network prediction engine. Once the simulator is setup to run in neural network mode and before the predict\_client.py prediction engine starts, tcpflow is launched and set to listen on the loopback interface port 9091, and output network traffic packets to console:
 \begin{verbatim}
 $ sudo tcpflow -i lo -c port 9091
 \end{verbatim}
-The prediction script then runs, and JSON (\cite{pezoa2016foundations}) a lightweight data-interchange format, tcp packets may be monitored and debugged. Simulator packets are distinguished by \textit{telemetry} and prediction engine packets by \textit{control} msg\_types respectively, as shown in excerpt:
+The prediction script then runs and JSON, (\cite{pezoa2016foundations}) a lightweight data-interchange format, TCP encoded packets may be monitored and debugged. Simulator decoded packets are distinguished by \textit{telemetry} and prediction engine packets by \textit{control} msg\_types respectively, as shown in excerpt:
 \begin{verbatim}
 127. (...) {"msg_type":"telemetry",(...),"image":(...)
 127. (...) {"msg_type": "control", "steering": "-0.09476048" (...)
@@ -251,6 +251,25 @@ good hook for the self-driving car project we spoke (briefly) about?
 Kind regards
 
 Daniel - PT2    
+\end{verbatim}
+
+\subsection{Correspondence with Artur Garcez 2}
+\label{met:corr_arthur_2}
+\begin{verbatim}
+
+Daniel,
+
+Out of curiosity, is there any easy way of increasing glare from the sun in the 
+simulator?
+
+This would be a nice UK-specific example to give: a situation with light rain and glare 
+possibly creating difficult illusions.
+
+The big picture being there's not much hope training such models for billions of hours 
+in California and transferring to London!
+
+Best,
+Artur    
 \end{verbatim}
 
 \section{Correspondence with authors}

@@ -39,11 +39,60 @@
 
 % LC - 14 pages
 
-\section{The Unity Game Engine}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CREATING VIDEOS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Creating Videos}
+Videos are used in this project for qualitative analysis as well as documentation. Three methods are used to create videos. The first is with the Kazam (\cite{Kazam2020}) desktop screen capture utility, which records the contents of a given display monitor. This generates video captures such as shown in Figure \ref{fig:SimTCPPred}, noting the video contains only one frame, and the three images shown in the figure represent different parts of the video. The second method was developed for this project (MakeVideo.py) and consists of parsing tcpflow logs, extracting images and predicted steering angles and creating a "side-by-side" video of the simulator being driven by the prediction engine, next to the re-created processed image presented to the network, generating video captures such as shown in Figure  \ref{fig:20201120171015_sanity_sim_network}. Examples of running the script to generate videos can be seen in a number of documented "runs", for instance \ref{app_res:36} and \ref{app_res:36}. The third method was also developed for this project (RecordVideo.py). It creates a recording at inference time with up to 3 (in case of added rain) side-by-side images in a single video. An example is shown in Figure \ref{fig:youtube20201207091932nvidia1lightrainmult_4_h5}, where most parameters (network name, rain type, predicted steering angle) are generated dynamically, and the "Intensity Multiplie" (sic) value is set in SDSandbox, hardcoded in predict\_ client.py, this python script then committed to git repository and a record of commit hash, tracking the code state at the moment recording was made, is kept in appendix \ref{res:training_and_testing_log} to make results repeatable. The concept of altering intensity multipliers to simulate glare on wet roads is in response to a suggestion by this project's supervisor (see correspondence with supervisor \ref{met:corr_arthur_2}). Examples of running the prediction engine to record can be seen in various runs, including \ref{app_res:51} and \ref{app_res:52}.
 
-SDSandbox was created with Unity, a toolset that generates graphics, physics, interactions and networking.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% tcpflow
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{tcpflow}
+tcpflow (\cite{tcpflowElson2013}, \cite{garfinkel2013passive}) is able to capture data packets, transmitted using the TCP (\cite{rfc793}) host-to-host protocol (which provides a process-to-process communication service) and store the data in a human readable format, such that it may be analysed and debugged. For this study, it is used to reconstruct and record data transmissions between SDSandbox and the prediction engine. A practical example is given in \ref{NetMonDebug}.
 
-\section{Creating the simulated dataset}
+Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% git version control
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Git}
+Git (\cite{chacon2014pro}) is a distributed software version control tool, also known as SCM (Source Code Management). It is used in this project to keep track of changes made to software code. A change is recorded through a \textit{commit}, which generates a unique commit hash. By comparing commits it is possible to determine how code was modified between commits. The ability to track such changes is useful to determine which parameters changed over the course of time. An example of the forensic use of Git can be seen in \ref{app_res:36}, to narrow down what code generated a well performing model.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SDSandbox and the Unity Game Engine
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{SDSandbox and the Unity Game Engine}
+\label{met:sdsandboxAndUnity}
+SDSandbox (Self Driving Car Sandbox - \cite{SDSandboxSim}) is a self-driving simulator that uses the Unity (\cite{haas2014history}) game engine to simulate 3d environment car physics, as well as terrain and lighting. SDSandbox adds a user interface with a number of circuits, and functionality to create labelled datasets consisting of images (.jpg files) and steering and throttle data (corresponding .json files). It also allows a model to be driven by a prediction engine. In addition to the Unity simulator (sdsim directory), SDSandbox also provides code (src directory) to train models (train.py) and run inferences (predict\_ client.py). A base model is supplied (models.py) that "uses NVidia PilotNet NN topology", with some modifications.  
+  
+Setting up the SDSandbox simulator and prediction engine is further detailed in Appendix \ref{RunningCarSimulatorForInference}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SD Sandbox and Udacity Driving Simulator Comparison
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{SD Sandbox and Udacity Driving Simulator Comparison}
+
+Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (see \ref{met:sdsandboxAndUnity}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal Engine (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim (short for simulator). SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020}). The majority of this community uses behavioral learning to train self-driving CNNs (see correspondence with SDSandbox main code maintainer in \ref{corr:ellerbach}).  
+ 
+Both simulators (Figure \ref{fig:UdacitySdSandboxAutonomous}) are equivalent in the sense of acting as a testing environment for self-driving CNNs and also as a training data generator. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving PID (\cite{bennett1993development}) closed loop controller as implemented in PIDController.cs source code file. The process provides feedback to the simulated car, which adjusts itself on the track, based on known geometrical constraints. The feature (option \textit{Auto Drive w Rec}) makes generating training sets less laborious. The manual option (\textit{Joystick/Keyboard w Rec}) being, a simulated car must be manually steered around the track a number of times. The equivalent Udacity sim option being \textit{TRAINING MODE}.
+
+For inference, Udacity and SDSandbox have equivalent modes. The options being \textit{AUTONOMOUS MODE} and \textit{NN Control over Network}. Output image sizes are 320x160 and 160x120 respectively. The Udacity sim outputs steering angles to a single comma separated values' (.csv) file, as opposed to multiple .json files. 
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{UdacitySdSandboxSim.png}
+\caption{Left to right: legacy Udacity and SDSandbox Autonomous Driving Simulators}
+\label{fig:UdacitySdSandboxAutonomous}
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generating Synthetic datasets
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Generating Synthetic Datasets}
 
 \begin{itemize}
     \item Running SDSandbox in Drive w Rec mode
@@ -51,6 +100,9 @@ SDSandbox was created with Unity, a toolset that generates graphics, physics, in
 
 SDSandbox has a built-in \textit{Drive w Rec} feature which enables saving of image frames generated while the simulator is running. In addition to the image, a corresponding json encoded file is also saved for every image, containing metadata which includes the reference image file name, and values for steering and throttle of simulated vehicle at the time image frame was recorded. 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Adding rain to images
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Adding rain to images}
 \label{methods:AddingRainToImages}
@@ -67,10 +119,7 @@ Rain is added to images using the Automould (\cite{Saxena2017}) library, in turn
     1 & 1 & 1 & 1 & 1 & 1 & 1 \\ 
     1 & 1 & 1 & 1 & 1 & 1 & 1 \end{bmatrix}
 \end{equation}
-The kernel acts as a low pass filter, removing high frequency content (such as noise and edges). The image is then moved from RGB (red, green, blue) to HSL (hue, saturation, lightness) space, where the lightness values are multiplied by 0.7. This has the effect of making the image darker. The process is completed by moving the image back to RGB space. Rain types are \textit{drizzle} (default), \textit{heavy}, and \textit{torrential}. Slant is defined as an angle in degrees from 0 to plus or minus 20.
-
-
-
+The kernel acts as a low pass filter, removing high frequency content (such as noise and edges). The image is then moved from RGB (red, green, blue) to HSL (hue, saturation, lightness) space, where the lightness values are multiplied by 0.7. This has the effect of making the image darker. The process is completed by moving the image back to RGB space. Rain types are \textit{drizzle} (a.k.a. "light", default, code checks for "heavy" and "torrential", any other non-empty string is considered drizzle/light rain), \textit{heavy}, and \textit{torrential}. Slant is defined as an angle in degrees from 0 to plus or minus 20.
 
 % Missing an introduction discussing why this is being done
 % The synthetic datasets used contain no rain. To test models with rainy images, rain must % be added. 
@@ -87,10 +136,14 @@ During inference (running steering predictions) the image is (in addition to sam
 \label{fig:AutomoldRoadAugmentationLibrary}
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Data Augmentation and Pre-Processing
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Data Augmentation and Pre-Processing}
 
 % Missing an introduction on why this is important
-Data augmentation can be used to reduce overfitting, by increasing the amount of data available to to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself, increase by a factor of 1.6 in this study.
+Data augmentation can be used to reduce overfitting, by increasing the amount of data available to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself, increase by a factor of 1.6 in this study.
 %For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. 
 The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. 
 The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
@@ -111,27 +164,6 @@ The image is then cropped to remove car and horizon, resized to the dimensions d
 
 The starting point for the choice of network model and architecture and parameters is the NVIDIA end to end model (\cite{bojarski2016end}).
 The starting point
-
-\section{Driving Simulators}
-
-Two driving simulators were trialed, an earlier version of Udacity (\cite{UdacityCarSim}) and SDSandbox (\cite{SDSandboxSim}). Both use the Unity game engine. The former had a large user base on account of the accompanying MOOC (Massive Online Open Course), which has since started using the Unreal (\cite{unrealengine}) based Carla (\cite{Dosovitskiy17}) sim. SDSandbox is actively developed for the open source Donkey Car autonomous vehicle (\cite{DonkeyCar2020} and used by the do-it-yourself model-scale autonomous-vehicle community DIY Robocars (\cite{DIYRobocars2020} (\cite{DIYRobocars2020}). The majority of this community uses behavioral learning to train self-driving CNNs (see correspondence with main code maintainer in \ref{corr:ellerbach}).  
- 
-Both simulators are equivalent in the sense of acting as a data generator and also as a testing environment for self-driving CNNs. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving proportional–integral–derivative-like closed loop controller as implemented in PIDController.cs source code file (\cite{SDSandboxSim}). The feature makes generating training sets less laborious. The manual option being, a simulated car must be manually steered around the track a number of times. The process of gathering training data, manual or automated, creates a set of images and a set of corresponding steering angles, forming a labelled dataset.
-The data is then ready to be processed and presented to a neural network.
-
-Both legacy Udacity and SDSandbox also run in autonomous driving modes (Fig. \ref{fig:UdacitySdSandboxAutonomous}) the options being \textit{AUTONOMOUS MODE} and \textit{Auto Drive w Rec} respectively. Output image sizes are 320x160 and 160x120 respectively.
-
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=\textwidth]{UdacitySdSandboxSim.png}
-\caption{Left to right: legacy Udacity and SDSandbox Autonomous Driving Simulators}
-\label{fig:UdacitySdSandboxAutonomous}
-\end{figure}
-
-Setting up the simulator and prediction engine is further detailed in Appendix
-
-\ref{RunningCarSimulatorForInference}.
 
 \subsection{Installing the source code}
 \label{installing-source-code}
