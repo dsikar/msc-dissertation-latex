@@ -250,7 +250,7 @@ order and other recurrent architectures)" \cite{hochreiter2001gradient}
 %-----------------------------------
 %	DATASETS
 %-----------------------------------
-\section{Datasets}
+\section{Public Datasets}
 
 TODOS
 
@@ -280,3 +280,36 @@ Explain:
 TODO explain inference time
 TOD explain behavioral learning/cloning
 
+\subsection{Digital Images}
+Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
+
+Maybe cite goodfellow once and do a joblot on items.  
+
+\subsection{Convolution}
+Much confusion exists between dot product and convolution, pick up bits in Methods.ConvNets-Discussion.tex
+
+\subsection{Deep Regression Models}
+Explain the process of transforming these models (except NVIDIA) into regression models, maybe cite \cite{lathuilire2018comprehensive} or papers cited therein.
+
+Paper is referred to by this discussion: 
+% https://stats.stackexchange.com/questions/335836/cnn-architectures-for-regression
+A somewhat more succinct definition of the procedure:  
+% https://stats.stackexchange.com/questions/456126/could-resnet-curve-be-used-for-a-regression-problem-e-g-housing-price-predicti
+Just to make it clear, a regression problem is one whose target is continuous and not discrete. In this sense you can make any Neural Network that is primarily used for classification a regressor, with minimal changes. Namely it needs to end with 1 neuron, no activation function and a proper loss function (e.g. mean squared error). For example, object detection is in its core a regression problem because you are trying to predict coordinates. Any ResNet could be used for these problems. 
+  
+TODO Add data augmentation - Data augmentation can be used to reduce overfitting, by increasing the amount of data available to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself.  
+  
+TODO explain what is meant by "deep" 
+TODO maybe add, in the context of simulated 3D environments used to train deep models, in this case, a deep reinforcement learning model.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OpenAI Gym
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{OpenAI Gym}
+Although OpenAI Gym (\cite{brockman2016openai)} was developed for Reinforcement Learning (\cite{sutton2018reinforcement}), it is used in SDSandbox gym\_ donkeycar module, specifically the 
+pseudorandom number generator and spaces modules. TCP communication between simulator and prediction engine.
+
+\section{Leftovers}
+Add to some part, probably related work:  
+  
+\cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  
+\cite{gonzalez2018} "Restoration attempts to recover an image that has been degraded by using a priori knowledge of the degradation phenomenon. Thus, restoration techniques are oriented toward modeling the degradation and applying the inverse process in order to recover the original image."

@@ -40,6 +40,18 @@
 % LC - 14 pages
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DATASETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Datasets}
+Five datasets are considered Audi (\cite{geyer2020a2d2}), FordAV (\cite{agarwal2020ford}), Kitti (\cite{geiger2013vision}), Udacity (\cite{udacity2020}) and Unity, this last one being synthetic data generated specifically for this project. All provide a labelled dataset in the sense that a steering angle may be obtained for each image. In the case of Udacity simulator and Unity (SDSandbox) data, the steering angle is implicit. The remaining datasets, the steering angle may be inferred either from plain text log files, or extracted from rosbag files.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Keras
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Keras}
+The Keras (\cite{chollet2015keras}) deep learning API (Application Programming Interface) written in Python (\cite{van1995python}) and in this case acting as a wrapper around the machine learning library Tensorflow (\cite{abadi2016tensorflow})  was used to create, train and test models.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CREATING VIDEOS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Creating Videos}
@@ -79,7 +91,8 @@ Two driving simulators were trialed, an earlier version of Udacity (\cite{Udacit
  
 Both simulators (Figure \ref{fig:UdacitySdSandboxAutonomous}) are equivalent in the sense of acting as a testing environment for self-driving CNNs and also as a training data generator. The difference being SDSandbox is able to generate data using, in addition to manual steering, a self-driving PID (\cite{bennett1993development}) closed loop controller as implemented in PIDController.cs source code file. The process provides feedback to the simulated car, which adjusts itself on the track, based on known geometrical constraints. The feature (option \textit{Auto Drive w Rec}) makes generating training sets less laborious. The manual option (\textit{Joystick/Keyboard w Rec}) being, a simulated car must be manually steered around the track a number of times. The equivalent Udacity sim option being \textit{TRAINING MODE}.
 
-For inference, Udacity and SDSandbox have equivalent modes. The options being \textit{AUTONOMOUS MODE} and \textit{NN Control over Network}. Output image sizes are 320x160 and 160x120 respectively. The Udacity sim outputs steering angles to a single comma separated values' (.csv) file, as opposed to multiple .json files. 
+For inference, Udacity and SDSandbox have equivalent modes. The options being   
+\textit{AUTONOMOUS MODE} and \textit{NN Control over Network}. Output image sizes are 320x160 and 160x120 respectively. The Udacity sim outputs steering angles to a single comma separated values' (.csv) file, as opposed to multiple .json files. 
 
 \begin{figure}[h!]
 \centering
@@ -88,17 +101,20 @@ For inference, Udacity and SDSandbox have equivalent modes. The options being \t
 \label{fig:UdacitySdSandboxAutonomous}
 \end{figure}
 
+Appendix \ref{AppendixA-methods} contains further notes on obtaining the source code (\ref{installing-source-code}), running the Unity Hub utility (\ref{running-unity-hub}), generating training datasets (\ref{recording-one-lap} )and running the driving simulator (
+\ref{running-driving simulator})
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Generating Synthetic datasets
+% Generating Synthetic datasets - REPEATED
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Generating Synthetic Datasets}
+%\section{Generating Synthetic Datasets}
 
-\begin{itemize}
-    \item Running SDSandbox in Drive w Rec mode
-\end{itemize}
+%\begin{itemize}
+%    \item Running SDSandbox in Drive w Rec mode
+%\end{itemize}
 
-SDSandbox has a built-in \textit{Drive w Rec} feature which enables saving of image frames generated while the simulator is running. In addition to the image, a corresponding json encoded file is also saved for every image, containing metadata which includes the reference image file name, and values for steering and throttle of simulated vehicle at the time image frame was recorded. 
+%SDSandbox has a built-in \textit{Drive w Rec} feature which enables saving of image frames generated while the simulator is running. In addition to the image, a corresponding json encoded file is also saved for every image, containing metadata which includes the reference image file name, and values for steering and throttle of simulated vehicle at the time image frame was recorded. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Adding rain to images
@@ -143,114 +159,30 @@ During inference (running steering predictions) the image is (in addition to sam
 \section{Data Augmentation and Pre-Processing}
 
 % Missing an introduction on why this is important
-Data augmentation can be used to reduce overfitting, by increasing the amount of data available to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself, increase by a factor of 1.6 in this study.
+As discussed in \ref{Context}, data augmentation can be used to reduce overfitting, but increasing the amount of training data. The data augmentation library used in this study is adapted from \cite{Naoki2016}. Critical to the design of computer vision CNNs is the geometry of the input image. The adapted augmentation library (Augmentation.py) first resizes the image to the expected size of acquired image in the original network design. This enables code re-usability, where different networks, using different image sizes can be tested using the same code. 
+Increase by a factor of 1.6 in this study.
 %For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. 
-The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded, augmented with random horizontal flip (with corresponding steering negated), random shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness. 
-The image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network) and finally moved from RGB to YUV space.
+The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded and resized (to 320 width x 160 height pixels in this case), augmented with random horizontal flip (with corresponding steering negated), random horizontal shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness, concluding the augmentation part.
+For the pre-processing part, the image is then cropped to remove car and horizon, resized to the dimensions determined by network design (200x66 pixels for baseline network). Crop parameters (amount of image to be removed from top and bottom sections) is network dependant and set in a configuration file (conf.py). In the example shown, 25 rows of pixels were removed from the bottom and 60 rows of pixels were removed from the top, resulting in a 320 x 75 pixel image. The image in then resized to the geometry to be presented to network, in this case 200 x 66, which is the geometry used by NaokiNet and DriveNet. Finally the image is moved from RGB to YUV space. In the RGB scheme, each pixel is represented by three channel intensities of red, green and blue. In YUV, also referred to as YCbCr (\cite{maller2020}) space, each pixel is represented by Y (luma), U (Cb - luminance value subtracted from red channel) and V (Cr - luminance value subtracted from red channel). It is a "lossy" process which degrades the data, and originally developed for colour to black and white television backward compatibility. Moving the image from RGB to YUV space has been demonstrated to give "better subjective image quality than the RGB color space", being better for computer vision "implementations than RGB due to the perceptual similarities to the human vision" (\cite{podpora2014yuv}).
 
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/AugmentationPreProcessing.png}
- \caption{Stages of image augmentation and pre-processing with array dimensions on each step}
+ \caption{Stages of image augmentation (DriveNet and NaokiNet image geometries) and pre-processing with corresponding image array dimensions of each step}
  \label{fig:augpreproc}
 \end{figure}
 
-\section{OpenAI Gym}
 
 
 % Prior to presenting pixel colour channel values to the network, a number of pre-processing steps have become standard with neural network classifiers and regressors applied to computer vision.
 
-\section{Network model}
-
-The starting point for the choice of network model and architecture and parameters is the NVIDIA end to end model (\cite{bojarski2016end}).
-The starting point
-
-\subsection{Installing the source code}
-\label{installing-source-code}
-The code is cloned from:
-\begin{verbatim}
-git clone https://github.com/dsikar/sdsandbox    
-\end{verbatim}
-This will download the source code to the sdsandbox directory.
-
-\subsection{Running the Unity Hub application image}
-
-
-\textit{Unity Hub} is downloaded to disk and started:
-\begin{verbatim}
-$ sudo ./UnityAppImage --no-sandbox
-\end{verbatim}
-
-\subsection{Adding the SDSanbox project to Unity Hub}
-
-Once source code has been cloned, and Unity Hub is running, the project is added by clicking "ADD" and selecting directory sdsandbox/sdsim. The project will then appear as an list entry in Unity Hub and can be opened by clicking.
-
-\subsection{Running the driving simulator}
-\label{running-driving simulator}
-Once the project is open, the "menu" scene is selected, and the play arrow button clicked. The simulator is ready to run.
-
-\subsection{Recording one lap of training data}
-\label{recording-one-lap}
-Once the simulator is running, A "Log dir" log directory for storing data outputs is set, then "Generated Track" double-clicked, then "Auto Drive w Rec" option selected. This will set the simulator car going around the track. 
-The control settings (displayed on main screen) are:
-\begin{verbatim}
-Max Speed: 1.772174
-Prop: 49
-Diff: 80
-Steer Max: 25
-\end{verbatim}
-The are the maximum speed, the values Prop and Diff for updating steering angle and the maximum steering angle. Once a lap is completed, the Stop button is clicked, then the Play button is clicked to stop the simulator.  
-Images in .jpg format and steering angles stored in .json files are created in sub-directory sdsim/log, and are ready to be moved to the "dataset" directory:
-\begin{verbatim}
-$ python prepare_data.py --out-path=../dataset/genTrack
-\end{verbatim}
-The previous command will 
-
-\subsection{Training models}
-Once a num
-
-Models are trained with the src/train.py script.
-
-\subsection{Generating graphs}
-
-Two graphs are used, steering angle histograms and steering angle plots. A set of functions have been written for this purpose in steerlib.py. For example to generate a histogram of steering angles from a 
-
 % maybe move to appendix or results, explaining here for now
-
-
-
-
-
-
 
 %\section{Data Augmentation}
 %To avoid overfitting, the data is augmented by: cropping the %image to a height band that excluded horizon and car shadow, %resized to required model input size, converted from RGB to YUV, 
 % get images from http://localhost:8890/notebooks/augument.ipynb
 
 % \section{Training a model}
-
-\section{Predicting steering angles for a simulated track}
-
-To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{brockman2016openai} (TODO FURTHER DISCUSS PLATFORM) framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
-\textbf{DESCRIBE HANDSHAKING} \textbf{DESCRIBE TCP} 
-\textbf{DESCRIBE GRAPH}
-Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{garfinkel2013passive}. A log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} and created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{fig:GeneratedTrackPlusHist}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/PredSteeringAnglestcpflowNvidia1.png}
- \caption{Predicted (blue) and ground-truth simulator (orange) steering angles. The simulator steering angle values in this case are obtained from data packets sent over the TCP network.}
- \label{fig:PredSteeringAnglestcpflowNvidia1}
-\end{figure}
-
-Taking this technique one step further, a video can be created using the image sent by simulator, next to the processed image presented to network. Together with the steering angle that would be used by simulator with the steering angle produced by prediction engine (predict\_client.py) which is used by the simulator.
-This also can produced a metric representing \textit{goodness-of-steer}, as seen in equation     \ref{eq:goodness_of_steer}:
-
-\begin{equation}
-    \label{eq:goodness_of_steer}
-    g_s(p,g) = \frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c
-\end{equation}
-where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized). The sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
 
 \section{Identifying rainy images with Amazon Mechanical Turk}
 
@@ -268,88 +200,10 @@ The unlabelled dataset is stored on AWS S3 (\cite{AmazonS3Documentation2020}). A
  \label{fig:amazon-ground-truth}
 \end{figure}
 
-\section{Development environments}
-
-Three development environments are planned to be used, a local environment to run the Unity3D SDSdanbox application, and two additional environments, the Intel Dev-Cloud (\cite{IntelDevCloud2020}) and City University's Camber server (\cite{Camber2019}).
-% Further develop running jobs in these environments
-
-\subsection{Digital Images}
-Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
-
-Maybe cite goodfellow once and do a joblot on items.  
-
-Our NVIDIA architecture is very similar to the one proposed by Bojarski et al. 2016. Our alternative AlexNet, GoogleLeNet, VGGNet and ResNet however have much fewer parameters. This is due to the "degradation" problem, where the number of parameters is too large for the dataset, and the network fails to converge.
-
-\section{Datasets}
-% What datasets we used and what data was gathered
-3 datasets where used. Udacity self-driving real life data, Unity 3D game engine data, and the same datasets with added rain. Figure X shows details of the data.
-
-The datasets are downloaded via script (\cite{Sikar2020}) and structured according to environment (local, Camber or DevCloud).
-
-Two data augmentation libraries were used: \cite{Naoki2016} to add random shifts, flips, crop and change images to YUV format (as per \cite{bojarski2016end} data augmentation method used in the baseline architecture) and \cite{Saxena2017} to add rain and reflections to the testing datasets.
-
 \section{Training and Testing}
 % TODO add the "pickle" model
-The Keras (\cite{chollet2015keras}) deep learning API (Application Programming Interface) written in Python (\cite{van1995python}) and in this case acting as a wrapper around the machine learning library Tensorflow (\cite{abadi2016tensorflow})  was used to create, train and test models.
-
-\subsection{Ford AV Dataset}
-% Get details from https://avdata.ford.com/downloads/default.aspx
-The Ford Autonomous Vehicle is a 
-% angle from IMU
-From % https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
- (\cite{Applanix}) is a professional-grade, compact,fully  integrated,  turnkey  position  and  orientation  system combining a differential GPS, an inertial measurement unit(IMU)  rated  with  1$^{\circ}$ of  drift  per  hour,  and  a  1024-count wheel encoder to measure the relative position, orientation,velocity,  angular  rate  and  acceleration  estimates  of  the vehicle. The Ford AV data set provides the 6-DOF pose (6DOF pose estimation of objects is the task of estimating the coordinates (X, Y,Z) and rotation angles (Yaw, Pitch and Roll) of an object with respect to a previously established reference coordinate system. (\cite{7005077} ) estimates obtained by integrating the (linear) acceleration and (angular) velocity.
-% Note, Ford av authors discussion https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
-% IEEE on 6DOF estimation from IMU discussion https://ieeexplore.ieee.org/document/7005077
-
-% on converting GPS and IMU measurements to steering angles, see
-% http://www.robesafe.uah.es/personal/roberto.arroyo/docs/Almazan13iv.pdf
-% We might use a similar technique, time allowing
-
-\subsection{Kitti}
-
-The Kitti dataset TODO add provenance, add description
-Data format, steering angle description obtained from oxts/dataformat.txt 
-% cat 2011_09_26/2011_09_26_drive_0001_sync/oxts/dataformat.txt
-\begin{verbatim}
-yaw:   heading (rad),       0 = east,  positive = counter clockwise,\
-    range: -pi   .. +pi
-\end{verbatim}
-Note, this may not be the steering angle - TBC. So additional work may be needed to obtain.
-There are some pointers online, a simple approach seems to be:
-% https://physics.stackexchange.com/questions/112301/calculating-the-rate-at-which-a-car-turns
-This is also an interesting approach:
-% http://docs.ros.org/en/kinetic/api/teb_local_planner_tutorials/html/cmd__vel__to__ackermann__drive_8py_source.html
-With python code:
-\begin{verbatim}
-def convert_trans_rot_vel_to_steering_angle(v, omega, wheelbase):
-  if omega == 0 or v == 0:
-     return 0
-  radius = v / omega
-  return math.atan(wheelbase / radius)    
-\end{verbatim}
-Another possible method "Estimation of the Steering Angle Based on Extended Kalman-Filter"  
-% http://gvpress.com/journals/IJMUE/vol11_no12/27.pdf
-% equations 10 and 11
-
-\subsection{Data balancing}
-
-Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angles are expected to be close to zero (car driving straight). So some form of undersampling may need to be used to address the issue.
-
-\subsection{Data Augmentation}
-The data was augmented with several methods
-
-Describe was additional transformations was performed to enlarge dataset - maybe a discussion that more data is good? With references.
 
 
-Found this article:
-% https://lmb.informatik.uni-freiburg.de/Publications/2015/FDB15/image_orientation.pdf
-Would some good suggestions:  
-Augmentation. To prevent overfitting, we perform image augmentation, i.e., we
-apply random transformations to input samples during network training on the
-fly. We use translations (up to 5\% of the image width), brightness adjustment
-% in the range [−0.2, 0.2], gamma adjustment with \\gamma \\memberof [−0.5, 0.1] and Gaussian
-pixel noise with a standard deviation in the range [0, 0.02].
-  
 \section{Deep Convolutional Neural Network Models}
 
 In this section all network architectures used are described.
@@ -395,60 +249,40 @@ Additional assumptions on training include: 128 example batch size, weights init
 % NB no reference to "Alexnet" in original or NVIDIA articles - clean up required.
 %For example, in the classic Alexnet (\cite{krizhevsky2012imagenet}) architecture, with input %image size 224x224, kernel size 11, padding equal zero and stride = 4, the resulting feature %map size in the first convolutional layer is 55x55. 
 %Alexnet has an input layer with dimensions 224x224x3, where 3 is the number of channels (RGB %image), the second layer has dimensions 55x55x48, the third convolutional layer has %dimensions 27x27x128 and so on. This is typical of deep network architectures, decreasing %feature map sizes with increasing number of channels as network depth increases.
-`  
 
 \textbf{Discussion on the number of parameters required given size of dataset.}  
-We also need a discussion on deep regression models as suggested by \cite{lathuilire2018comprehensive}. This is the main difference between the NVIDIA and additional models, the NVIDIA model is a regression model while the models we compare and contrast with NVIDIA are classification models built specifically for the ILSVC  competitiion.
+We also need a discussion on deep regression models as suggested by \cite{lathuilire2018comprehensive}. This is the main difference between the NVIDIA and additional models, the NVIDIA model is a regression model while the models we compare and contrast with NVIDIA are classification models built specifically for the ILSVC  competition.
 
-\subsection{ResNet}
+\section{Training}
+Discuss training, logging and training outputs, with examples of logs, history and image.
 
-Discuss the concept of "residuals". ResNet makes use of skip-connections (spelling), these "network architecture
-designs (e.g., skip connections) produce loss functions that train easier", producing smoother loss surfaces (\cite{li2017visualizing})  
-The "Degradation problem itself stems from the fact that it is easier to learn 0 than to learn 1"   https://www.youtube.com/watch?v=jio04YvgraU
-"if an identity mapping were optimal, it would be easier to push the residual to zero than to fit an identity mapping by a stack of nonlinear layers" \cite{he2015deep}.  
-Explain what variation A, B or C we will be using (zero padding, weights * x, etc.  
-"Essemble" of ResNets was used.  
-18 layers seems to be a threshold, beyond that, training becomes difficult. Skip connections make deeper networks, i.e. networks with more layers, easier to train compared to networks without skip connections.  
-Another wording, deeper neural networks (i.e. layer count equal or greater than 20) become increasingly difficult to train, generating poorer accuracy than deep networks with less than 20 layers. This is known as "degradation problem" (citation needed). Skip connections make deeper architectures easier to train, by smoothing the loss function.
 
-\subsection{GoogleLeNet}
+\section{Evaluation - Predicting Steering Angles}
+This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
+We have so far a goodness of steer metric. Additionally, it would be good to have some form of noise measure, to quantify how much the image has been changed by random noise, i.e. rain.
 
-This network (\cite{szegedy2014going}) was the winning entry in the ILSVCC 2014 Classification Challenge. It uses the LeNet-5 (\cite{Lecun98gradient-basedlearning}) model as a starting point, following the now traditional design of ConvNets with the addition of \textit{Inception} modules as introduced by \cite{lin2013network} in the \textit{Network in Network} model.
+
+
+To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{brockman2016openai} (TODO FURTHER DISCUSS PLATFORM) framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
+\textbf{DESCRIBE HANDSHAKING} \textbf{DESCRIBE TCP} 
+\textbf{DESCRIBE GRAPH}
+Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{garfinkel2013passive}. A log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} and created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{fig:GeneratedTrackPlusHist}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\columnwidth]{Figures/InceptionModules.png}
- \caption{Inception naive (left) and dimension reduction model (right)}
- \label{fig:inception_modules}
+ \includegraphics[width=\textwidth]{Figures/PredSteeringAnglestcpflowNvidia1.png}
+ \caption{Predicted (blue) and ground-truth simulator (orange) steering angles. The simulator steering angle values in this case are obtained from data packets sent over the TCP network.}
+ \label{fig:PredSteeringAnglestcpflowNvidia1}
 \end{figure}
 
-The designers of the GoogleLeNet architecture state that power and memory use is important to consider and aim to keep a computation budget of 1.5 billion multiply adds at inference time such that the resulting model could be used in practice at a reasonable cost.
+Taking this technique one step further, a video can be created using the image sent by simulator, next to the processed image presented to network. Together with the steering angle that would be used by simulator with the steering angle produced by prediction engine (predict\_client.py) which is used by the simulator.
+This also can produced a metric representing \textit{goodness-of-steer}, as seen in equation     \ref{eq:goodness_of_steer}:
 
-The architecture contains 22 layers where all
-
-\subsection{Deep Regression Models}
-Explain the process of transforming these models (except NVIDIA) into regression models, maybe cite \cite{lathuilire2018comprehensive} or papers cited therein.
-
-Paper is referred to by this discussion: 
-% https://stats.stackexchange.com/questions/335836/cnn-architectures-for-regression
-A somewhat more succinct definition of the procedure:  
-% https://stats.stackexchange.com/questions/456126/could-resnet-curve-be-used-for-a-regression-problem-e-g-housing-price-predicti
-Just to make it clear, a regression problem is one whose target is continuous and not discrete. In this sense you can make any Neural Network that is primarily used for classification a regressor, with minimal changes. Namely it needs to end with 1 neuron, no activation function and a proper loss function (e.g. mean squared error). For example, object detection is in its core a regression problem because you are trying to predict coordinates. Any ResNet could be used for these problems
-
-\subsection{Binning/Quantization}
-Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.
-
-\subsection{Training}
-
-We might want to add that training was done on AWS GPUs following   
-https://aws.amazon.com/blogs/machine-learning/train-deep-learning-models-on-gpus-using-amazon-ec2-spot-instances/  
-
-
-\section{Evaluation}
-This section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
-We have so far a goodness of steer metric. Additionally, it would be good to have some form of noise measure, to quantify how much the image has been changed by random noise, i.e. rain.
-\cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  
-\cite{gonzalez2018} "Restoration attempts to recover an image that has been degraded by using a priori knowledge of the degradation phenomenon. Thus, restoration techniques are oriented toward modeling the degradation and applying the inverse process in order to recover the original image."
+\begin{equation}
+    \label{eq:goodness_of_steer}
+    g_s(p,g) = \frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c
+\end{equation}
+where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized). The sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
 %\begin{equation}
 %    \label{eq:g(x,y)}
 %    g(x,y) = \matchcal{H} Stopped here

@@ -303,9 +303,86 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 ./Assets/Scripts/Logger.cs
 \end{verbatim}
 
-\section{Generated Track performance}
+\section{Generated Track performance - goodness of steer}
+% Table generated with steerlib.py
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\multicolumn{6}{|c|}{Goodness-of-steer results - Generated Track and Generated Road SDSandbox logs} \\ \hline
 
+% 1 Log: Unity log location (image plus .json files)
+% 1 Filename:   Download  D1  Udacity real world dataset
+% 2 Model:    D2  Udacity simulator data
+% 3 Rain Type: D3  Udacity real and simulator data
+% 4 Slant: Turk dry/rainy Ford dataset
+% 5.GOS: Goodness of steer
 
+% Generated Track log number of image files
+% $ ls -l ../../dataset/unity/genTrack/genTrackOneLap/logs_Wed_Nov_25_23_39_22_2020/*.jpg | wc -l
+% 1394
+% Generated Road log number of image files
+% $ ls -l ../../dataset/unity/genRoad/logs_Fri_Jul_10_09_16_18_2020/*.jpg | wc -l
+% 19679
+
+\multicolumn{6}{|c|}{Generated Track log: logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 (1394 images)} \\ \hline
+ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
+% GENERATED TRACK
+1 & 20201207192948\_ nvidia2.h5 & nvidia2 &  & 0 & 1.68 * \\ \hline
+2 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 2.12 \\ \hline
+3 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 2.17 \\ \hline
+4 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 2.30 \\ \hline
+5 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 1.82 * \\ \hline
+6 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 2.11 \\ \hline
+7 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 2.13 \\ \hline
+8 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 2.28 \\ \hline
+9 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline &  & 0 & 2.32 * \\ \hline
+10 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 3.12 \\ \hline
+11 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 3.17 \\ \hline
+12 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 3.39 \\ \hline
+13 & 20201120171015\_ sanity.h5 & nvidia1 &  & 0 & 5.03 * \\ \hline
+14 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.11 \\ \hline
+15 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.07 \\ \hline
+16 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.00 \\ \hline
+% GENERATED ROAD
+\multicolumn{6}{|c|}{Generated Road log:  logs\_ Fri\_ Jul\_ 10\_ 09\_ 16\_ 18\_ 2020 (19679 images)} \\ \hline
+ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
+% NVIDIA2
+17 & 20201207192948\_ nvidia2.h5 & nvidia2 &  & 0 & 2.99 * \\ \hline  % drove 16 minutes on this road 1 & https://youtu.be/z9nILq9dQfI
+18 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 3.20 \\ \hline
+19 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 3.22 \\ \hline
+20 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 3.27 \\ \hline
+% NVIDIA1
+21 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 3.87 * \\ \hline
+22 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 3.75 \\ \hline
+23 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 3.70 \\ \hline
+24 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 3.57 \\ \hline
+% NVIDIA_BASELINE
+25 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline &  & 0 & 5.51 * \\ \hline
+26 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 4.97 \\ \hline
+27 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 4.98 \\ \hline
+28 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 5.05 \\ \hline
+% SANITY (NVIDIA1)
+29 & 20201120171015\_ sanity.h5 & nvidia1 &  & 0 & 3.85 * \\ \hline
+30 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.06 \\ \hline
+31 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.05 \\ \hline
+32 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.02 \\ \hline
+%   compare to genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png
+\end{tabular}
+\end{center}
+\caption{Goodness-of-Steer $G_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather.}
+\label{table:goodness-of-steer}
+\end{table}
+Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs. The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (on stretch). Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot.
+
+Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} shows the ground truth steering predictions as obtained in "Auto Drive w Rec" mode, for Generated Track, saved to log directory logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png}
+ \caption{Ground truth steering values for logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 recorded log}
+ \label{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} 
+\end{figure}
 The $G_s$ (goodness-of-steer) model performance score, was obtained by recording one full lap and comparing steering angles with model predictions.
 
 \section{Datasets}

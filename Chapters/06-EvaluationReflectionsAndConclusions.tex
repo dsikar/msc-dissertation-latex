@@ -19,8 +19,18 @@ TBC - TODO. Some points to reflect:
 \end{itemize}
 TODO - future work
 addressing data inbalance
-Binning as an alternative to deep regression models for ResNet, LeNet and VGG net.
+Binning as an alternative to deep regression models for ResNet, LeNet and VGG net. 
+\subsection{Binning/Quantization}
+Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.
+\subsection{Data balancing}
+
+Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angles are expected to be close to zero (car driving straight). So some form of undersampling may need to be used to address the issue.
+TODO, maybe move class imbalance to Context.  
+ 
 TODO - Development environments - need to run same versions of python, keras and tensorflow. Care in setting up environment (potentially virtual) must be taken to ensure models can be run acrsso different machines.
+\section{Dropped datasets}
+Some effort was expended into downloading datasets and understanding how to extract steering angles from data provided. This drive, together with the expectation of trialing, in addition to variations of DriveNet, ResNet, VGGNet and InceptionNet proved too ambitious.   
+TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geometry could be attained.ecode
 
 %The absence of good quality labelled datasets (maybe change this w.r.t. Mech Turk and ISLSVRC - "the presence of a good quality" labelled dataset engered a number of landmark computer vision CNN architectures, more obvious and less citations required) has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
 

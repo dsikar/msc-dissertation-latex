@@ -4,9 +4,47 @@
 
 Procedures used to set up experiments are detailed in this appendix.
 
+\section{Generating graphs}
+
+Two graphs are used, steering angle histograms and steering angle plots. A set of functions have been written for this purpose in steerlib.py. For example to generate a histogram of steering angles from a 
+
+\section{Network architectures for future reference}
+
+\subsection{ResNet}
+
+Discuss the concept of "residuals". ResNet makes use of skip-connections (spelling), these "network architecture
+designs (e.g., skip connections) produce loss functions that train easier", producing smoother loss surfaces (\cite{li2017visualizing})  
+The "Degradation problem itself stems from the fact that it is easier to learn 0 than to learn 1"   https://www.youtube.com/watch?v=jio04YvgraU
+"if an identity mapping were optimal, it would be easier to push the residual to zero than to fit an identity mapping by a stack of nonlinear layers" \cite{he2015deep}.  
+Explain what variation A, B or C we will be using (zero padding, weights * x, etc.  
+"Essemble" of ResNets was used.  
+18 layers seems to be a threshold, beyond that, training becomes difficult. Skip connections make deeper networks, i.e. networks with more layers, easier to train compared to networks without skip connections.  
+Another wording, deeper neural networks (i.e. layer count equal or greater than 20) become increasingly difficult to train, generating poorer accuracy than deep networks with less than 20 layers. This is known as "degradation problem" (citation needed). Skip connections make deeper architectures easier to train, by smoothing the loss function.
+
+\subsection{GoogleLeNet}
+
+This network (\cite{szegedy2014going}) was the winning entry in the ILSVCC 2014 Classification Challenge. It uses the LeNet-5 (\cite{Lecun98gradient-basedlearning}) model as a starting point, following the now traditional design of ConvNets with the addition of \textit{Inception} modules as introduced by \cite{lin2013network} in the \textit{Network in Network} model.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\columnwidth]{Figures/InceptionModules.png}
+ \caption{Inception naive (left) and dimension reduction model (right)}
+ \label{fig:inception_modules}
+\end{figure}
+
+The designers of the GoogleLeNet architecture state that power and memory use is important to consider and aim to keep a computation budget of 1.5 billion multiply adds at inference time such that the resulting model could be used in practice at a reasonable cost.
+
+\subsection{VGGNet}
+Another one there was not enough time to trial.
+
 \section{Cleaning SDSandbox data}
 
 Data corruption was found with SDSandbox generated datasets where some .json files (containing steering angles and throttle for a corresponding image)  were not generated, the missing values leading to training failure. There "orphaned" images were deleted with custom script src/utils/jsonclean.py
+
+\section{Degradation}
+
+Our NVIDIA architecture is very similar to the one proposed by Bojarski et al. 2016. Our alternative AlexNet, GoogleLeNet, VGGNet and ResNet however have much fewer parameters, never tested in full. This is due to the "degradation" problem, where the number of parameters is too large for the dataset, and the network fails to converge.
+
 
 \section{Running the car simulator}
 \label{RunningCarSimulatorForInference}
@@ -29,7 +67,46 @@ Once the menu scene runs, one of 5 circuits can be chosen. Once the chosen circu
  \label{fig:SDSandboxHome}
 \end{figure}
 
+\subsection{Installing the source code}
+\label{installing-source-code}
+The code is cloned from:
+\begin{verbatim}
+git clone https://github.com/dsikar/sdsandbox    
+\end{verbatim}
+This will download the source code to the sdsandbox directory.
 
+\subsection{Running the Unity Hub application image}
+\label{running-unity-hub}
+
+\textit{Unity Hub} is downloaded to disk and started:
+\begin{verbatim}
+$ sudo ./UnityAppImage --no-sandbox
+\end{verbatim}
+
+\subsection{Adding the SDSanbox project to Unity Hub}
+
+Once source code has been cloned, and Unity Hub is running, the project is added by clicking "ADD" and selecting directory sdsandbox/sdsim. The project will then appear as an list entry in Unity Hub and can be opened by clicking.
+
+\subsection{Running the driving simulator}
+\label{running-driving simulator}
+Once the project is open, the "menu" scene is selected, and the play arrow button clicked. The simulator is ready to run.
+
+\subsection{Recording one lap of training data}
+\label{recording-one-lap}
+Once the simulator is running, A "Log dir" log directory for storing data outputs is set, then "Generated Track" double-clicked, then "Auto Drive w Rec" option selected. This will set the simulator car going around the track. 
+The control settings (displayed on main screen) are:
+\begin{verbatim}
+Max Speed: 1.772174
+Prop: 49
+Diff: 80
+Steer Max: 25
+\end{verbatim}
+The are the maximum speed, the values Prop and Diff for updating steering angle and the maximum steering angle. Once a lap is completed, the Stop button is clicked, then the Play button is clicked to stop the simulator.  
+Images in .jpg format and steering angles stored in .json files are created in sub-directory sdsim/log, and are ready to be moved to the "dataset" directory:
+\begin{verbatim}
+$ python prepare_data.py --out-path=../dataset/genTrack
+\end{verbatim}
+The previous command will move all images stored in the sim output directory to a date-labelled folder.
 
 \section{Network monitoring and debugging with tcpflow}
 \label{NetMonDebug}
@@ -119,6 +196,46 @@ Thus a timestamp can be obtained for each image extracted. This is done with scr
 While the steering angles are extracted 
 The image can be matched with a steering angle by obtaining the timestamp of image, the full secs 
 
+\subsection{Ford AV Dataset}
+% Get details from https://avdata.ford.com/downloads/default.aspx
+The Ford Autonomous Vehicle is a 
+% angle from IMU
+From % https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
+ (\cite{Applanix}) is a professional-grade, compact,fully  integrated,  turnkey  position  and  orientation  system combining a differential GPS, an inertial measurement unit(IMU)  rated  with  1$^{\circ}$ of  drift  per  hour,  and  a  1024-count wheel encoder to measure the relative position, orientation,velocity,  angular  rate  and  acceleration  estimates  of  the vehicle. The Ford AV data set provides the 6-DOF pose (6DOF pose estimation of objects is the task of estimating the coordinates (X, Y,Z) and rotation angles (Yaw, Pitch and Roll) of an object with respect to a previously established reference coordinate system. (\cite{7005077} ) estimates obtained by integrating the (linear) acceleration and (angular) velocity.
+% Note, Ford av authors discussion https://s23.q4cdn.com/258866874/files/doc_downloads/2020/03/2003.07969.pdf
+% IEEE on 6DOF estimation from IMU discussion https://ieeexplore.ieee.org/document/7005077
+
+% on converting GPS and IMU measurements to steering angles, see
+% http://www.robesafe.uah.es/personal/roberto.arroyo/docs/Almazan13iv.pdf
+% We might use a similar technique, time allowing
+
+\subsection{Kitti}
+
+The Kitti dataset TODO add provenance, add description
+Data format, steering angle description obtained from oxts/dataformat.txt 
+% cat 2011_09_26/2011_09_26_drive_0001_sync/oxts/dataformat.txt
+\begin{verbatim}
+yaw:   heading (rad),       0 = east,  positive = counter clockwise,\
+    range: -pi   .. +pi
+\end{verbatim}
+Note, this may not be the steering angle - TBC. So additional work may be needed to obtain.
+There are some pointers online, a simple approach seems to be:
+% https://physics.stackexchange.com/questions/112301/calculating-the-rate-at-which-a-car-turns
+This is also an interesting approach:
+% http://docs.ros.org/en/kinetic/api/teb_local_planner_tutorials/html/cmd__vel__to__ackermann__drive_8py_source.html
+With python code:
+\begin{verbatim}
+def convert_trans_rot_vel_to_steering_angle(v, omega, wheelbase):
+  if omega == 0 or v == 0:
+     return 0
+  radius = v / omega
+  return math.atan(wheelbase / radius)    
+\end{verbatim}
+Another possible method "Estimation of the Steering Angle Based on Extended Kalman-Filter"  
+% http://gvpress.com/journals/IJMUE/vol11_no12/27.pdf
+% equations 10 and 11
+
+
 \section{Automold}
 The rainy images were created with:  
 \begin{verbatim}
@@ -126,6 +243,9 @@ github.com/dsikar/automold/RainyImagesDissertationPlot.ipynb
 \end{verbatim}
 
 \section{Development Environments}
+
+Three development environments are planned to be used, a local environment to run the Unity3D SDSdanbox application, and two additional environments, the Intel Dev-Cloud (\cite{IntelDevCloud2020}) and City University's Camber server (\cite{Camber2019}).
+% Further develop running jobs in these environments
 
 \subsection{Intel DevCloud}
 
