@@ -960,3 +960,30 @@ Writing methods.
 
 Finished results appendix. Started polishing up results. for 2020.12.15 need to
 finish results, provide a story of how best models were found, training times (short), parameters, and the plots and images of working models. Also need to generate appendix with source code.
+
+2020.12.17
+
+Most submission details taken care of, just need to compile the full pdf (currently at 271 pages) and 
+where a readme with all sharepoint links, then submit both pdf and readme.
+
+This leaves 3 full days to complete report, plus Monday for contingency.
+
+If dedicating one full day per section, this should be 1 (Friday) for results and 1 (Saturday) for context. The remaining day (Sunday) should be split in tyding up (the still incomplete) methods and evaluation sections. Monday should be invested in revising the whole text. Submitting one draft at 1300h. Continuing with revision and submitting a final draft at 16:50h. Also, time allowing, revisit the output.txt file, and eliminate overlap where possible, specially between ipynb and python files.
+
+	
+
+Dear students.
+
+The next accurate project submission deadline ( for F T students with resits,PT students and those with internships) is
+
+5pm 21/12/2020.
+
+Good luck.
+
+Keep safe.
+
+Regards.
+
+Andrey Povyakalo
+
+the project tutor.
