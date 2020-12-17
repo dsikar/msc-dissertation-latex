@@ -5,6 +5,7 @@
 
 %This chapter should evaluate the project work as a whole. Here the original choice of objectives, the literature examined, the methods used, the planning, etc. are all reviewed to see what has been achieved by undertaking the project. There may be a summary of general conclusions drawn from the work done, highlighting the particular contribution of your project. You should also consider the implications of these conclusions. Discuss any proposals that you might make for further work, having discovered what you now know. It is also important to include a reflective section covering what you have learned from the project process. What would you do differently if you were to start again, knowing what you now know? Your report MUST include adequate Evaluation, Reflections and Conclusions to gain a passing grade.  
 
+On
 TBC - TODO. Some points to reflect:
 \begin{itemize}
     \item[--] What this project demonstrated
@@ -13,30 +14,81 @@ TBC - TODO. Some points to reflect:
     \item[--] What are the contributions
     \item[--] What would I have done differently - narrowed the scope for sure.
     \item[--] Here would be a good place, perhaps, to discuss "Understanding deep learning requires rethinking generalization", Zhang ICLR 2017, on deep models fitting random data (noise) perfectly. 
-    \item[--] Recommendations for future work: although CNNs are not well understood, they are heavily used. A lot of effort has gone into creating models that are and could be harnessed for self-driving, such as ResNets and deeper architectures. These deeper models have been applied successfully to multi-class classification problems. Assuming the network design somehow is optimized for this type of task it would be interesting to transform regression problems into multi-class classification problems by quantizing (assigning a continuous value into a discrete value) and binning the outputs, subject to the quantized values having acceptable precision, in the case of a self-driving car, the minimum acceptable steering change, as the network output would become discrete and cease to be continuous as the network would not longer be a regression model.
-    Perhaps such models could also produce usable results for computer vision applications.
+    \item[--] 
     \item[--] Future work - add reflections to road. Experiment was limited to adding rain-like effects. With a better understanding of the game engine, it could be possible to add reflections to road, etc, and generate then another set of results and evaluation.
 \end{itemize}
 TODO - future work
-addressing data inbalance
+addressing data imbalance
 Binning as an alternative to deep regression models for ResNet, LeNet and VGG net. 
-\subsection{Binning/Quantization}
+\subsection{Using deep classification models for self-driving CNNs} % Binning/Quantization
 Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.
 \subsection{Data balancing}
 
-Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angles are expected to be close to zero (car driving straight). So some form of undersampling may need to be used to address the issue.
-TODO, maybe move class imbalance to Context.  
- 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On transforming deep regression problems into deep classification problems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Future work}
+\subsection{Attaining deep regression with deep classification}
+Although CNNs are not well understood, they are heavily used. A lot of effort has gone into creating models originally designed for image classification. Future work could determine if alternative deep models (ResNet, LeNet, VGGNet) could be used for self-driving. These models have been applied successfully to multi-class classification problems. Assuming the network design somehow is optimized for this type of task, it would be interesting to transform regression problems into multi-class classification problems to make optimal use of such networks. This could be attained by quantizing (assigning a continuous value with a defined range to a discrete value) and binning the outputs, subject to the quantized values having acceptable steering precision, in the case of a self-driving car, the minimum acceptable steering change. The network output would become discrete, and the leveraged network as a classifier, which was the original intent. Perhaps such scheme could also produce usable results for other computer vision applications relying on regression models.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On running training on multiple development environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Training models on multiple environments created portability issues because of different version of Python, Keras and Tensorflow, where a model trained on Camber (City cloud service) not running locally. The same was not observed on Intel DevCloud 
+
 TODO - Development environments - need to run same versions of python, keras and tensorflow. Care in setting up environment (potentially virtual) must be taken to ensure models can be run acrsso different machines.
 \section{Dropped datasets}
 Some effort was expended into downloading datasets and understanding how to extract steering angles from data provided. This drive, together with the expectation of trialing, in addition to variations of DriveNet, ResNet, VGGNet and InceptionNet proved too ambitious.   
-TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geometry could be attained.ecode
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ALEXNET - NOT READILY IMPLEMENTED IN KERAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geometry could be attained. Original Alexnet paper details, as an example, the first kernel dimension as being 11x11 with a stride of 4, with resulting feature maps of size 55x55 in the first convolution layer, the code implementation details were not given. Using the Keras library there was a trade-off between keeping the kernel or the feature map size. To obtain feature maps of 55x55, a kernel of size 8x8 was used, having an effect of the number of trainable parameters. 
+Also, the first two fully connected layers with 2048 units each let to compilation errors in Keras (compilation errors left as comments in models.py). The lesson learnt was that network topologies are not readily transferable across libraries, and the description was not sufficient to implement the model in Keras.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DRIVENET - NOT READILY IMPLEMENTED IN KERAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The same was observed with DriveNet. One co-author (\ref{urs_muller1}) was very helpful in sharing implementation details not described in the paper. The resulting Keras model failed to produce usable results and had to be modified further, reducing the size of network, as were TawnNet and NaokiNet by their respective authors.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the necessity to understand camera properties
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Another aspect that was lacking in this project was a study of camera characteristics, such that determine geometric properties of the acquired image. As an example, it was determined that image cropping had an effect on network performance. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reflections on change of Work Plan
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Work Plan changes}
+The work plan originally set out in appendix \ref{app:rpmi} was changed and an estimate of the revisions are shown in Figure \ref{fig:Revised-work-breakdown-structure}. In hindsight, the original plan seems to reflect a \textit{waterfall} (\cite{balaji2012waterfall}) software development model, where all requirements are defined at the outset, the work then separated into logical blocks and sequenced following a delivery schedule. In practice, many (as opposed to the originally expected few) areas were found to overlap such as selecting (and creating) toolsets, replicating existing and creating alternative models, augmenting data and evaluating models, while creating metrics. The end of October and beginning of November 2020 task overlap reflect the busiest research period, during which a working model, qualitative evaluation toolset and a quantitative evaluation metric were obtained. The work followed what could be described as an \textit{agile} process, with short \textit{sprints} and concurrent changes reflected across several tasks. This is not meant as criticism or praise of any software development models. The work plan (a project proposal requirement) was essential is conceptualising and structuring the effort needed to complete this project.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the inadequacy of the Goodness-of-Steer metric
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The quantitative evaluation metric $g_s$ (\ref{eq:goodness_of_steer}) proposed in this study proved to accurately reflect qualitative analysis for dry weather self-driving, as the best observed model obtained the best $g_s$ score (table  \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}, row 1). For wet weather it proved to be inadequate. 
+% maybe move this bit to discussion
+The nvidia1 model, known to crash in all rain conditions for intensity multiplier 1 (rows 6, 7 and 8), obtained better corresponding $g_s$ scores than the nvidia2 model (rows 2, 3 and 4) for SDSandbox log data (not self-driving in real time). The original expectation was the $g_s$ score being able to generate lower scores for the nvidia2 model in all cases. A suggestion for future work is to evaluate a \textit{sliding window} approach as used in digital signal processing, where a sequence of frames is analysed at a time, the $g_s$ for the sequence could then be noted, the window moved forward by one frame, and so on until the entire sequence is inspected. The expectation being that events such as nvidia1 model crashes shown in \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} could be quantified by a higher-than-threshold $g_s$ score in the window sequence, each crash adding up into a penalty term. Also, the function name choice was unfortunate, as higher scores mean worse steering. An improved $G_s$ metric is suggested in \ref{eq:goodness_of_steer_improved_fixed_name}:
+\begin{equation}
+    \label{eq:goodness_of_steer_improved_fixed_name}
+    G_s(p,g) = \Bigg(\frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c + C_c\Bigg)^{-1}
+\end{equation}
+where $C_c$ is the crash count penalty term, and the exponentiation leads to lower results translating into higher scores.
+
+% Badness-of-steer is one possibility, another is 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Machine Learning, AI and social responsibility
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Ultimately the evaluation provided in this study could help to make self-driving vehicles (relying on behavioral learning) safer, which can be interpreted as a positive outcome. The issue of artificial intelligence and social responsibility (\cite{saveliev2020artificial}) perhaps should also be considered, as developments in self-driving AI may reduce both demand for drivers and wages.
 
 %The absence of good quality labelled datasets (maybe change this w.r.t. Mech Turk and ISLSVRC - "the presence of a good quality" labelled dataset engered a number of landmark computer vision CNN architectures, more obvious and less citations required) has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
 
 
 %% Ethical issues - maybe leave to discussion and further work
-%This also raises issues related to safety, liability, privacy, cybersecurity, and industry %risks \cite{Taeihagh_2018}
+% This also raises issues related to safety, liability, privacy, cybersecurity, and industry %risks \cite{Taeihagh_2018}
 % Also, perhaps a discussion on developing systems that may put people out of work and social responsibility.
 
 % to process more datasets, the maximum steering angle of vehicle must be known
@@ -56,9 +108,51 @@ TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geom
 % Reflect on different hues generated by converting tcpflow packets into images. This differs from direct processing of Unity .jpg synthetically generated data.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUBMISSION CHECKLIST
-% 1. This pdf
-% 2. msc-dissertation-latex repository
-% 3. SDSANDBOX repository
-% 4. msc-data repository
+% 1. This pdf                                                       MONDAY
+% NB COMMENT IN ALL APPENDIXES BEFORE FINAL COMPILATION
+% 1.1 Readme.txt - shared links plus setup instructions             MONDAY - SUBMIT WITH PDF
+% 2. msc-dissertation-latex repository                              MONDAY - Commit code and get shareable link
+% 3. SDSANDBOX repository                                           Uploading to OneDrive
+% 4. msc-data repository - CANCELLED - only using unity data  
 % 5. Additional data - models, tcpflow logs, etc
+% 5.1 Models, tcpflow logs, training logs  - trained_models.tar.gz  SHARED LINK:
+% https://cityuni-my.sharepoint.com/:u:/g/personal/daniel_sikar_city_ac_uk/ERt1rJCR3bNApjGumrKXlA4B6SzwutzOtpQH6egT_Vl6cw?e=za5e7p
+% 5.2 Synthetic datasets                                            SHARED LINK:
+% https://cityuni-my.sharepoint.com/:u:/g/personal/daniel_sikar_city_ac_uk/Eb-C0jivxuNPjOa2CthUGLIB3O2tvcZWQDw_6FqkHUc4Lw?e=mh19Tu
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%. Models and tcpflow data
+% $ tar cvf  trained_models.tar.gz trained_models/nvidia_baseline/ trained_models/nvidia1 trained_models/nvidia2 trained_models/sanity/
+% $ ls -lsh trained_models.tar.gz 
+% 964M -rw-r--r-- 1 simbox simbox 964M Dec 17 17:38 trained_models.tar.gz
+
+% Synthetic datasets
+% $ tar cfv dataset.tar.gz dataset/unity/genRoad dataset/unity/genTrack dataset/unity/log_sample/ dataset/unity/smallLoop
+% $ ls -lsh dataset.tar.gz 
+% 1.6G -rw-r--r-- 1 simbox simbox 1.6G Dec 17 18:02 dataset.tar.gz
+
+% source code
+% $ tar cvf sdsandbox.tar.gz sdsandbox/
+% $ ls -lsh sdsandbox.tar.gz
+% 1.8G -rw-r--r-- 1 simbox simbox 1.8G Dec 17 18:57 sdsandbox.tar.gz
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% README.TXT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 1. Download source code via brownser
+% https://cityuni-my.sharepoint.com/:u:/g/personal/daniel_sikar_city_ac_uk/ERQ3EbK5Z9BAmCDPlw64yo8BmYkQ7TcEA4TTUz1hJU3lJg?e=HbZB1Z
+
+% 2. Download trained models via brownser
+% https://cityuni-my.sharepoint.com/:u:/g/personal/daniel_sikar_city_ac_uk/ERt1rJCR3bNApjGumrKXlA4B6SzwutzOtpQH6egT_Vl6cw?e=za5e7p
+
+% 3. Download datasets - for training additional models via brownser
+% https://cityuni-my.sharepoint.com/:u:/g/personal/daniel_sikar_city_ac_uk/Eb-C0jivxuNPjOa2CthUGLIB3O2tvcZWQDw_6FqkHUc4Lw?e=mh19Tu
+
+% Unpack files, moving 2. and 3. inside 1. That create the directory structure used to train 
+% test code.
+% To run tests, install Unity. To train, follow procedure in SDSandbox/src/readme.txt
+
+% TODO PDF with source code modifications to be added in appendix

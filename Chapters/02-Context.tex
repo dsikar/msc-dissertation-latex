@@ -20,6 +20,12 @@
 
 %% Prior methods used in image classification, using manual feature extraction
 
+% Data dirth, not dirt, and network performance
+% Augmentation
+% Mechanical Turk to the rescue
+% Large public datasets
+% Public self driving datasets, large, but aimged at pipeline models
+
 % What is end to end learning?
 The properties of multilayer feedforward neural networks as universal function approximators has been studied extensively, especially in the 1980's . \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available. while (\cite{cybenko1989approximation}) demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function with arbitrary precision providing that
 no constraints are placed on the number of nodes or the size of the weights. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than a deterministic relation between input and target. (\cite{hornik1989multilayer}) state their results do not address the issue of how many units are needed to attain a  given degree of approximation.  
@@ -207,8 +213,22 @@ The  ImageNet Large-Scale Visual Recognition Challenge (ILSVRC) (Russakovsky et 
 %	End to End Learning
 %-----------------------------------
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% CLASS IMBALANCE - GROUP WITH DATASETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angle labels will be close to zero (car driving straight). So some form of undersampling of majority classes (if viewing steering angle ranges, for instance, as would be achieved by binning) may help to address the issue. An alternative is to oversample augmented 
+% need to bring this in after the concept of augmentation has been explained
+minority classes.
+
+
 \section{Deep Learning applied to autonomous vehicles}
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Issues related to self-driving cars
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The introduction of any AI-controlled hardware into public spaces also raises a number of societal issues like safety, liability, privacy, cybersecurity, and industry (\cite{Taeihagh_2018}).
+Other issues include the impact on demand for a human workforce, wages and employment (\cite{acemoglu2018artificial}).
 \subsection{Modular pipeline}
 
 \subsection{End to end learning}
@@ -313,3 +333,5 @@ Add to some part, probably related work:
   
 \cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  
 \cite{gonzalez2018} "Restoration attempts to recover an image that has been degraded by using a priori knowledge of the degradation phenomenon. Thus, restoration techniques are oriented toward modeling the degradation and applying the inverse process in order to recover the original image."
+
+TODO Add a reminder on GPU as it is mentioned further along.

@@ -159,7 +159,7 @@ During inference (running steering predictions) the image is (in addition to sam
 \section{Data Augmentation and Pre-Processing}
 
 % Missing an introduction on why this is important
-As discussed in \ref{Context}, data augmentation can be used to reduce overfitting, but increasing the amount of training data. The data augmentation library used in this study is adapted from \cite{Naoki2016}. Critical to the design of computer vision CNNs is the geometry of the input image. The adapted augmentation library (Augmentation.py) first resizes the image to the expected size of acquired image in the original network design. This enables code re-usability, where different networks, using different image sizes can be tested using the same code. 
+As discussed in \ref{Context}, data augmentation can be used to reduce overfitting, by increasing the amount of training data. The data augmentation library used in this study is adapted from \cite{Naoki2016}. Critical to the design of computer vision CNNs is the geometry of the input image. The adapted augmentation library (Augmentation.py) first resizes the image to the expected size of acquired image in the original network design. This enables code re-usability, where different networks, using different image sizes can be tested using the same code. 
 Increase by a factor of 1.6 in this study.
 %For the NVIDIA baseline model, assumed image capture size is 320x160 pixels, and the 200x66 pixel image presented to network is a crop containing road and excluding horizon. 
 The sequence shown in figure \ref{fig:augpreproc} presents image array sizes at every step, from top left to bottom right, the image is loaded and resized (to 320 width x 160 height pixels in this case), augmented with random horizontal flip (with corresponding steering negated), random horizontal shifts (with steering adjusted by adding or subtracting 0.002 degrees per shifted pixel, random addition of shadows and random modification of brightness, concluding the augmentation part.
@@ -200,9 +200,37 @@ The unlabelled dataset is stored on AWS S3 (\cite{AmazonS3Documentation2020}). A
  \label{fig:amazon-ground-truth}
 \end{figure}
 
-\section{Training and Testing}
+\section{Training Environments}
 % TODO add the "pickle" model
+Three training environments were used, a local workstation running Ubuntu 18.04 with 31GB RAM and 12-core CPU, City University's shared Camber running Ubuntu 16.04 with 125G RAM and 48-core CPU and the Intel's shared DevCloud running Ubuntu 18.04 with 250G RAM and 80-core CPU. None have GPU processors.
 
+% number of processors
+% $ cat /proc/cpuinfo | grep processor | wc -l
+% OS
+% $ cat  /etc/os-release
+% Available memory
+% $ free -h
+
+%u52850@s099-n009:~$ cat /proc/cpuinfo | grep processor | wc -l
+%80
+%u52850@s099-n009:~$ cat  /etc/os-release
+%NAME="Ubuntu"
+%VERSION="18.04.2 LTS (Bionic Beaver)"
+%ID=ubuntu
+%ID_LIKE=debian
+%PRETTY_NAME="Ubuntu 18.04.2 LTS"
+%VERSION_ID="18.04"
+%HOME_URL="https://www.ubuntu.com/"
+%SUPPORT_URL="https://help.ubuntu.com/"
+%BUG_REPORT_URL="https://bugs.launchpad.net/ubuntu/"
+%PRIVACY_POLICY_URL="https://www.ubuntu.com/legal/terms-and-policies/privacy-policy"
+%VERSION_CODENAME=bionic
+%UBUNTU_CODENAME=bionic
+%u52850@s099-n009:~$ free -h
+%              total        used        free      shared  buff/cache   available
+%%Mem:           250G        1.4G        248G        2.1M        276M        247G
+%Swap:          1.9G          0B        1.9G
+%u52850@s099-n009:~$
 
 \section{Deep Convolutional Neural Network Models}
 
@@ -282,7 +310,7 @@ This also can produced a metric representing \textit{goodness-of-steer}, as seen
     \label{eq:goodness_of_steer}
     g_s(p,g) = \frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c
 \end{equation}
-where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized). The sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
+where $p,g$ are prediction and ground truth arrays,  $N$ is the number of predictions and $n_c$ is the normalization constant (25 in example shown, 1 for values not normalized), which in this case is the maximum steering angle for the SDSandbox simulated vehicle. In plain english, $g_s$ is defined as the sum of the absolute value of the difference between prediction and ground truth values, divided by the number of predictions multiplied by a normalization constant, that is the steering error average over all predictions. This error metric is used to compare models quantitatively. For example, in Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} $g_s = 0.59^{\circ}$, that is, on average the model steering is $0.59^{\circ}$ off the ground truth steering on every predicted image frame. 
 %\begin{equation}
 %    \label{eq:g(x,y)}
 %    g(x,y) = \matchcal{H} Stopped here
@@ -299,5 +327,4 @@ TODO read up on noise models (Gonzalez)
 %% Udacity
 %% see https://arxiv.org/pdf/1912.05440.pdf
 %% for discussion on using rmse as error metric - NB This relates to training a network, not the analysis of image noise.
-
 

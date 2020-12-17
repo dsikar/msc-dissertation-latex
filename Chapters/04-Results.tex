@@ -171,6 +171,7 @@ More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (
 %and run as per procedure described in (TODO add reference).
 
 After the attempt illustrated in Figure \ref{fig:tcpflow_Run43}, the rain-adding workflow was modified such that rain was added to the acquired image, and that image then processed further downstream. Some results can be seen in Figures
+% 20-12-17 STOPPED HERE - FIX IMAGES (REMOVE SIDE BORDERS).
 \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1}, \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} and
 \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1}.
 
@@ -328,7 +329,7 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 \multicolumn{6}{|c|}{Generated Track log: logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 (1394 images)} \\ \hline
 ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 % GENERATED TRACK
-1 & 20201207192948\_ nvidia2.h5 & nvidia2 &  & 0 & 1.68 * \\ \hline
+1 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 1.68 * \\ \hline
 2 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 2.12 \\ \hline
 3 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 2.17 \\ \hline
 4 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 2.30 \\ \hline
@@ -340,7 +341,7 @@ ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 10 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 3.12 \\ \hline
 11 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 3.17 \\ \hline
 12 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 3.39 \\ \hline
-13 & 20201120171015\_ sanity.h5 & nvidia1 &  & 0 & 5.03 * \\ \hline
+13 & 20201120171015\_ sanity.h5 & nvidia1 :( &  & 0 & 5.03 * \\ \hline
 14 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.11 \\ \hline
 15 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.07 \\ \hline
 16 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.00 \\ \hline
@@ -348,7 +349,7 @@ ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 \multicolumn{6}{|c|}{Generated Road log:  logs\_ Fri\_ Jul\_ 10\_ 09\_ 16\_ 18\_ 2020 (19679 images)} \\ \hline
 ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 % NVIDIA2
-17 & 20201207192948\_ nvidia2.h5 & nvidia2 &  & 0 & 2.99 * \\ \hline  % drove 16 minutes on this road 1 & https://youtu.be/z9nILq9dQfI
+17 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 2.99 * \\ \hline  % drove 16 minutes on this road 1 & https://youtu.be/z9nILq9dQfI
 18 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 3.20 \\ \hline
 19 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 3.22 \\ \hline
 20 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 3.27 \\ \hline
@@ -358,7 +359,7 @@ ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 23 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 3.70 \\ \hline
 24 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 3.57 \\ \hline
 % NVIDIA_BASELINE
-25 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline &  & 0 & 5.51 * \\ \hline
+25 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline :( &  & 0 & 5.51 * \\ \hline
 26 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 4.97 \\ \hline
 27 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 4.98 \\ \hline
 28 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 5.05 \\ \hline
@@ -370,20 +371,90 @@ ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
 %   compare to genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png
 \end{tabular}
 \end{center}
-\caption{Goodness-of-Steer $G_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather.}
+\caption{Goodness-of-Steer $G_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather. Smiley face :) in Model column indicate best gos score. Sad face :( in Model column indicates worst $g_s$ scores. The logs used to generate the data used to compute the $g_s$ scores were generated with Unity intensity multiplier 1 and Skybox-Material set to Default-Skybox, the default sunny dry weather.}
 \label{table:goodness-of-steer}
 \end{table}
-Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs. The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (on stretch). Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot.
+Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs. The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (on stretch). Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot. 
 
 Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} shows the ground truth steering predictions as obtained in "Auto Drive w Rec" mode, for Generated Track, saved to log directory logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020.
 
+% NB Table gos data and figures generated with code commit hash cc095fc
+% Figure generated with GetSteeringAnglesFromtcpflow.ipynb
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png}
- \caption{Ground truth steering values for logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 recorded log}
+ \caption{Ground truth steering values for logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 recorded log. The four inverted humps represent the four right turns. The hump between frames 500 and 700 represents the only (gentle) left turn in the circuit}
  \label{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} 
 \end{figure}
-The $G_s$ (goodness-of-steer) model performance score, was obtained by recording one full lap and comparing steering angles with model predictions.
+
+
+
+% Plots generated with steerlib.py, commit 8693713
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207192948_nvidia2.h5.png}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia2 in rows 1, 2, 3 and 4 in table \ref{table:goodness-of-steer}}
+ \label{fig:sa_Generated_Track_20201207192948_nvidia2.h5} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207091932_nvidia1.h5.png}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia1 in rows 5, 6, 7  and 8 in table \ref{table:goodness-of-steer}}
+ \label{fig:sa_Generated_Track_20201207091932_nvidia1.h5} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207201157_nvidia_baseline.h5.png}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia\_ baseline in rows 9, 10, 11  and 12 in table \ref{table:goodness-of-steer}}
+ \label{fig:sa_Generated_Track_20201207201157_nvidia_baseline.h5} 
+\end{figure}
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201120171015_sanity.h5.png}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model sanity in rows 13, 14,15  and 16 in table \ref{table:goodness-of-steer}}
+ \label{fig:sa_Generated_Track_20201120171015_sanity.h5} 
+\end{figure}
+
+\section{To be added}
+
+Figure  \ref{fig:2948x3_1932x1_genTrack}  shows a still from video \url{https://youtu.be/ayESXH9zZdM} Model.
+Bottom left is 20201207192948\_ nvidia2.h5 with no rain, bottom right 20201207192948\_ nvidia2.h5 light rain zero slant. Top left is 20201207091932\_ nvidia1.h5 light rain zero slant , top right is 20201207192948\_ nvidia2.h5 torrential rain -+20 degree slant.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/2948x3_1932x1_genTrack.png}
+ \caption{2 models (20201207192948\_ nvidia2.h5 x3, 20201207091932\_ nvidia1.h5 x1) going around the generated Track}
+ \label{fig:2948x3_1932x1_genTrack} 
+\end{figure}
+
+Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows 3 stills taken for corresponding videos of network nvidia2 20201207192948\_ nvidia2.h5 (best performing model in the rain), for runs 83 (\ref{app_res:83}), 86 (\ref{app_res:86}) and 89 (\ref{app_res:89}), containing from left to right, the acquired image as produced by the Unity3D game engine (SDSandbox), the same image with added light rain and the processed image as presented to the network, which then predicts a steering angle. The first row for intensity multiply 1, the second for 4 and the third for 8. There are no lane markings in the last row, suggesting the network has learned about road boundaries and is able to generalise, given the image being presented (no lane markings) had never been seen before.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_mult_1_4_8_light.png}
+ \caption{Intensity multipliers 1, 4 and 8 for light rain}
+ \label{fig:20201207192948_nvidia2_mult_1_4_8_light}
+\end{figure}
+
+Figure \ref{fig:run-93-94-generated-road} shows a randomly Generated Road used for runs 93, 94 and 95, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on the right hand image. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/run-93-94-generated-road.png}
+ \caption{The randomly generated Generated Road circuit used in runs 93 and 94. Left image is a view of the simulator as presented on computer desktop, the right image is the augmented detail showing the Generated Road circuit, the same inset on left image.}
+ \label{fig:run-93-94-generated-road} 
+\end{figure}
+
+Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. Run 95 (16m14s duration) was much longer than run 94 (1m11s duration) which seems also to be suggested in the distributions shown in the related histograms, as more data is present (about 800 data points in run 94 and 11000 data points in run 95), so is the distribution smoother.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad_full.png}
+ \caption{Steering angle and normalized histogram plots of the 20201207192948\_ nvidia2.h5 model driving the full length of Generated Track presented in figure \ref{fig:run-93-94-generated-road} }
+ \label{fig:20201207192948_nvidia2_dry_genRoad_full} 
+\end{figure}
 
 \section{Datasets}
 

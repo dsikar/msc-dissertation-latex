@@ -692,7 +692,7 @@ The difference being the presence of trees, mountains and tall grass.
 Command: python train.py --model=sanity --outdir=../trained\_models
 Environment: simbox
 Comment: This model was trained with the committed code from November 7th, which
-produced the first success lap drive with not crashes or steering off the track.
+produced the first successfull lap drive with not crashes or steering off the track.
 There is no record of what commit generated the model, though on video:
 https://youtu.be/9z0mMtOnUUc
 One section in the video shows:
@@ -2077,6 +2077,12 @@ final 10 hidden units? Will probably not have time to test so leaving as
 recommendation for future work i.e. does last ten hidden units before output neurons 
 work with zero-centered normalised inputs? Note, answered this question in 
 run 70.
+
+To examine the model:
+$ git checkout -b looksee df953d2
+$ cat models.py
+
+It shows the last ten unit hidden layers and the pixel values not being centered.
 
 $ python predict_client.py 
 --model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
