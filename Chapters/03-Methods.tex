@@ -62,7 +62,7 @@ Videos are used in this project for qualitative analysis as well as documentatio
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{tcpflow}
 tcpflow (\cite{tcpflowElson2013}, \cite{garfinkel2013passive}) is able to capture data packets, transmitted using the TCP (\cite{rfc793}) host-to-host protocol (which provides a process-to-process communication service) and store the data in a human readable format, such that it may be analysed and debugged. For this study, it is used to reconstruct and record data transmissions between SDSandbox and the prediction engine. A practical example is given in \ref{NetMonDebug}.
-
+% TODO What are we getting from, and why are we using TCP flow
 Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -157,7 +157,7 @@ During inference (running steering predictions) the image is (in addition to sam
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data Augmentation and Pre-Processing}
-
+\label{met:data-aug-pre-proc}
 % Missing an introduction on why this is important
 As discussed in \ref{Context}, data augmentation can be used to reduce overfitting, by increasing the amount of training data. The data augmentation library used in this study is adapted from \cite{Naoki2016}. Critical to the design of computer vision CNNs is the geometry of the input image. The adapted augmentation library (Augmentation.py) first resizes the image to the expected size of acquired image in the original network design. This enables code re-usability, where different networks, using different image sizes can be tested using the same code. 
 Increase by a factor of 1.6 in this study.
@@ -235,7 +235,7 @@ Three training environments were used, a local workstation running Ubuntu 18.04 
 \section{Deep Convolutional Neural Network Models}
 
 In this section all network architectures used are described.
-
+% BIG TODO - ADD image architectures
 \section{NVIDIA \textit{End to End Learning for Self-Driving Cars} Network Architecture}
 
 The NVIDIA network (\ref{NVIDIA_baseline}) is the baseline sefl-driving architecture used in this study. This comprises three (RGB channel) x 66 (height) x 200 (width) size input layer corresponding to an image presented to network. The input layer is followed by: a normalization layer generating a 3 channel 66 x 200 layer, a 24 5x5 kernel convolutional layer generating 31x98 feature maps, a 36 5x5 kernel convolutional layer generating 14x47 feature maps, a 48 5x5 kernel convolutional layer generating 5x22 size feature maps, a 64 3x3 kernel convolutional layer generating 3x20 size feature maps, a 64 3x3 kernel generating 1x18 size feature maps, a 1164 neuron flattened layer fully connected to a 100 neuron layer, fully connected to a 50 neuron layer, fully connected to a 10 neuron layer, fully connected to a one neuron output layer.  

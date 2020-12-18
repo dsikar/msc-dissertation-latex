@@ -220,10 +220,11 @@ command
 $ train.py --model=nvidia1 --outdir=../trained_models
 loss: 0.0077 - acc: 0.8726 - val_loss: 0.0077 - val_acc: 0.8732
 
-Comment: Network trained with no augmentation of cropping.
+Comment: Network trained with no augmentation or cropping.
+Drove off the road.
 
-video upload: https://youtu.be/ZLhrcyuONj0
 \end{verbatim}
+video \url{https://youtu.be/ZLhrcyuONj0}
 
 \subsection{Run 7 - 20201102090041\_nvidia2.h5}
 \begin{verbatim}
@@ -359,6 +360,7 @@ Epoch 5/100
 \end{verbatim}
 
 \subsection{Run 15}
+\label{app_res:15}
 \begin{verbatim}
 commit aec3290fdbc83e71e450deef650aa2d51873b886
 model nvidia_baseline
@@ -570,6 +572,7 @@ Epoch 2/100
 \end{verbatim}
 
 \subsection{Run 31}
+\label{app_res:31}
 \begin{verbatim}
 Commit: 1997b914e829466659a27bfe1b31a6a6374afd36  
 Model, Outputs, Dataset and Command: Same as 19
@@ -787,7 +790,7 @@ two datasets used to train on that day were log2 (later renamed genRoad), the
 following two datasets used were log_sample. The commit history suggests one
 of the two were used to generate the Nov 7 successful model. Since the test 
 was run on "Generated Track" course, and genRoad contains images for "Generated
-Road" course, the assumption is sample_log dataset was used.
+Road" course, the assumption is sample_log (small_looping_circuit) dataset was used.
 
 The sanity check model was then used to run predictions:
 python predict_client.py 
@@ -840,7 +843,6 @@ Figure \ref{fig:0627_nvidia1x1015_sanity_GenRoad} shows a still from video \url{
 % RUN 37
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 37 - 20201120184912\_sanity.h5}
-Referenced from \ref{results:net-training} 
 \label{app_res:37}
 \begin{verbatim}
 Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
@@ -880,7 +882,7 @@ plotSteeringAngles(p, g, 25, False, "Generated Road", "20201120184912_sanity.h5"
 %PAUSE HERE - WRITING FUNCTION TO PLOT STEERING ANGLES AND BINS FROM LOGS
 Below are the normalized histogram and bins recovered from tcplow logs for model  
   
-20201120184912\_sanity.h5 referenced in \ref{results:net-training}. The video generated from tcpflow log was uploaded to \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}.
+20201120184912\_sanity.h5 referenced in \ref{results:net-training}. The video generated from tcpflow log was uploaded to \url{https://youtu.be/xGDN8qOnv9M}.
 
 \begin{figure}[ht]
  \centering 
@@ -900,7 +902,8 @@ Below are the normalized histogram and bins recovered from tcplow logs for model
 % RUN 38
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Run 38 - 20201123162643\_sanity.h5}
+\subsection{Run 38 - 20201123162643\_ sanity.h5}
+\label{app_res:38}
 \begin{verbatim}
 Commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
 Model: nvidia1
@@ -909,7 +912,7 @@ Dataset: genRoad (clean - logs_Thu_Jul__9_16_00_15_2020 quarantined)
 Command: python train.py --model=sanity --outdir=../trained\_models --epochs=5
 NB Trained for 5 epochs
 Environment: simbox
-Comment: Rerunning commit 1ad187d4bf with cleaned data.
+Comment: Rerunning commit 1ad187d4bf with cleaned data. Drove off the road.
 $ git checkout nov7 (this branch is commit 1ad187d4bff5b6936c065a1aaa15a654ef4d368c)
 NB a simlink was created in unity/log2 pointing to unity/genRoad for the sake of
 not changing committed source code.
@@ -969,7 +972,7 @@ This was running with commit 1ad187d4bf where frame \textbf{is not preprocessed}
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_graph.png}
- \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanity.log for model 20201123162643\_sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/uG2HvAbg2U4}{https://youtu.be/uG2HvAbg2U4}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_sanity.log for model 20201123162643\_sanity.h5 driving on Generated Road}. The video can be seen here \url{https://youtu.be/uG2HvAbg2U4}
  \label{fig:tcpflow_20201123162643_graph}
 \end{figure}
 
@@ -984,6 +987,7 @@ This was running with commit 1ad187d4bf where frame \textbf{is not preprocessed}
 % RUN 39
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 39 - 20201123162643\_sanity.h5}
+\label{app_res:39}
 \begin{verbatim}
 Commit: 7f3086490118fec1a20e99e93cc1b853a91272b6
 Model:  N/A (trained model)
@@ -1026,7 +1030,7 @@ manages to keep vehicle on the road.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_20201123162643_sanity_pp_graph.png}
- \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_  pp.log for model 20201123162643\_ sanity.h5 driving on Generated Road}. The video can be seen here \href{https://youtu.be/377O2E\_ LwyU}{https://youtu.be/377O2E\_ LwyU}
+ \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201123162643\_ sanity\_  pp.log for model 20201123162643\_ sanity.h5 driving on Generated Road}. The video can be seen here \url{https://youtu.be/377O2E\_ LwyU}
  \label{fig:tcpflow_20201123162643_pp_graph}
 \end{figure}
 
@@ -1041,9 +1045,11 @@ manages to keep vehicle on the road.
 % RUN 40
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 40 - 20201124032017\_ nvidia2.h5}
+\label{app_res:62}
+20201121090912\_ nvidia\_ baseline.h5
 \begin{verbatim}
 Commit: 7f3086490118fec1a20e99e93cc1b853a91272b6
-Model: nvidia1
+Model: nvidia2
 Outputs: 2
 Dataset: N/A
 Command: python3 train.py --model=nvidia2 --outdir=../trained_models --epochs=100
@@ -1185,13 +1191,11 @@ Command:
 $ python predict_client.py --model=../trained_models/sanity/20201120171015_sanity.h5
 --rain=torrential --slant=20 --record=true
 
-Video https://youtu.be/57jwwcjbfdE
-
-Comment: As observed if noise is added to preprocessed image (at the point of being
+Comment: As observed, if noise is added to preprocessed image (at the point of being
 presented to network), sim crashes.
 
 \end{verbatim}
-
+Video: \url{https://youtu.be/57jwwcjbfdE}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -3091,6 +3095,33 @@ Bottom left is 20201207192948\_ nvidia2.h5 with no rain, bottom right 2020120719
  \label{fig:2948x3_1932x1_genTrack} 
 \end{figure}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RUN 98 - 20201121090912\_ nvidia\_ baseline.h5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Run 98 - 20201121090912\_ nvidia\_ baseline.h5 }
+\label{app_res:98}
+\begin{verbatim}
+Commit: Not recorded
+Model: nvidia_baseline
+Outputs: 2
+Dataset: not recorded
+Command: not recorded
+Environment: camber
+Comment: Added after the training run for Figure reference. This model was trained
+on camber on November 21
+
+Training log:
+
+Model name: ../trained_models//nvidia_baseline/20201121090912_nvidia_baseline.h5
+Total training time: 0:05:25
+Training loss: 0.066
+Validation loss: 0.064
+Training accuracy: 0.524
+Validation accuracy: 0.556
+
+Unusable model due to weights not being loaded on local workstation due to Python/
+Keras/Tensorflow version incompatibility.
+\end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN XX - TEMPLATE
@@ -3319,9 +3350,11 @@ List of 30 tcpflow logs recorded for models nvidia1 and nvidia2.
 
 \end{verbatim}
 
-
-
-
-
-
-
+\section{Download links}
+\label{res:download-links}
+This section contain download links for data made available to examiners.
+\begin{itemize}
+    \item [--] Dataset - \url{https://bit.ly/3alDWvs}
+    \item [--] Source code - \url{https://bit.ly/2KwnNsl}
+    \item [--] Trained models - \url{https://bit.ly/34raiBh}
+\end{itemize}

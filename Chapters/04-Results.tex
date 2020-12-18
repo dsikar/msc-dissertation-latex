@@ -17,33 +17,21 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PRODUCING A SELF-DRIVING MODEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Producing a self-driving model}
-TODO describe how SDSandbox did not work out of the box - author mentions in video "several hours of data are required" and model to nearly 24 hours to train on GPU. In practice, one augmentation and pre-processing were added, working models were produced in as little as 5 epochs of training, taking under 1m30s.
-That was hard. Detail the bits that were used from TawnNet (augmentation added) and NaokiNet (crop changed). in the end two outputs were required for NaokiNet to work. Maybe move this to discussion. Here we show results.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% EVALUATION OF SELF-DRIVING CARS USING CNNS IN THE RAIN
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Evaluation of self-driving cars using CNNs in the rain}
-
-Once the best models were narrowed down to nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}), a number of test runs were conducted to generate outputs for evaluation. 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OUTPUTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Outputs}
-Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with differente levels of rain and light intensity multipliers.
-A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs. 
+% The story we are telling:
+% 1. how we used SDSandbox to produce data and what the steering data looked like
+% 2. How we trained the models
+% 2. How we added rain to the data
+% 3. How we drove in the rain and what the steering data looked like
+\section{Generating Synthetic Datasets} % with SDSandbox} this should be obvious by now
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SYNTHETIC DATASETS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Synthetic datasets}
-The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) corresponding to steering angles. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s  in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being recorded. The maximum steering angle, is set in the simulator with respect to a car. In this case it is plus or minutes 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle. The data shows a high bias towards right turns because the simulated vehicle drives clockwise around the track.
+% \section{Synthetic datasets}
+
+\subsection{Generated Track}
+Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) for the small\_ looping\_ circuit track seen on the right. The circuit is the same as the Generated Track circuit, while the landscape in the latter excludes trees, bushes and tall grass. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s of recorded data in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being processed and recorded. The maximum steering angle is set in the simulator with respect to a car. In this case it is plus or minus 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle, referred to in this study as the \textit{normalization constant}. The data shows a high bias towards positive steering angles because the simulated vehicle drives clockwise around the track. From the starting line on the top left, there are two right turns, followed by a left turn, followed by two right turns.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/GeneratedTrackPlusHistogram.png}
@@ -51,124 +39,149 @@ The data distribution depends on the track. Figure \ref{fig:GeneratedTrackPlusHi
  \label{fig:GeneratedTrackPlusHist}
 \end{figure}
 
-Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20, are -0.18 and 5.37 degrees respectively. The number of outliers omitted from the plot (not excluded from data at this stage) was 2204 (0.79\%). It can be seen that when more data points are collected, the bell-shaped curve becomes smoother.
+Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} shows the \textit{ground truth} (not predicted) steering angles obtained in "Auto Drive w Rec" mode, for one lap driven around the Generated Track, saved to log directory dataset / Unity / genTrack / logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 made available for download in \ref{res:download-links}. The y axis is inverted such that plot follows steering adjustments, if observer tilts head to the right. The four troughs  represent the four right turns. The hump between frames 500 and 700 represents the only (gentle) left turn in the circuit, where the steering angle is keep negative while the vehicle negotiates the bend.
+
+% NB Table gos data and figures generated with code commit hash cc095fc
+% Figure generated with GetSteeringAnglesFromtcpflow.ipynb
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png}
+ \caption{Ground truth steering values for logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 recorded log.}
+ \label{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} 
+\end{figure}
+
+\subsection{Generated Road}
+Another simulated circuit used was the \textit{Generated Road}, which creates a random path on every run. This can be seen in figure \ref{fig:GeneratedRoadPlusHist}. The total number of frames collected for 15 \textit{Auto Drive w Rec} sessions (saved in dataset/unity/genRoad) was 280727, approximately 3h14m37s. The outliers, mainly to left of histogram, are due to the simulated vehicle being left unattended, reaching the end of the road and continuing into a section with no road markings, becoming stuck in a hard-left turn, until the simulation was switched off and recording halted. The mean and standard deviation, for angles in the range -20 to + 20 (excludes outliers), are -0.18 and 5.37 degrees respectively. The number of outliers omitted from the plot (not excluded from data at this stage) was 2204 (0.79\%). It can be seen that when more data points are collected, the histogram becomes "smoother", if compared to equivalent plot in Figure  \ref{fig:GeneratedTrackPlusHist}.
+Both boths are clearly centered around zero degrees, meaning the vehicle is driving straight more often than not. The Generated Road has a normally distributed steering angle distribution because of the same number of left and right turns in the circuit, which infers the data distribution is track-dependant.
 
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/GeneratedRoadPlusHistogram.png}
- \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right. Outliers is due to oversteering when running off the end of track and sim left recording.}
+ \caption{Normalized histogram of Unity 3D SDSandbox generated road, steering angles for 280727 image frames. A sample randomly generated road is shown on the right. Outliers in negative range are due to oversteering when vehicle reached the end of the road and simulator was left recording.}
  \label{fig:GeneratedRoadPlusHist}
 \end{figure}
 
+\section{Training self-driving models}
+Model training was performed using a modified version of the SDSandbox/src/train.py script. A successful training run produces four files: a plain text .log file containing the script running time duration and last recorded values of accuracy and loss for training and validation (the training "history"), a .history file in the pickle format containing all history values, a model .h5 file in the pickle format containing the model structure and weights, and a .png image file containing a history plot for the training run.
+Figure \ref{fig:devcloud_nvidia2__camber_baseline_local_sanity_accuracy} shows three training history plots: 20201124032017\_ nvidia2.h5 trained for 23 epochs on the Intel DevCloud, 20201121090912\_ nvidia\_ baseline.h5 trained for 2 epochs on Camber and 20201120184912\_ sanity.h5 trained for 82 epochs on the local workstation. The left y axis represents loss and the right y axis represents accuracy values. The x axis represents training epochs (one run through the entire dataset). The title for each plot contains the last recorded training history values and the model name.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/devcloud_nvidia2__camber_baseline_local_sanity_accuracy.png}
+ \caption{Training and validation accuracy and loss value plots for, left to right, models 20201124032017\_ nvidia2.h5, 20201121090912\_ nvidia\_ baseline.h5 and 20201120184912\_ sanity.h5}
+ \label{fig:devcloud_nvidia2__camber_baseline_local_sanity_accuracy}
+\end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% NETWORK TRAINING
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Listing \ref{training_logs} shows the corresponding log files for each run, training run documented in \ref{app_res:62} (devcloud), \ref{app_res:98} (camber) and \ref{app_res:37} (local) respectively.
 
-\section{Network training and simulator testing}
-\label{results:net-training} 
-% write up, label runs and make reference
-The first working model (able to successfully self-drive around the Generated Track) was   20201107210627\_nvidia1.h5. A video was generated using the recording screen utility Kazam (\cite{Kazam2020}), recording at 15fps (frames per second), and published at  \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc}. Figure \ref{fig:SimTCPPred}
-shows 3 stills from the video containing from left to right, the game engine, the TCP debug output and the prediction engine running.
+\label{training_logs}
+\begin{verbatim}
+Model name: ../trained_models/nvidia2/20201124032017_nvidia2.h5
+Total training time: 4:06:55
+Training loss: 0.008
+Validation loss: 0.008
+Training accuracy: 0.873
+Validation accuracy: 0.872
+
+Model name: ../trained_models//nvidia_baseline/20201121090912_nvidia_baseline.h5
+Total training time: 0:05:25
+Training loss: 0.066
+Validation loss: 0.064
+Training accuracy: 0.524
+Validation accuracy: 0.556
+
+Model name: ../trained_models/sanity/20201120184912_sanity.h5
+Total training time: 16:08:01
+Training loss: 0.010
+Validation loss: 0.008
+Training accuracy: 0.858
+Validation accuracy: 0.858 
+\end{verbatim}
+
+Training and validation data was split at 80\%/20\% ratio. Early stopping was used with patience typically set to 6 epochs for validation loss (stop if no decrease over 5 epochs). Images were presented to network in batches of 64. The Adam optimizer was used with a learning rate of 0.0001 and mean squared error loss function. Trainnig and testing runs are documented in appendix \ref{AppendixD}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Testing self-driving models without rain
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Testing self-driving models without rain}
+To create a proof-of-concept, the initial model architecture used was TawnNet. In the documentation, the author states that with the SDSandbox framework, self-driving was achieved with a few hours of recorded laps and up to one day (24 hours) training time on GPU, with the code supplied "as is". This experiment was replicated (20.07.2020 on CPU) while the outcome was not as the car, after initially staying on the Generated Road, drove off the track. The experiment recorded in video  \url{https://youtu.be/453mTlL2gvs}.    
+
+The first working model (able to successfully self-drive around the Generated Track) was the 20201107210627\_ nvidia1.h5, with the nvidia1 (TawnNet) model on 07.11.2020. A video was generated using the recording screen utility Kazam (\cite{Kazam2020}), recording at 15fps (frames per second), and published at  \url{https://youtu.be/9z0mMtOnUUc}. Figure \ref{fig:SimTCPPred}
+shows 3 stills from the video containing from left to right, the game engine, the tcpflow TCP debug output and the prediction engine running. tcpflow was added to the process in this project as a debugging tool, and does not exist in the original SDSandbox.
 
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{Figures/SimTCPPred.png}
-\caption{Stills of video \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc} showing left to right: SDSandbox simulated car going around the Generated Track course, TCP Debug (tcpflow) and prediction engine (predict\_ client.py) running}
+\caption{Stills of video \url{https://youtu.be/9z0mMtOnUUc} showing left to right: SDSandbox simulated car going around the Generated Track course, TCP Debug (tcpflow) and prediction engine (predict\_ client.py) running}
 \label{fig:SimTCPPred}
 \end{figure}
 
-The video shows the TCP debugging, prediction engine and the game engine simulated car steering with predictions received over the TCP network. The actual code used to generate the model was not logged at the time the experiment log entry was written in the appendix log (\ref{AppendixD}). By verifying git hash commits (4 commits were made on November 7th) as documented in appendix  a second sanity check model \ref{app_res:36} (20201120171015\_ sanity.h5) was created and found to self-drive successfully around the generated track. A video was made from tcpflow frames as described at the end of \ref{app_res:36}, and uploaded to \href{https://youtu.be/JaSkkh-2xtI}{https://youtu.be/JaSkkh-2xtI}.
-The video shows (fps discrepancies considered) that the \ref{app_res:36} model had a better lap around the track.
-Model 37 (\ref{app_res:37}) trained with genRoad (including outliers seen in Figure \ref{fig:GeneratedRoadPlusHist}) ) did not do well. The oversteering can be seen in video \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}. The steering angle bins and graph plots can be seen in  Figures \ref{fig:tcpflow_20201120184912_bins}  and \ref{fig:tcpflow_20201120184912_graph} in the results appendix.
+A record of what code generated the successfull model was not made at the time. Forensics in \ref{app_res:36} using git logs and further tests conducted in \ref{app_res:37}, \ref{app_res:38}, \ref{app_res:39} ("sanity" models) determined it was achieved by porting the data augmentation and pre-processing described in \ref{met:data-aug-pre-proc} to the SDSandbox training and prediction scripts. The augmentation is applied during training, with a probability of 0.6, pre-processing is applied to all images. Pre-processing is applied to all images received from simulator during inference time.
 
-% a number of runs (e.g. commit 2e5bf1b7 failed prematuraly, most failing to generate a model. Doing a diff on one of them shows that batch size was set to 128
-% Could this also be an issue?
-% Note in original Alexnet which we assume NVIDIA were using as a design reference, used batch size 128 for TWO channels - TODO write-up in Discussion.
+Once the sanity model could successfully drive around the Generated Track, tcpflow logs were captured and used to generate the video shown in Figure \ref{fig:20201120171015_sanity_sim_network}. A script was written for this end (MakeVideo.py) and the actual running of the script documented in \ref{app_res:41}. The video in this case is obtained by processing all still images logged by tcpflow, as when they were sent from the simulator to the prediction engine during inference time. In MakeVideo.py, the adapted \cite{Naoki2016} augmentation library is used to pre-process the original image such that it will be the same as the image presented to the network. The predicted angle is obtained from tcpflow. Labels added to the images, then both images (original and processed) are concatenated horizontally and added to a video one frame at a time using the opencv-python module. The ratio for each individual frame in the composition is set to 800x600 pixels.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201120171015_sanity_sim_network.png}
+ \caption{Video still from run 41 video  \url{https://youtu.be/LEmZJJzJkEE} showing simulator image as sent over TCP network on the left with added CNN (20201123162643\_ sanity.h5 model) steering angle prediction and processed image (as presented to CNN) on the right}
+ \label{fig:20201120171015_sanity_sim_network} 
+\end{figure}
 
-%$ git diff master..2e5bf1b7 train.py | grep batch_size
-%-    batch_size = conf.batch_size
-%+    batch_size = conf.training_batch_size
-%(base) simbox@simbox-wifi-server:~/src(master)$ git diff master..2e5bf1b7 conf.py | grep %batch_size
-%+training_batch_size = 128
-%-batch_size = 64
-%+batch_size = 128 # nvidia1 = 64
-%@@ -50,7 +49,5 @@ batch_size = 64
+Figure \ref{fig:sa_GeneratedTrack_20201120171015_sanity} shows the plot for \textbf{predicted} steering angles around Generated Track for run 41, whereas in Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} shows \textbf{ground truth} steering angles are plotted. The predictions start at around 5 degrees steering slowly edging close to zero degrees. This can be observed on the video and is attributed to the car starting the simulation in the middle of the right lane, but most of the training data placing the car slightly to the right of the middle so the model "corrects" itself by steering right and placing itself in the familiar location.
+The plot for predicted angles seems smoother than for ground truth angles. This may be due to the PID settings where the response to going off the desired path is more abrupt, and "jerkier", in trying to correct itself.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrack_20201120171015_sanity.h5.png}
+ \caption{Steering angle plot generated from tcpflow log obtained in run 41 (\ref{app_res:41})}
+ \label{fig:sa_GeneratedTrack_20201120171015_sanity} 
+\end{figure}
+
+At this stage, the nvidia1 model was proven to self-drive. The nvidia2 and nvidia\_ baseline models required more work. The first step was to "clean" the genRoad dataset. % Fixing the data
 Figure \ref{fig:SkewCleanup} shows from left to right, an overlay of all plots of normalized histogram plots for steering values contained in unity/genRoad directory, the folder containing most outliers (logs\_Thu\_Jul\_ \_9\_16\_00\_15\_2020) and the resulting plot once the outliers' folder was removed from unity/genRoad. 
-
 \begin{figure}[h!]
 \centering
 \includegraphics[width=\textwidth]{Figures/SkewCleanup.png}
 \caption{Left to right, normalized histograms of all genRoad folders, outlier's folder and all data with outliers removed.}
 \label{fig:SkewCleanup}
 \end{figure}
-
-Once the outliers were removed, another model was generated with five epochs of training to test if there was any difference in the loss values observed. The resulting model proved useful and was able to drive along the Generated Road course during a few seconds until the simulation was stopped. Below are the normalized histogram and bins recovered from tcplow logs for model  
-  
-20201120184912\_sanity.h5 referenced in \ref{app_res:37}. The video generated from tcpflow log was uploaded to \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}.
+The presence of outliers is believed to have caused issues with the nvidia\_ baseline model from runs \ref{app_res:15} to \ref{app_res:31}. The next issue was found to be the ratio used to crop images presented to both "problematic" networks. Run 55 (\ref{app_res:55}) provides analisys. Figure \ref{fig:nvidia1x1_nvidia2x3_crops_results} shows on the left, the crop (pre-processed image) presented to nvidia1 and sanity models. The actual crop values were determined by the imported augmentation library, which had crop values set to "frame" the "part of interest" in images (320x160) generated by the Udacity sim. The crop turned out to work for the nvidia1 and sanity models with images (160x120) generated by the SDSandbox sim, which is a \textit{fluke}, by removing 60 pixels from the top and 25 pixels from the bottom of SDSandbox images, the result was an image that seems to best frame the road. The issue was corrected by using the third crop, from left to right and a working nvidia2 model was generated in run 62 (\ref{app_res:62}). Crop values are set in script conf.py, adapted for this project.
 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_graph.png}
- \caption{Graph of steering angles recovered from tcpflow log genRoad/tcpflow/20201120184912\_sanity\_tcpflow.log for model 20201120184912\_sanity.h5 driving on Generated Road}
- \label{fig:tcpflow_20201120184912_graph}
+ \includegraphics[width=\textwidth]{Figures/nvidia1x1_nvidia2x3_crops.png}
+ \caption{Left to right, nvidia1 network crop, nvidia2 network crops at top crop set to 70, 81 and 91 pixels respectively)}
+ \label{fig:nvidia1x1_nvidia2x3_crops_results} % duplicate image
 \end{figure}
 
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/tcpflow_20201120184912_sanity_bins.png}
- \caption{Normalized histogram of tcpflow log genRoad/tcpflow/20201120184912\_ sanity \_ tcpflow.log for model 20201120184912\_ sanity.log driving on Generated Road}
- \label{fig:tcpflow_20201120184912_bins} 
-\end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% PRODUCING A SELF-DRIVING MODEL
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ADDING RAIN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Producing a self-driving model}
+\section{Adding rain}
 
-We added a video of the model running side by side with network as shown in figure 
-\ref{fig:20201120171015_sanity_sim_network}, using a procedure as described in \ref{app_res:41}.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/20201120171015_sanity_sim_network.png}
- \caption{Video still from \href{https://youtu.be/LEmZJJzJkEE}{https://youtu.be/LEmZJJzJkEE} showing simulator image sent over TCP network on the left with CNN steering angle prediction and processed image (as presented to CNN) on the right}
- \label{fig:20201120171015_sanity_sim_network} 
-\end{figure}
-
-% \textbf{STOPPED HERE - NEED TO GENERATE STEERING ANGLE PLOT WITH MEAN AND STD} Looks like we might be picking up the simulator steering angle.  \ref{fig:sa_GeneratedTrack_20201120171015_sanity}
-Figure \ref{fig:sa_GeneratedTrack_20201120171015_sanity} shows the predicted steering angles around Generated Track, where the first dip is the sharp right corner, the second dip is the slight right turn followed by a slight left turn plateauing at a negative steering angle (gentle left turn followed by two sharp right turns and finally the straight until the finish line with steering angles close to zero degrees.
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/sa_GeneratedTrack_20201120171015_sanity.h5.png}
- \caption{Steering angle plot for figure \ref{fig:20201120171015_sanity_sim_network}}
- \label{fig:sa_GeneratedTrack_20201120171015_sanity} 
-\end{figure}
-% probably best to more this to results section and reference here
-%\begin{verbatim}
-%# data: genRoad (log2 renamed)
-%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
-%$ python train.py --model=sanity --outdir=../trained_models
-%\end{verbatim}
-%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
-% and run as per procedure described in (TODO add reference).
-More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (Figure 
- \ref{fig:tcpflow_Run43}). This was a first attempt to add rain, where the effect is added to the image presented to network. Although the procedure introduces noise to images, it is somewhat unrealistic, as rain is expected to be present on the acquired image. It is left here to document the work development.
- 
+Using the Automould library, rain was added in real time for predictions. Two schemes were considered. The first where rain is added directly to the network image, as show in Figure \ref{fig:tcpflow_Run43}. Although the procedure introduces noise to images, it is somewhat unrealistic, as rain is expected to be present on the acquired image.
 \begin{figure}[ht]
  \centering 
  \includegraphics[width=\textwidth]{Figures/tcpflow_Run43.png}
- \caption{Video still showing torrential rain added to the image presented to the network \href{https://youtu.be/57jwwcjbfdE}{https://youtu.be/57jwwcjbfdE}}
+ \caption{Video still showing left to right, the acquired image supplied by the simulator, a processed network image with no rain and the same image with torrential rain added. This last being the image presented to the network. A video was recorded in run \ref{app_res:43}, \url{https://youtu.be/57jwwcjbfdE}, showing the model driving off the track.}
  \label{fig:tcpflow_Run43} 
 \end{figure}
-%\begin{verbatim}
-%# data: genRoad (log2 renamed)
-%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
-%$ python train.py --model=sanity --outdir=../trained_models
-%\end{verbatim}
-%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
-%and run as per procedure described in (TODO add reference).
+The second scheme, which was adopted for this project, was to add rain to the acquired image. Figure  \ref{fig:youtube20201207091932nvidia1torrential20mult_4_h5} shows a still from video \url{https://youtu.be/mDjtnnVZdic} obtained in run \ref{app_res:77}, the moment before the sim crashes into a bollard off the fist right turn in the Generated Track.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1torrential20mult_4_h5.png}
+ \caption{Left to right, the acquired image generated by SDSandbox, the same image with torrential rain at minus and plus 20 degree slant added, and the network image, processed using the previous "rainy" image.}
+ \label{fig:youtube20201207091932nvidia1torrential20mult_4_h5} 
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVALUATION OF SELF-DRIVING CARS USING CNNS IN THE RAIN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Evaluation of self-driving cars using CNNs in the rain}
+
+\section{In realtime}
 
 After the attempt illustrated in Figure \ref{fig:tcpflow_Run43}, the rain-adding workflow was modified such that rain was added to the acquired image, and that image then processed further downstream. Some results can be seen in Figures
 % 20-12-17 STOPPED HERE - FIX IMAGES (REMOVE SIDE BORDERS).
@@ -215,13 +228,184 @@ Figure \ref{fig:youtube20201207091932nvidia1heavy10mult_4_h5} contains a set of 
 \end{figure}
 
 
-Figure  \ref{fig:youtube20201207091932nvidia1torrential20mult_4_h5} shows still from youtube video \url{https://youtu.be/mDjtnnVZdic}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESULTS TABLE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Table generated with steerlib.py
+\begin{table}[]
+\begin{center}
+\begin{tabular}{|l|l|l|l|l|l|}
+\hline
+\multicolumn{6}{|c|}{Goodness-of-steer results - Generated Track and Generated Road SDSandbox logs} \\ \hline
+
+% 1 Log: Unity log location (image plus .json files)
+% 1 Filename:   Download  D1  Udacity real world dataset
+% 2 Model:    D2  Udacity simulator data
+% 3 Rain Type: D3  Udacity real and simulator data
+% 4 Slant: Turk dry/rainy Ford dataset
+% 5.GOS: Goodness of steer
+
+% Generated Track log number of image files
+% $ ls -l ../../dataset/unity/genTrack/genTrackOneLap/logs_Wed_Nov_25_23_39_22_2020/*.jpg | wc -l
+% 1394
+% Generated Road log number of image files
+% $ ls -l ../../dataset/unity/genRoad/logs_Fri_Jul_10_09_16_18_2020/*.jpg | wc -l
+% 19679
+
+\multicolumn{6}{|c|}{Generated Track log: logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 (1394 images)} \\ \hline
+ID & Keras model file name & Model & Rain Type & Slant & $g_s$ \\ \hline
+% GENERATED TRACK
+1 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 1.68 * \\ \hline
+2 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 2.12 \\ \hline
+3 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 2.17 \\ \hline
+4 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 2.30 \\ \hline
+5 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 1.82 * \\ \hline
+6 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 2.11 \\ \hline
+7 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 2.13 \\ \hline
+8 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 2.28 \\ \hline
+9 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline &  & 0 & 2.32 * \\ \hline
+10 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 3.12 \\ \hline
+11 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 3.17 \\ \hline
+12 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 3.39 \\ \hline
+13 & 20201120171015\_ sanity.h5 & nvidia1 :( &  & 0 & 5.03 * \\ \hline
+14 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.11 \\ \hline
+15 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.07 \\ \hline
+16 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.00 \\ \hline
+% GENERATED ROAD
+\multicolumn{6}{|c|}{Generated Road log:  logs\_ Fri\_ Jul\_ 10\_ 09\_ 16\_ 18\_ 2020 (19679 images)} \\ \hline
+ID & Keras model file name & Model & Rain Type & Slant & $g_s$ \\ \hline
+% NVIDIA2
+17 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 2.99 * \\ \hline  % drove 16 minutes on this road 1 & https://youtu.be/z9nILq9dQfI
+18 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 3.20 \\ \hline
+19 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 3.22 \\ \hline
+20 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 3.27 \\ \hline
+% NVIDIA1
+21 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 3.87 * \\ \hline
+22 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 3.75 \\ \hline
+23 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 3.70 \\ \hline
+24 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 3.57 \\ \hline
+% NVIDIA_BASELINE
+25 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline :( &  & 0 & 5.51 * \\ \hline
+26 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 4.97 \\ \hline
+27 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 4.98 \\ \hline
+28 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 5.05 \\ \hline
+% SANITY (NVIDIA1)
+29 & 20201120171015\_ sanity.h5 & nvidia1 &  & 0 & 3.85 * \\ \hline
+30 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.06 \\ \hline
+31 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.05 \\ \hline
+32 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.02 \\ \hline
+%   compare to genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png
+\end{tabular}
+\end{center}
+\caption{Goodness-of-Steer $g_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather. Smiley face :) in Model column indicate best (lowest) $g_s$ score. Sad face :( in Model column indicates worst (highest) $g_s$ scores. The logs used to generate the data used to compute the $g_s$ scores were generated with Unity intensity multiplier 1 and Skybox-Material set to Default-Skybox, the default sunny dry weather.}
+\label{table:goodness-of-steer}
+\end{table}
+
+Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs, that is, the results were generated by running predictions on synthetic datasets, which contain ground truth steering values, like shown in Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}. 
+
+The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (one stretch). There are 32 rows, each sequence of four (1-4, 5-8 and so on) representing one model subject to sunny weather followed by 3 types of rain. 
+
+Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot. 
+
+
+
+
+Once the best models were narrowed down to nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}), a number of test runs were conducted to generate outputs for evaluation. 
+
+
+
+    
+\section{Producing a self-driving model}
+A self-driving model that successfully drove around the Generated Track was produced 
+
+
+TODO describe how SDSandbox did not work out of the box - author mentions in video "several hours of data are required" and model to nearly 24 hours to train on GPU. In practice, one augmentation and pre-processing were added, working models were produced in as little as 5 epochs of training, taking under 1m30s.
+That was hard. Detail the bits that were used from TawnNet (augmentation added) and NaokiNet (crop changed). in the end two outputs were required for NaokiNet to work. Maybe move this to discussion. Here we show results.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OUTPUTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Outputs}
+Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with differente levels of rain and light intensity multipliers.
+A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs at the time of compilation.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NETWORK TRAINING
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Network training and simulator testing}
+\label{results:net-training} 
+% write up, label runs and make reference
+The first working model (able to successfully self-drive around the Generated Track) was 20201107210627\_ nvidia1.h5. A video was generated using the recording screen utility Kazam (\cite{Kazam2020}), recording at 15fps (frames per second), and published at  \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc}. Figure \ref{fig:SimTCPPred}
+shows 3 stills from the video containing from left to right, the game engine, the TCP debug output and the prediction engine running.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/SimTCPPred.png}
+\caption{Stills of video \href{https://youtu.be/9z0mMtOnUUc}{https://youtu.be/9z0mMtOnUUc} showing left to right: SDSandbox simulated car going around the Generated Track course, TCP Debug (tcpflow) and prediction engine (predict\_ client.py) running}
+\label{fig:SimTCPPred}
+\end{figure}
+
+The video shows the TCP debugging, prediction engine and the game engine simulated car steering with predictions received over the TCP network. The actual code used to generate the model was not logged at the time the experiment log entry was written in the appendix log (\ref{AppendixD}). By verifying git hash commits (4 commits were made on November 7th) as documented in appendix  a second sanity check model \ref{app_res:36} (20201120171015\_ sanity.h5) was created and found to self-drive successfully around the generated track. A video was made from tcpflow frames as described at the end of \ref{app_res:36}, and uploaded to \href{https://youtu.be/JaSkkh-2xtI}{https://youtu.be/JaSkkh-2xtI}.
+The video shows (fps discrepancies considered) that the \ref{app_res:36} model had a better lap around the track.
+Model 37 (\ref{app_res:37}) trained with genRoad (including outliers seen in Figure \ref{fig:GeneratedRoadPlusHist}) ) did not do well. The oversteering can be seen in video \href{https://youtu.be/xGDN8qOnv9M}{https://youtu.be/xGDN8qOnv9M}. The steering angle bins and graph plots can be seen in  Figures \ref{fig:tcpflow_20201120184912_bins}  and \ref{fig:tcpflow_20201120184912_graph} in the results appendix.
+
+% a number of runs (e.g. commit 2e5bf1b7 failed prematuraly, most failing to generate a model. Doing a diff on one of them shows that batch size was set to 128
+% Could this also be an issue?
+% Note in original Alexnet which we assume NVIDIA were using as a design reference, used batch size 128 for TWO channels - TODO write-up in Discussion.
+
+%$ git diff master..2e5bf1b7 train.py | grep batch_size
+%-    batch_size = conf.batch_size
+%+    batch_size = conf.training_batch_size
+%(base) simbox@simbox-wifi-server:~/src(master)$ git diff master..2e5bf1b7 conf.py | grep %batch_size
+%+training_batch_size = 128
+%-batch_size = 64
+%+batch_size = 128 # nvidia1 = 64
+%@@ -50,7 +49,5 @@ batch_size = 64
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% PRODUCING A SELF-DRIVING MODEL
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Producing a self-driving model}
+
+
+% probably best to more this to results section and reference here
+%\begin{verbatim}
+%# data: genRoad (log2 renamed)
+%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+%$ python train.py --model=sanity --outdir=../trained_models
+%\end{verbatim}
+%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+% and run as per procedure described in (TODO add reference).
+More results, this time as per run 43 (\ref{app_res:43}) 3 images side by side (Figure 
+ \ref{fig:tcpflow_Run43}). This was a first attempt to add rain, where the effect is added to the image presented to network. Although the procedure introduces noise to images, it is somewhat unrealistic, as rain is expected to be present on the acquired image. It is left here to document the work development.
+ 
 \begin{figure}[ht]
  \centering 
- \includegraphics[width=\textwidth]{Figures/youtube20201207091932nvidia1torrential20mult_4_h5.png}
- \caption{This one has torrential rain (orange line in mult 4 plot), and actually crashes into the first left hand bollard \url{https://youtu.be/mDjtnnVZdic}}
- \label{fig:youtube20201207091932nvidia1torrential20mult_4_h5} 
+ \includegraphics[width=\textwidth]{Figures/tcpflow_Run43.png}
+ \caption{Video still showing torrential rain added to the image presented to the network \href{https://youtu.be/57jwwcjbfdE}{https://youtu.be/57jwwcjbfdE}}
+ \label{fig:tcpflow_Run43} 
 \end{figure}
+%\begin{verbatim}
+%# data: genRoad (log2 renamed)
+%# commit: 1ad187d4bff5b6936c065a1aaa15a654ef4d368c
+%$ python train.py --model=sanity --outdir=../trained_models
+%\end{verbatim}
+%this will create the a model in trained\_output/sanity/20201120184912\_sanity.h5
+%and run as per procedure described in (TODO add reference).
+
+
+
+
+
 
 Another set of results for the best performing nvidia2 architecture. TODO ADD DISCUSSION, nearly steering off at large negative spike - link to video time, for three videos.  
 Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} shows
@@ -303,89 +487,6 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 \begin{verbatim}
 ./Assets/Scripts/Logger.cs
 \end{verbatim}
-
-\section{Generated Track performance - goodness of steer}
-% Table generated with steerlib.py
-\begin{table}[]
-\begin{center}
-\begin{tabular}{|l|l|l|l|l|l|}
-\hline
-\multicolumn{6}{|c|}{Goodness-of-steer results - Generated Track and Generated Road SDSandbox logs} \\ \hline
-
-% 1 Log: Unity log location (image plus .json files)
-% 1 Filename:   Download  D1  Udacity real world dataset
-% 2 Model:    D2  Udacity simulator data
-% 3 Rain Type: D3  Udacity real and simulator data
-% 4 Slant: Turk dry/rainy Ford dataset
-% 5.GOS: Goodness of steer
-
-% Generated Track log number of image files
-% $ ls -l ../../dataset/unity/genTrack/genTrackOneLap/logs_Wed_Nov_25_23_39_22_2020/*.jpg | wc -l
-% 1394
-% Generated Road log number of image files
-% $ ls -l ../../dataset/unity/genRoad/logs_Fri_Jul_10_09_16_18_2020/*.jpg | wc -l
-% 19679
-
-\multicolumn{6}{|c|}{Generated Track log: logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 (1394 images)} \\ \hline
-ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
-% GENERATED TRACK
-1 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 1.68 * \\ \hline
-2 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 2.12 \\ \hline
-3 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 2.17 \\ \hline
-4 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 2.30 \\ \hline
-5 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 1.82 * \\ \hline
-6 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 2.11 \\ \hline
-7 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 2.13 \\ \hline
-8 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 2.28 \\ \hline
-9 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline &  & 0 & 2.32 * \\ \hline
-10 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 3.12 \\ \hline
-11 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 3.17 \\ \hline
-12 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 3.39 \\ \hline
-13 & 20201120171015\_ sanity.h5 & nvidia1 :( &  & 0 & 5.03 * \\ \hline
-14 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.11 \\ \hline
-15 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.07 \\ \hline
-16 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.00 \\ \hline
-% GENERATED ROAD
-\multicolumn{6}{|c|}{Generated Road log:  logs\_ Fri\_ Jul\_ 10\_ 09\_ 16\_ 18\_ 2020 (19679 images)} \\ \hline
-ID & Keras model file name & Model & Rain Type & Slant & gos \\ \hline
-% NVIDIA2
-17 & 20201207192948\_ nvidia2.h5 & nvidia2 :) &  & 0 & 2.99 * \\ \hline  % drove 16 minutes on this road 1 & https://youtu.be/z9nILq9dQfI
-18 & 20201207192948\_ nvidia2.h5 & nvidia2 & light & 0 & 3.20 \\ \hline
-19 & 20201207192948\_ nvidia2.h5 & nvidia2 & heavy & 10 & 3.22 \\ \hline
-20 & 20201207192948\_ nvidia2.h5 & nvidia2 & torrential & 20 & 3.27 \\ \hline
-% NVIDIA1
-21 & 20201207091932\_ nvidia1.h5 & nvidia1 &  & 0 & 3.87 * \\ \hline
-22 & 20201207091932\_ nvidia1.h5 & nvidia1 & light & 0 & 3.75 \\ \hline
-23 & 20201207091932\_ nvidia1.h5 & nvidia1 & heavy & 10 & 3.70 \\ \hline
-24 & 20201207091932\_ nvidia1.h5 & nvidia1 & torrential & 20 & 3.57 \\ \hline
-% NVIDIA_BASELINE
-25 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline :( &  & 0 & 5.51 * \\ \hline
-26 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & light & 0 & 4.97 \\ \hline
-27 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & heavy & 10 & 4.98 \\ \hline
-28 & 20201207201157\_ nvidia\_ baseline.h5 & nvidia2\_ baseline & torrential & 20 & 5.05 \\ \hline
-% SANITY (NVIDIA1)
-29 & 20201120171015\_ sanity.h5 & nvidia1 &  & 0 & 3.85 * \\ \hline
-30 & 20201120171015\_ sanity.h5 & nvidia1 & light & 0 & 3.06 \\ \hline
-31 & 20201120171015\_ sanity.h5 & nvidia1 & heavy & 10 & 3.05 \\ \hline
-32 & 20201120171015\_ sanity.h5 & nvidia1 & torrential & 20 & 3.02 \\ \hline
-%   compare to genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png
-\end{tabular}
-\end{center}
-\caption{Goodness-of-Steer $G_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather. Smiley face :) in Model column indicate best gos score. Sad face :( in Model column indicates worst $g_s$ scores. The logs used to generate the data used to compute the $g_s$ scores were generated with Unity intensity multiplier 1 and Skybox-Material set to Default-Skybox, the default sunny dry weather.}
-\label{table:goodness-of-steer}
-\end{table}
-Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs. The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (on stretch). Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot. 
-
-Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} shows the ground truth steering predictions as obtained in "Auto Drive w Rec" mode, for Generated Track, saved to log directory logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020.
-
-% NB Table gos data and figures generated with code commit hash cc095fc
-% Figure generated with GetSteeringAnglesFromtcpflow.ipynb
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png}
- \caption{Ground truth steering values for logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 recorded log. The four inverted humps represent the four right turns. The hump between frames 500 and 700 represents the only (gentle) left turn in the circuit}
- \label{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles} 
-\end{figure}
 
 
 

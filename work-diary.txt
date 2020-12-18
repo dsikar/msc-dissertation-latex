@@ -968,7 +968,7 @@ where a readme with all sharepoint links, then submit both pdf and readme.
 
 This leaves 3 full days to complete report, plus Monday for contingency.
 
-If dedicating one full day per section, this should be 1 (Friday) for results and 1 (Saturday) for context. The remaining day (Sunday) should be split in tyding up (the still incomplete) methods and evaluation sections. Monday should be invested in revising the whole text. Submitting one draft at 1300h. Continuing with revision and submitting a final draft at 16:50h. Also, time allowing, revisit the output.txt file, and eliminate overlap where possible, specially between ipynb and python files.
+If dedicating one full day per section, this should be 1 (Friday) for results and 1 (Saturday) for context (Discussion! URGENT). The remaining day (Sunday) should be split in tyding up (the still incomplete) methods and evaluation sections. Monday should be invested in revising the whole text. Submitting one draft (all sections and appendixes compiled) at 1300h. Continuing with revision and submitting a final draft at 16:50h. Also, time allowing, revisit the output.txt file, and eliminate overlap where possible, specially between .ipynb and python files.
 
 	
 
