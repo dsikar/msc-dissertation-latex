@@ -1123,7 +1123,7 @@ Generating plot:
 $ python steerlib.py
 $ python 
 >>> import steerlib as sl
->>> sa = sl.etSteeringFromtcpflow('../../dataset/unity/genRoad/tcpflow/tcpflow_20201
+>>> sa = sl.getSteeringFromtcpflow('../../dataset/unity/genRoad/tcpflow/tcpflow_20201
 120171015_sanity.log')
 >>> sarr = np.asarray(sa)
 >>> p = sarr[:,0]
@@ -2613,15 +2613,21 @@ Commit: 356fe8f
 Outputs: 2
 Dataset: genTrack
 Command:
-sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1__no_rain_tcpflow.log
+sudo tcpflow -i lo -c port 9091 > /tmp/20201207091932_nvidia1_no_rain_tcpflow.log
 
 $ python predict_client.py
 --model=../trained_models/nvidia1/20201207091932_nvidia1.h5 --modelname=nvidia1 
 --record=True
 Environment: simbox
-Comment: Run to create a tcpflow ground truth file (best steering lap)
+Comment: Run to create a tcpflow a no rain file (best steering lap for nvidia1
+
+$ python MakeVideo.py --filename=../../trained_models/nvidia1/tcpflow/20201207091932_nvidia1_no_rain_
+tcpflow.log 
+--model=20201207091932_nvidia1.h5
+
 \end{verbatim}
-For run 81, no recording was done as the interest was in the tcpflow data for the best nvidia1 model.
+For run 81, no recording was done as the interest was in the tcpflow data for the best nvidia1 model. CORRENTION. Record now 2020.12.18 done.
+Video: \url{https://youtu.be/Tzo3zw-b_qk}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 82
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -2641,7 +2647,7 @@ Comment: No rain lap for best nvidia2 model
 
 \end{verbatim}
 Video: \url{https://youtu.be/iePt2HJPXP0}. 
-For nvidia2, a recording was done, which smatches the line taken in run 62, as it is the same model.
+For nvidia2, a recording was done, which matches the "line", that is the path, taken on run 62, as it is the same model.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 83
