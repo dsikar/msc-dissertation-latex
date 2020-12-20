@@ -1,16 +1,96 @@
-
 \chapter{Discussion}
-
 \label{Discussion} 
 
+%This chapter examines your results in comparison with your objectives, and then in the wider perspective of other theoretical and applied work relevant to your project, as covered in your review in Chapter 2. For instance, for a software product you will discuss how well it satisfies the user needs that it addresses, its performance and dependability, aspects of design, implementation or assessment that have proved good choices or that instead you would change if you were to repeat the project knowing what you now know. For novel research results or any other knowledge obtained through the project, you will discuss your confidence in the results, their validity, scope and their generalisability. What are the implications of what you have found out? Do you have any recommendations as a result?
+
+The objectives set out in \ref{intro:aims-and-objectives} to evaluate self-driving CNNs in the rain were achieved by:
+\begin{itemize}
+    \item  [--] Determining a game engine able to support the experiments
+    \item  [--] Creating a set of synthetic datasets (with functionality provided out-of-the-box by SDSandbox)
+    \item  [--] Identifying software able to augment and add rain-like patterns to images, modified and integrated into the original SDSandbox framework
+    \item  [--] Training a number of CNN models in dry weather
+    \item  [--] Establishing a workflow to modify images to be presented to the network during inference time
+\end{itemize}
+and failed in:
+\begin{itemize}
+    \item  [--] Determining a metric for evaluating how well a self-driving CNN is performing in the rain with respect to steering angle ground truth values
+\end{itemize}
+
+Results presented are valid in the scope of a simulated environment and a CNN predicting steering angles for an image with added rain-like effect. In the experiment conducted using Amazon Mechanical Turk (\ref{res:mech-turk}), with five artificial rainy images added, to a batch of 100 images from the FordAV dataset, no images were classified as "rainy" by a (assumed) real person. Given this outcome, added rain is best interpreted qualitatively as added noise.  
+
+This study highlighted the importance of network architecture, image geometry, image preprocessing, cropping the most representative image area and moving the image from RGB to YUV space, making an argument for CNNs being able to generalise. Models trained on Generated Track were able to self-drive on Generated Road (run 95 \ref{app_res:95} shows a 16m14s self-drive). Models trained in dry weather were able to drive in simulated wet-like weather. To that effect, particularly significant are the steering plots presented in Figures % 1.11, 1.12 and 1.13
+\ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1}, \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} and
+\ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1}, for the nvidia1 model driving in all weather with intensity multiplier set to 1.
+Figures 
+\ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} and
+\ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} show the model crashed in the rain when Unity intensity multipliers are set to 1 and 4. Figure \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1} shows the nvidia1 model is able to drive around the track when intensity multiplier is set to 8. 
+Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows video stills from acquired to presented to network for a single type of rain (light) and each intensity multiplier. The steering plot in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} (crashed) applying to the first row, Figure \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1} (crashed) applying to the second row and \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1} (did not crash) applying to third row. The nvidia1 model therefore did not crash when there were no lane markings left on the road, and only two distinctive "road" and "non-road" features were present in the network image. The result suggests that rain-like noise did have an impact in the nvidia1 performance, and when the glare was such (intensity multiplier set to 8) that it had the effect of a filter leading to a network image consisting of two features, the nvidia1 model was able to drive around the track. nvidia1 can be seen as the borderline case (the effect of intensity multipliers together with added rain being interpreted as different noise levels), where  the model is able to drive around the track depending on  network image noise level. The nvidia1 network architecture is therefore on the limit of being able to learn self-driving in the rain.
+ 
+% The story we are trying to tell, what design differences could account for
+% performance differences.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% nvidia2, nvidia1 design differences
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Since both modesl were trained with the same hyperparameters, the task at hand is then to determine what are the network design differences that could account for performance differences between nvidia2 and nvidia1. The comparison is made between architectures in \ref{arc:nvidia2} and \ref{arc:nvidia1}, and the compiled models in commits df953d2 and 55cb00b for nvidia2 and nvidia1 respectively. The architectures show that the input shapes are different (nvidia2 - 66h x 200w x 3, nvidia1 - 160h x 120w x 3). Kernel size, stride and padding are the same for both networks in all convolutional layers, though the kernel size changes from 5x5 to 3x3 and stride from 2 to 1, in the last two convolutional layers.   
+  
+In the first convolutional layer, both models have the same number of feature maps (24) but a different feature map geometry (nvidia2 - 31h x 98w | nvidia1 - 58h x 78w) as a result of the input geometry being different (see equation \ref{eq:feature_map}). The number of trainable parameters for both models is 1824 (see equation \ref{eq:trainable_params}). For the second convolutional layer, the same number of feature maps are generated for both models (32) with geometries 47w x 14h (nvidia2) and 37w x 27h (nvidia1). The number of trainable parameters is 19232 for both models. In the third convolutional layer, 48 feature maps are generated for nvidia2 and 64 feature maps are generated for nvidia1. The feature map geometries are 22w x 5h (nvidia2) and 17w x 12h (nvidia1) with 38448 and 51264 trainable parameters respectively. This is accounted for by the different number of feature maps in the current layer, term $d$ in \ref{eq:trainable_params}. What becomes noticeable in the third convolutional layer are the feature map aspect ratios. nvidia1 started at 160/120 = 1.33:1 and is at this point 17/12 = 1.4:1, while nvidia2 started at 200/66 = 3:1 and is now 22/5 = 4.4:1, meaning it is increasingly more panoramic, while nvidia1 is still relatively square in comparison.  
+ 
+In the fourth convolutional layer, both models generate 64 feature maps with geometries 20w x 3h (nvidia2) and 15w x 10h (nvidia1). The number of trainable parameters is 27712 and 36928 respectively on account of term $k$ in \ref{eq:trainable_params} being different, that is, on account of the number of feature maps in the previous layer being different.  
+In the fifth convolutional layer, both models generate 64 feature maps with geometries 18w x 1h (nvidia2) and 13w x 8h (nvidia1) with the same 36928 number of trainable parameters. The aspect ratios in this final convolutional layer are 18:1 and 1.6:1 respectively. In other words, the nvidia2 feature map is an 18 pixel wide by one pixel high sliver.  
+In the following flattened layer, nvidia2 and nvidia1 have 1152 and 6656 inputs respectively. This is given in \ref{eq:conv_outputs}:
+\begin{equation}
+    \label{eq:conv_outputs}
+    m = w \times h \times k
+\end{equation}
+where m is the number of inputs in the flattened layer, k is number of feature maps and w is width, h is height of feature map in the previous convolutional layer.  
+In the next fully connected layer both networks have 100 units. nvidia2 and nvidia1 have 115300 and 665700 trainable parameters respectively. The difference is due to different number of inputs in the flattened layer, term $m$ in \ref{eq:trainable-parmas}.  
+In the next fully connected layer, both networks have 50 units and 5050 trainable parameters on account of both having the same number of units in the current and previous layer.  
+At this point, there is a difference in the network design. nvidia2 has one additional fully connected layer with 10 units, and 510 trainable parameters (50x10, and ten added to account for bias term). The final output layer is the same for both models, with two units (steering and throttle outputs). The number of trainable parameters is 22 and 102 for nvidia2 and nvidia1, respectively.  
+The total number of trainable parameters being 245,026 and 817,028 for nvidia2 and nvidia1 respectively. Proportionally, nvidia2 is less than 1/3 the size of nvidia1, noting the original nvidia2 (NaokiNet) architecture has 36 feature maps in the second convolutional layer and 21636 trainable parameters, then 43248 trainable parameters in the third convolutional layer, leading to a total of 252,230 trainable parameters.  
+The conclusion is image and feature map geometry choices in the nvidia2 network accounted for the better performance in the rain. This opens a number of interesting investigation avenues such as what would be the minimum number of parameters required to train a network to perform the same task, what sliver geometries would most favour the task and what other scenarios favour a horizontal "sliver" geometry in the last convolutional layer feature map, as well as what scenarios would favour a vertical sliver and what could be achieved with ensemble models (\cite{ren2016ensemble}) combining both horizontal and vertical sliver geometry feature maps.
+
+
+% The story we are trying to tell, accuracy alone is not a measure of performance
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the inadequacy of training accuracy as a performance measure
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Training accuracy metrics were found not to be a good performance metric.
+As an example, nvidia2 \ref{app_res:67} has a marginally higher validation accuracy than the best performing \ref{app_res:62} (see plots \ref{fig:20201207195804_nvidia2_accuracy} and \ref{fig:20201207192948_nvidia2_accuracy}), however, the former crashes. The difference being the former has zero centered pixel values presented to the network, while the latter has not. The lesson learnt was qualitative analysis had to be carried out for each model with simulator testing. This creates an issue with employing schemes such as grid search (\cite{bergstra2012random}) or automated machine learning (\cite{feurer2015efficient}), if relying on training accuracy alone.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the inadequacy of the Goodness-of-Steer metric
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The quantitative evaluation metric $g_s$ (\ref{eq:goodness_of_steer}) proposed in this study proved to accurately reflect qualitative analysis for dry weather self-driving, as the best observed model obtained the best $g_s$ score (table  \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}, row 1). For wet weather it proved to be inadequate. 
+% maybe move this bit to discussion
+The nvidia1 model, known to crash when running real time predictions in all rain conditions with intensity multiplier 1 and 4 (Figures
+\ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} and  \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207091932_nvidia1}), obtained better $g_s$ scores (rows 5, 6 and 7) in the rain than the nvidia2 model (rows 2, 3, 4) for SDSandbox log data (not self-driving in real time) on the Generated Track. On the Generated Road, nvidia2 outperformed nvidia1 for all weather. The original expectation was the $g_s$ score being able to generate lower scores for the best performing model in all cases. A suggestion for future work is to evaluate a \textit{sliding window} approach as used in digital signal processing, where a sequence of frames is analysed at a time, the $g_s$ score for the sequence could then be noted, the window moved forward by one frame, and so on until the entire sequence is inspected. The expectation being that events such as nvidia1 model crashes shown in \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} could be quantified by a higher-than-threshold $g_s$ score in the window sequence, each crash adding up into a penalty term. Also, the function name choice was unfortunate, as higher scores mean worse steering. An improved $G_s$ metric is suggested in \ref{eq:goodness_of_steer_improved_fixed_name}:
+\begin{equation}
+    \label{eq:goodness_of_steer_improved_fixed_name}
+    G_s(p,g) = \Bigg(\frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c + C_c\Bigg)^{-1}
+\end{equation}
+where $C_c$ is the crash count penalty term, and the exponentiation leads to lower results translating into higher scores.
+
+The best performing nvidia2 and nvidia1 models were trained in 1m39s and 1m23s over 5 epochs, (accuracy and validation plots shown in \ref{fig:20201207192948_nvidia2_accuracy} and \ref{fig:20201207091932_nvidia1_accuracy}) showing validation accuracies converging within 2 epochs, that is, the function being approximated by the network converging quickly to a local minima. 
+
+
+The model size for both nvidia2 and nvidia1 on disk is 9.5M. Given fast training times, relatively small datasets, and small model size, the result could be applied to ensembles of CNNs, each dealing with a specific task.
+
+further work is needed to evaluate real life environments. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5555
+% 2. For instance, for a software product you will discuss how well it satisfies the user needs that it addresses, its performance and dependability, aspects of design, implementation or assessment that have proved good choices or that instead you would change if you were to repeat the project knowing what you now know.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The project achieved its aim in providing evaluation for variations of one specific CNN architecture (NVIDIA PilotNet). There was not sufficient time to attempt ResNet, Google LeNet and VGG architetures, or to get the original AlexNet working as deep regression networks, modifying the output layer to perform regression istead of classification. It took longer than expected, 4 months (\ref{fig:Revised-work-breakdown-structure}), where original estimate was 1 (\ref{app:rpmi}) to get a model self-driving around the Generated Track. If the project was to start again with the current working setup, additional architectures could be tested. As a result of examining 4 additional real life datasets: Audi, FordAV, Kitti and Udacity, it became clear that for the first three, there was no standard for storing steering angle values, or even storing a steering angle with the acquired image at all, like the FordAV dataset which relied on IMU readings extracted from rosbag files, that required further processing to be converted to a steering angle (\ref{ankit_vora}), unforeseen at the outset of this project. In essence, some public datasets are primarily meant for multi-sensor fusion, not end to end self-driving models. The time invested in evaluating public datasets overran by 9 weeks. It would have been a better use of time to stick to the end to end datasets if the project was to start gain with the benefit of hindsight. A work diary (work-diary.txt) is provided in the latex files used to format the final dissertation pdf.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Impact on network design and performance
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Good case to be covered between runs 62 (best nvidia model)
 % and 70, wobbly but works.
-
-
-%This chapter examines your results in comparison with your objectives, and then in the wider perspective of other theoretical and applied work relevant to your project, as covered in your review in Chapter 2. For instance, for a software product you will discuss how well it satisfies the user needs that it addresses, its performance and dependability, aspects of design, implementation or assessment that have proved good choices or that instead you would change if you were to repeat the project knowing what you now know. For novel research results or any other knowledge obtained through the project, you will discuss your confidence in the results, their validity, scope and their generalisability. What are the implications of what you have found out? Do you have any recommendations as a result?
 
 %\section{Andrew Ng CNN complexity table - number of parameters}
 %Convolutional Neural Network Examples    
@@ -21,15 +101,15 @@
 
 % Discuss Mechanical Turk and Automold images being labeled as No Rain
 
-examine results in comparison with objectives
-\begin{itemize}
-    \item[--] Game engine - able to support experiments?
-    \item[--] Datasets
-    \item[--] Image augmentation
-    \item[--] Training models
-    \item[--] Workflow
-    \item[--] Evaluation metric
-\end{itemize}
+% examine results in comparison with objectives
+%\begin{itemize}
+%    \item[--] Game engine - able to support experiments?
+%    \item[--] Datasets
+%    \item[--] Image augmentation
+%    \item[--] Training models
+%    \item[--] Workflow
+%    \item[--] Evaluation metric
+%\end{itemize}
 Discuss:
 \begin{itemize}
     \item[--] Validity
@@ -47,3 +127,7 @@ TODO Add How Outliers messed up training
 Todo add The code used to generate the model was not logged at the time. Some forensics conducted in \ref{app_res:36}
 Todo Add Run 3 - one output, bad result.
 TODO Video not recorded for ground truth in figures 1.12 through 1.14, left tcpflow log in /tmp folder, deleted after reboot.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% CORRECTION TODO LIST
+%% 1. Check if NVIDIA is called PilotNet or DriveNet, then search and replace

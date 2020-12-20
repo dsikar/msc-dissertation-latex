@@ -1,7 +1,9 @@
 \chapter{Network architectures} % Main appendix title
 
 \label{AppendixB} % For referencing this appendix elsewhere, use \ref{AppendixX}
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA_BASELINE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NVIDIA baseline architecture}
 \label{NVIDIA_baseline}
 \label{arc:nvidia_baseline}
@@ -88,6 +90,9 @@ _________________________________________________________________
 (None, 1)
 \end{verbatim}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA1 - Commit 55cb00b
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NVIDIA1 architecture}
 \label{arc:nvidia1}
 The network architecture is as shown, with a total of 817,028 trainable parameters. The design is exactly as used by \cite{SDSandboxSim}.
@@ -154,7 +159,7 @@ _________________________________________________________________
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% NVIDIA2
+% NVIDIA2 - Commit df953d2
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NVIDIA2 Architecture}
 \label{arc:nvidia2}
@@ -225,7 +230,9 @@ _________________________________________________________________
 \end{verbatim}
 
 
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA2
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Alexnet}
 Adapted to achieve same geometry - NB Input size (described as 224x224) is suggested to  be 227x227 \cite{CS231n}. 
 Though changing kernel size to 8x8 also generates a 55x55 feature map in the first convolutional layer.

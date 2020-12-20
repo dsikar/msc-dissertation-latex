@@ -224,7 +224,17 @@ Comment: Network trained with no augmentation or cropping.
 Drove off the road.
 
 \end{verbatim}
-video \url{https://youtu.be/ZLhrcyuONj0}
+video: \url{https://youtu.be/ZLhrcyuONj0}
+
+Figure \ref{fig:20201102094552_nvidia1_accuracy} 
+shows the training loss and accuracy plot for 20201102094552\_ nvidia1.h5.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201102094552_nvidia1_accuracy.png}
+\caption{20201102094552\_ nvidia1.h5 testing and validation loss and accuracy plots (run 6)}
+\label{fig:20201102094552_nvidia1_accuracy}
+\end{figure}
 
 \subsection{Run 7 - 20201102090041\_nvidia2.h5}
 \begin{verbatim}
@@ -246,6 +256,15 @@ command:
 train.py --model=nvidia2 --outdir=../trained_models
 \end{verbatim}
 
+Figure \ref{fig:20201102134802_nvidia2_accuracy} 
+shows the training loss and accuracy plot for 20201102134802\_ nvidia2.h5.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201102134802_nvidia2_accuracy.png}
+\caption{20201102134802\_ nvidia2.h5 testing and validation loss and accuracy plots. Run 8}
+\label{fig:20201102134802_nvidia2_accuracy}
+\end{figure}
 
 \subsection{Run 9 - 20201102210514\_nvidia2.h5}
 \begin{verbatim}
@@ -1374,7 +1393,20 @@ tcpflow log:
 \end{verbatim}
 
 Video of image plus network image - no rain - Generated Road:  
-\url{https://youtu.be/S-PBNgJ_mdY} 
+\url{https://youtu.be/S-PBNgJ_mdY}.  
+
+Figure \ref{fig:20201207091932_nvidia1_accuracy} 
+shows the training loss and accuracy plot for 20201207091932\_ nvidia1.h5.
+The x axis divisions should be interpreted as 0.0 values obtained at the end of first training epoch.
+1.0 as the values obtained at the end of second training epoch, and so forth.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201207091932_nvidia1_accuracy.png}
+\caption{20201207091932\_ nvidia1.h5 testing and validation loss and accuracy plots}
+\label{fig:20201207091932_nvidia1_accuracy}
+\end{figure}
+
 
 Figure \ref{fig:20201207091932_nvidia1_tcpflow} shows a slight positive value (road turning right) to start with, then a negative value (road turning left) steering angle.
 
@@ -2078,21 +2110,41 @@ Comment: Restore last 10 unit fully connected layer. This one drives well around
 Generated Track. This last layer, perhaps together with non-zero centered pixel 
 values and multi-dropout layers may have made the difference. Or perhaps just the 
 final 10 hidden units? Will probably not have time to test so leaving as 
-recommendation for future work i.e. does last ten hidden units before output neurons 
+recommendation for future work i.e. do last ten hidden units before output neurons 
 work with zero-centered normalised inputs? Note, answered this question in 
 run 70.
+
+$ cat nvidia2/20201207192948_nvidia2.log
+Model name: ../trained_models/nvidia2/20201207192948_nvidia2.h5
+Total training time: 0:01:39
+Training loss: 0.023
+Validation loss: 0.015
+Training accuracy: 0.747
+Validation accuracy: 0.773
+
 
 To examine the model:
 $ git checkout -b looksee df953d2
 $ cat models.py
 
-It shows the last ten unit hidden layers and the pixel values not being centered.
+It shows the last ten unit hidden layers and the pixel values not being centered
+(run 70).
 
 $ python predict_client.py 
 --model=../trained_models/nvidia2/20201207192948_nvidia2.h5 --modelname=nvidia2 
 --record=True --modelname=nvidia2
 \end{verbatim}
-\url{https://youtu.be/7-Paz1_PKAo}
+Video: \url{https://youtu.be/7-Paz1_PKAo}. Figure \ref{fig:20201207192948_nvidia2_accuracy} 
+shows the training loss and accuracy plot for 20201207192948\_ nvidia2.h5.
+The x axis divisions should be interpreted as 0.0 values obtained at the end of first training epoch.
+1.0 as the values obtained at the end of second training epoch, and so forth.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_accuracy.png}
+\caption{20201207192948\_ nvidia2.h5 testing and validation loss and accuracy plots}
+\label{fig:20201207192948_nvidia2_accuracy}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 63
@@ -2142,7 +2194,15 @@ and 49). Or move this paragraph to reflections section.
 Video (\url{https://youtu.be/N9xyRizMJvI}) showing the first few hundred frames of model  
 nvidia2 20201207194331\_ nvidia2.h5 on the randomly Generated Road circuit.
 
+Figure \ref{fig:20201207194331_nvidia2_accuracy} 
+shows the training loss and accuracy plot for 20201207194331\_ nvidia2.h.
 
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201207194331_nvidia2_accuracy.png}
+\caption{20201207194331\_ nvidia2.h5 testing and validation loss and accuracy plots. }
+\label{fig:20201207194331_nvidia2_accuracy}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 65 - problem here video is the same as Run 66
 % although video title (named after file is 20201207193607 nvidia2 h5
@@ -2175,7 +2235,7 @@ For previous edit (with errors) see diff for this file  between commit d68c4be5 
 % RUN 67
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \subsection{Run 67 - 20201207195804\_ nvidia2.h5}
-\label{app_res:XX}
+\label{app_res:67}
 \begin{verbatim}
 Commit: 957d14c
 Model:  Same as 59
@@ -2217,6 +2277,16 @@ $ python predict_client.py --model=../trained_models/nvidia2/20201207195804_nvid
 
 \end{verbatim}
 Video: \url{https://youtu.be/ZSgKMGL7azY}
+
+Figure \ref{fig:20201207195804_nvidia2_accuracy} 
+shows the training loss and accuracy plot for 20201207195804\_ nvidia2.h.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201207195804_nvidia2_accuracy.png}
+\caption{20201207195804\_ nvidia2.h5 testing and validation loss and accuracy plots for run 67}
+\label{fig:20201207195804_nvidia2_accuracy}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 68
@@ -2301,9 +2371,17 @@ nvidia2_img_dims = [320,160,3,200,66,81,-35]
 There might have been an issue fixed with no commits to show the fix, changing the 
 prediction workflow, such that image is resized to expected network dimensions,
 based on parameters in conf.py.
-
-
 \end{verbatim}
+
+Figure \ref{fig:20201102090041_nvidia2_accuracy} 
+shows the training loss and accuracy plot for 20201207192948\_ nvidia2.h5.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{Figures/20201102090041_nvidia2_accuracy.png}
+\caption{20201102090041\_ nvidia2.h5 testing and validation loss and accuracy plots. }
+\label{fig:20201102090041_nvidia2_accuracy}
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % RUN 70

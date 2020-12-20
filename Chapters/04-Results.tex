@@ -5,7 +5,9 @@
 
 %This chapter presents the outputs that you produced, by applying the methods that you have selected, including e.g. analysis, design, prototyping, experimental work, evaluation, etc.  
   
-%How you report these results will depend on the nature of the work. It may be helpful to divide them into basic data (e.g., for a project that developed a software product, requirements specification, test data, etc.) and analysis of the data (e.g. statistical analyses, evaluation analyses, etc.). Remember that you are informing the reader of what you have produced and found and emphasising the interesting parts, so summarising at the end of each major section is useful.  
+%How you report these results will depend on the nature of the work. It may be helpful to divide them into basic data (e.g., for a project that developed a software product, requirements specification, test data, etc.) and analysis of the data (e.g. statistical analyses, evaluation analyses, etc.). Remember that you are informing the reader of what you have produced and found and emphasising the interesting parts, 
+% IMPORTANT - ADD SUMMARIES
+% so summarising at the end of each major section is useful.  
   
 %It is usually very helpful for the readers to include graphics and diagrams, for instance to clarify software design or requirements, identify key trends and relationships in empirical data, etc. If you do so, be sure to refer to these figures in the text and use them as evidence to support what you are explaining or arguing; and be sure that your figures are well designed and clearly presented – do not just use default settings of the software you are using in producing them.  
   
@@ -152,6 +154,24 @@ The presence of outliers is believed to have caused issues with the nvidia\_ bas
  \label{fig:nvidia1x1_nvidia2x3_crops_results} % duplicate image
 \end{figure}
 
+
+
+Figure \ref{fig:run-93-94-generated-road} shows a randomly Generated Road used for runs 93, 94 and 95, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on the right hand image. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/run-93-94-generated-road.png}
+ \caption{The randomly generated Generated Road circuit used in runs 93 and 94. Left image is a view of the simulator as presented on computer desktop, the right image is the augmented detail showing the Generated Road circuit, the same inset on left image.}
+ \label{fig:run-93-94-generated-road} 
+\end{figure}
+
+Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. Run 95 (16m14s duration) was much longer than run 94 (1m11s duration) which seems also to be suggested in the distributions shown in the related histograms, as more data is present (about 800 data points in run 94 and 11000 data points in run 95), so is the distribution smoother.
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad_full.png}
+ \caption{Steering angle and normalized histogram plots of the 20201207192948\_ nvidia2.h5 model driving the full length of Generated Track presented in figure \ref{fig:run-93-94-generated-road} }
+ \label{fig:20201207192948_nvidia2_dry_genRoad_full} 
+\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ADDING RAIN
@@ -381,13 +401,11 @@ Figure \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2} sh
 %\end{figure}
 
 \section{Modifications to original source codes}
-Three libraries used:
-\begin{itemize}
-    \item SDSandbox
-    \item Naoki Augmentation
-    \item Automold
-\end{itemize}
-
+Modifications were required to original source codes that were integrated in this project: \cite{Saxena2017} (Automold), \cite{Naoki2016} (Augmentation), and \cite{SDSandboxSim} (SDSandbox). The automold library is designed to process lists of RGB images represented as numpy (\cite{harris2020array}) arrays. Function \textit{add\_ rain\_ single} was added to Automold.py script to deal with image arrays being processed one at a time when running predictions with added rain in real time. The Augmentation library was incorporated into a python class in Augmentation.py. The original code was modified such that before beginning augmentation, the image is resized to the expected acquired size as produced by camera (e.g. 320x160 for nvidia2 and nvidia\_ baseline models, 160x120 for nvidia1 and sanity models). This was set as a configuration parameter in the SDSandbox script conf.py. The preprocessing was modified to use top and bottom crop sizes from configurable values set in conf.py.  
+ 
+The modifications to SDSandbox were made to scripts conf.py, predict\_ client.py and train.py. conf.py was modified such that parameters could be set then shared across function calls. For instance, when running script predict\_ client.py in \ref{app_res:83}, conf.py is used to store rain, slant and record arguments in configuration settings, further checked throughout the running script to determine actions. Image geometry parameters image width, height, depth, expected network width and height, top and bottom crop values for preprocessing was stored as python lists in conf.py. This ensured that the same image geometry was being used during training and inference time for the specified network. This is set with command line argument --modelname for inference in predict\_ client.py (e.g. \ref{app_res:83}) and --model in train.py (e.g. \ref{app_res:92}) for training.  
+predict\_ client.py was modified to use the Augmentation class, the modified conf.py and the Automold library, to preprocess image with correct geometry, before presenting to network for prediction, and to add rain to images. The script was also modified to generate videos making use of the RecordVideo.py class.  
+train.py was modified to take additional command line arguments --aug and --preproc to determine if augmentation and preprocessing were to be performed for testing. The script was also modified to save: the training history, a history training image and a training log file. Network image geometries settings in conf.py are also used by train.py in the modified version.
 
 
 
@@ -441,23 +459,6 @@ Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows 3 stills taken fo
  \label{fig:20201207192948_nvidia2_mult_1_4_8_light}
 \end{figure}
 
-Figure \ref{fig:run-93-94-generated-road} shows a randomly Generated Road used for runs 93, 94 and 95, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on the right hand image. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/run-93-94-generated-road.png}
- \caption{The randomly generated Generated Road circuit used in runs 93 and 94. Left image is a view of the simulator as presented on computer desktop, the right image is the augmented detail showing the Generated Road circuit, the same inset on left image.}
- \label{fig:run-93-94-generated-road} 
-\end{figure}
-
-Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. Run 95 (16m14s duration) was much longer than run 94 (1m11s duration) which seems also to be suggested in the distributions shown in the related histograms, as more data is present (about 800 data points in run 94 and 11000 data points in run 95), so is the distribution smoother.
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad_full.png}
- \caption{Steering angle and normalized histogram plots of the 20201207192948\_ nvidia2.h5 model driving the full length of Generated Track presented in figure \ref{fig:run-93-94-generated-road} }
- \label{fig:20201207192948_nvidia2_dry_genRoad_full} 
-\end{figure}
-
 \section{Datasets}
 
 The following training unity datasets were generated:
@@ -482,3 +483,31 @@ Following the list of data deliverables (\ref{Deliverables-Datasets}) the Udacit
 \section{Outputs}
 Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with differente levels of rain and light intensity multipliers.
 A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs at the time of compilation.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mechanical Turk
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Locating rainy sections with Mechanical Turk}
+\label{res:mech-turk}
+To investigate the effect of rain in self-driving CNNs in a real world dataset, an attempt was made to locate such images in available autonomous vehicle public datasets.
+The data that looked most promising was Ford V2 Log 1 and V3 Log 1 from the FordAV dataset (\cite{agarwal2020ford}), both described as "freeway, overpass, bridge, cloudy". The goal was the set to label a sample of the cloudy images with Amazon Mechanical Turk and 50 images were uniformly drawn from each log, plus 5 images with rain added with the Automold library using the RainyImagesDissertationPlot.ipynb script. The expectation being the 5 extra images be labelled as "Rain". The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
+% rainy files created with automold/RainyImagesDissertationPlot.ipynb
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
+\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications. On the top left are images supplied as "Good example" of rain. The lower of the two being an image modified with the Automold library to add rain. After the job was submitter, the image was labelled by a Mechanical Turk worker as "No Rain".}
+\label{fig:MechTurkCreateJob}
+\end{figure}
+Labelling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
+The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
+There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
+The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
+The images were labelled by one Mechanical Turk worker and results made available in a json encoded file (dataset/mechanical-turk/2020-11-21\_22 45 37.json). In case more than one worker is assigned to a same task, a confidence score is also provided in the results. Results showed no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain" by the worker. Figure \ref{fig:MechTurkLabeledImages} shows one page of the SageMaker Ground Truth completed job, detailing 4 labelled images on the Labeling Job Summary page. A side-effect of the labelling job being Automold rain where not seen by a human as such. The implication is further discussed in \ref{Discussion}.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
+\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
+\label{fig:MechTurkLabeledImages}
+\end{figure}

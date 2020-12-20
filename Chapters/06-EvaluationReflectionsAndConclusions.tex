@@ -65,20 +65,6 @@ Another aspect that was lacking in this project was a study of camera characteri
 The work plan originally set out in appendix \ref{app:rpmi} was changed and an estimate of the revisions are shown in Figure \ref{fig:Revised-work-breakdown-structure}. In hindsight, the original plan seems to reflect a \textit{waterfall} (\cite{balaji2012waterfall}) software development model, where all requirements are defined at the outset, the work then separated into logical blocks and sequenced following a delivery schedule. In practice, many (as opposed to the originally expected few) areas were found to overlap such as selecting (and creating) toolsets, replicating existing and creating alternative models, augmenting data and evaluating models, while creating metrics. The end of October and beginning of November 2020 task overlap reflect the busiest research period, during which a working model, qualitative evaluation toolset and a quantitative evaluation metric were obtained. The work followed what could be described as an \textit{agile} process, with short \textit{sprints} and concurrent changes reflected across several tasks. This is not meant as criticism or praise of any software development models. The work plan (a project proposal requirement) was essential is conceptualising and structuring the effort needed to complete this project.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% On the inadequacy of the Goodness-of-Steer metric
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The quantitative evaluation metric $g_s$ (\ref{eq:goodness_of_steer}) proposed in this study proved to accurately reflect qualitative analysis for dry weather self-driving, as the best observed model obtained the best $g_s$ score (table  \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}, row 1). For wet weather it proved to be inadequate. 
-% maybe move this bit to discussion
-The nvidia1 model, known to crash in all rain conditions for intensity multiplier 1 (rows 6, 7 and 8), obtained better corresponding $g_s$ scores than the nvidia2 model (rows 2, 3 and 4) for SDSandbox log data (not self-driving in real time). The original expectation was the $g_s$ score being able to generate lower scores for the nvidia2 model in all cases. A suggestion for future work is to evaluate a \textit{sliding window} approach as used in digital signal processing, where a sequence of frames is analysed at a time, the $g_s$ for the sequence could then be noted, the window moved forward by one frame, and so on until the entire sequence is inspected. The expectation being that events such as nvidia1 model crashes shown in \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207091932_nvidia1} could be quantified by a higher-than-threshold $g_s$ score in the window sequence, each crash adding up into a penalty term. Also, the function name choice was unfortunate, as higher scores mean worse steering. An improved $G_s$ metric is suggested in \ref{eq:goodness_of_steer_improved_fixed_name}:
-\begin{equation}
-    \label{eq:goodness_of_steer_improved_fixed_name}
-    G_s(p,g) = \Bigg(\frac{\sum_i^N \lvert p(i)-g(i) \rvert }{N} \times n_c + C_c\Bigg)^{-1}
-\end{equation}
-where $C_c$ is the crash count penalty term, and the exponentiation leads to lower results translating into higher scores.
-
-% Badness-of-steer is one possibility, another is 
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Machine Learning, AI and social responsibility
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

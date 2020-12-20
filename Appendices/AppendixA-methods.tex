@@ -582,27 +582,3 @@ Daniel
 
 \end{verbatim}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Mechanical Turk
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Locating rainy sections with Mechanical Turk}
-For Mechanical Turk, the data that looked most promising was Ford V2 Log 1 and V3 Log 1, both described as "freeway, overpass, bridge, cloudy". We drew 50 images uniformly from each log and added 5 images with rain that were expected to be labelled as such. The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
-% rainy files created with automold/RainyImagesDissertationPlot.ipynb
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
-\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications.}
-\label{fig:MechTurkCreateJob}
-\end{figure}
-Labeling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
-The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
-There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
-The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
-The images were labelled by Mechanical Turk workers and results made available in a json encoded file (datasets/mechanical-turk/2020-11-21\_22 45 37.json) showing no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain". Figure \ref{fig:MechTurkLabeledImages}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
-\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
-\label{fig:MechTurkLabeledImages}
-\end{figure}
