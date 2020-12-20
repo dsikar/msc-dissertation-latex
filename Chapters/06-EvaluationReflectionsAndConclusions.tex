@@ -55,7 +55,13 @@ The same was observed with DriveNet. One co-author (\ref{urs_muller1}) was very 
 % On the necessity to understand camera properties
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Another aspect that was lacking in this project was a study of camera characteristics, such that determine geometric properties of the acquired image. As an example, it was determined that image cropping had an effect on network performance. 
+Another aspect lacking in this project was a study of camera characteristics that determine geometric properties of the acquired image, demonstrated here to impact network performance on the image size level. Important factors not considered include frame of reference, world frame, camera frame, image plane, image frame, intrinsic parameters and extrinsic parameters (\cite{Sala2006}).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the importance of human readable and self documenting naming conventions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The naming conventions used in throughout this project, for data directories, models, tcpflow logs, etc, could have benefited from some time invested in searching for a more human-readable and self-documenting scheme, as well as code documentation. An effort was made to this end while the research work was being carried out. Attempts to improve experiment documentation can be seen in \ref{res:training_and_testing_log} where the level of detail and layout increases over time. Still it was laborious sometimes to recall an experiment setup and results, which could be addressed with additional planning.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Reflections on change of Work Plan
@@ -64,11 +70,16 @@ Another aspect that was lacking in this project was a study of camera characteri
 \section{Work Plan changes}
 The work plan originally set out in appendix \ref{app:rpmi} was changed and an estimate of the revisions are shown in Figure \ref{fig:Revised-work-breakdown-structure}. In hindsight, the original plan seems to reflect a \textit{waterfall} (\cite{balaji2012waterfall}) software development model, where all requirements are defined at the outset, the work then separated into logical blocks and sequenced following a delivery schedule. In practice, many (as opposed to the originally expected few) areas were found to overlap such as selecting (and creating) toolsets, replicating existing and creating alternative models, augmenting data and evaluating models, while creating metrics. The end of October and beginning of November 2020 task overlap reflect the busiest research period, during which a working model, qualitative evaluation toolset and a quantitative evaluation metric were obtained. The work followed what could be described as an \textit{agile} process, with short \textit{sprints} and concurrent changes reflected across several tasks. This is not meant as criticism or praise of any software development models. The work plan (a project proposal requirement) was essential is conceptualising and structuring the effort needed to complete this project.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the list of delivered "deliverables"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+From the original 92 deliverables \textit{deliverables} outlined in \ref{AppendixC-deliverables} this project managed to deliver D1, D2 and D4 datasets. D3 was not attempted (as over time came the awareness that it may not be good practice to mix datasets, later confirmed with understanding of image geometry and its impact on network architecture). All simulator testing tracks S1, S2 and S3. Model N1 (PilotNet), plus deliverables' IDs 13 through 16. Completing a total of 11 out of 92. A total closer to the original goal would have been achieved, had the AlexNet, VGGNet, InceptionNet/GoogleLeNet and ResNet models been adapted for self-driving, which in hindsight does not seem realistic, hence the original goal was overambitious.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Machine Learning, AI and social responsibility
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Ultimately the evaluation provided in this study could help to make self-driving vehicles (relying on behavioral learning) safer, which can be interpreted as a positive outcome. The issue of artificial intelligence and social responsibility (\cite{saveliev2020artificial}) perhaps should also be considered, as developments in self-driving AI may reduce both demand for drivers and wages.
+Ultimately the evaluation provided in this study could help to make self-driving vehicles (relying on CNNs in the rain) safer, which can be interpreted as a positive outcome. The issue of artificial intelligence and social responsibility (\cite{saveliev2020artificial}) perhaps should also be considered, as developments in self-driving AI may reduce both demand for drivers and wages.
 
 %The absence of good quality labelled datasets (maybe change this w.r.t. Mech Turk and ISLSVRC - "the presence of a good quality" labelled dataset engered a number of landmark computer vision CNN architectures, more obvious and less citations required) has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
 

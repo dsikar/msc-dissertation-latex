@@ -49,7 +49,10 @@ In the next fully connected layer both networks have 100 units. nvidia2 and nvid
 In the next fully connected layer, both networks have 50 units and 5050 trainable parameters on account of both having the same number of units in the current and previous layer.  
 At this point, there is a difference in the network design. nvidia2 has one additional fully connected layer with 10 units, and 510 trainable parameters (50x10, and ten added to account for bias term). The final output layer is the same for both models, with two units (steering and throttle outputs). The number of trainable parameters is 22 and 102 for nvidia2 and nvidia1, respectively.  
 The total number of trainable parameters being 245,026 and 817,028 for nvidia2 and nvidia1 respectively. Proportionally, nvidia2 is less than 1/3 the size of nvidia1, noting the original nvidia2 (NaokiNet) architecture has 36 feature maps in the second convolutional layer and 21636 trainable parameters, then 43248 trainable parameters in the third convolutional layer, leading to a total of 252,230 trainable parameters.  
-The conclusion is image and feature map geometry choices in the nvidia2 network accounted for the better performance in the rain. This opens a number of interesting investigation avenues such as what would be the minimum number of parameters required to train a network to perform the same task, what sliver geometries would most favour the task and what other scenarios favour a horizontal "sliver" geometry in the last convolutional layer feature map, as well as what scenarios would favour a vertical sliver and what could be achieved with ensemble models (\cite{ren2016ensemble}) combining both horizontal and vertical sliver geometry feature maps.
+The conclusion is image and feature map geometry choices in the nvidia2 network accounted for the better performance in the rain. This opens a number of interesting investigation avenues such as what would be the minimum number of parameters required to train a network to perform the same self-driving in the rain task, what "sliver" geometries would most favour the task and what other scenarios favour a horizontal sliver geometry in the last convolutional layer feature map, as well as what scenarios would favour a vertical sliver and what could be achieved with ensembles (\cite{ren2016ensemble}) combining models with both horizontal and vertical sliver geometry feature maps.  
+The best performing nvidia2 and nvidia1 models were trained in 1m39s and 1m23s over 5 epochs, (accuracy and validation plots shown in \ref{fig:20201207192948_nvidia2_accuracy} and \ref{fig:20201207091932_nvidia1_accuracy}) with validation accuracies converging within 2 epochs, that is, the function being approximated by the network converging quickly to a local minima. 
+The model size for both nvidia2 and nvidia1 on disk is 9.5M. Given fast training times, relatively small datasets, and small model size, the result makes another case for the use of ensembles of CNNs, each dealing with a specific task.
+
 
 
 % The story we are trying to tell, accuracy alone is not a measure of performance
@@ -59,8 +62,8 @@ The conclusion is image and feature map geometry choices in the nvidia2 network 
 % On the inadequacy of training accuracy as a performance measure
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Training accuracy metrics were found not to be a good performance metric.
-As an example, nvidia2 \ref{app_res:67} has a marginally higher validation accuracy than the best performing \ref{app_res:62} (see plots \ref{fig:20201207195804_nvidia2_accuracy} and \ref{fig:20201207192948_nvidia2_accuracy}), however, the former crashes. The difference being the former has zero centered pixel values presented to the network, while the latter has not. The lesson learnt was qualitative analysis had to be carried out for each model with simulator testing. This creates an issue with employing schemes such as grid search (\cite{bergstra2012random}) or automated machine learning (\cite{feurer2015efficient}), if relying on training accuracy alone.
+Training accuracy metrics were found not to be a good performance indicator.
+As an example, nvidia2 \ref{app_res:67} has a marginally higher validation accuracy than the best performing \ref{app_res:62} (see plots \ref{fig:20201207195804_nvidia2_accuracy} and \ref{fig:20201207192948_nvidia2_accuracy}), however, the former crashes. The difference between the former and the later being the former has zero centered pixel values presented to the network and no 10-unit last fully connected layer. The lesson learnt was qualitative analysis had to be carried out for each model with simulator testing. This creates an issue with employing schemes such as grid search (\cite{bergstra2012random}) or automated machine learning (\cite{feurer2015efficient}), if relying on training accuracy alone.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % On the inadequacy of the Goodness-of-Steer metric
@@ -75,12 +78,6 @@ The nvidia1 model, known to crash when running real time predictions in all rain
 \end{equation}
 where $C_c$ is the crash count penalty term, and the exponentiation leads to lower results translating into higher scores.
 
-The best performing nvidia2 and nvidia1 models were trained in 1m39s and 1m23s over 5 epochs, (accuracy and validation plots shown in \ref{fig:20201207192948_nvidia2_accuracy} and \ref{fig:20201207091932_nvidia1_accuracy}) showing validation accuracies converging within 2 epochs, that is, the function being approximated by the network converging quickly to a local minima. 
-
-
-The model size for both nvidia2 and nvidia1 on disk is 9.5M. Given fast training times, relatively small datasets, and small model size, the result could be applied to ensembles of CNNs, each dealing with a specific task.
-
-further work is needed to evaluate real life environments. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5555
 % 2. For instance, for a software product you will discuss how well it satisfies the user needs that it addresses, its performance and dependability, aspects of design, implementation or assessment that have proved good choices or that instead you would change if you were to repeat the project knowing what you now know.
