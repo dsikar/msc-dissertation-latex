@@ -17,6 +17,72 @@
 % The most important thing now is to describe clearly (with the right level of detail - not too much, not too little) the (...) evaluation of results (there's a more objective evaluation here of accuracy/speed but also a subjective evaluation that you can discuss in more detail: when a situation changes from "no rain" to "rain" and how that affects the pre-trained network). With those results you will have the material needed for the important discussion chapter which should include your own critical evaluation of results and also point to future work.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% OUTPUTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Outputs}
+Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with different levels of rain and light intensity multipliers.
+A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs at the time of compilation. Public download links are available in \ref{res:download-links}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DATASETS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Datasets}
+
+The following training unity datasets were generated:
+\begin{verbatim}
+$ . count.sh 
+871403 files in directory .
+25562 files in directory ./roboRacingLeague
+25795 files in directory ./log_sample
+82245 files in directory ./warehouse
+44496 files in directory ./quarantine
+90842 files in directory ./smallLoop
+516997 files in directory ./genRoad
+16570 files in directory ./genTrack
+68886 files in directory ./smallLoopingCourse
+\end{verbatim}
+where approximately half are the labels (.json files) so the total number of images generated is 435701 while the most used for training and testing were genTrack and genRoad for an approximate total of 266783 images used to train the best performing models. In addition to Generated Track and Generated Road, the RoboRacingLeague and Warehouse tracks were also attempted and could have potentially worked. In the end to keep the problem constrained, two tracks were used.
+%Directory           Number of files Comment
+%smallLoopingCourse/ 34443           from small_looping_course
+%warehouse/          41126           From Warehouse course
+%smallLoop/          45422           From small_looping_course
+%roboRacingLeague/   12778           From "Robot Racing League" course
+%log_sample          25791           From small_looping_course
+%genRoad             280727          From "Generated Road" course
+From the real life datasets considered, Audi, FordAV, Kitti and Udacity. All were inspected and notes made in \ref{appA:datasets} and the dissertation latex directory work-diary.txt. Correspondences were held with authors (\ref{corr_with_authors}) with respect to extracting steering angles from datasets, and ROS (Robot Operating System) was used to extract data from public dataset files provided in the rosbag format (\ref{appA:FordAvDataset}). 
+%the overall conclusion being there were too many disparate formats to deal with, though it was interesting to use ROS (robot operating system) to extract sensor data from rosbag files. Another problem was no rainy images were implied to exist in any of these public datasets.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Mechanical Turk
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Locating rainy sections with Mechanical Turk}
+\label{res:mech-turk}
+To investigate the effect of rain in self-driving CNNs in a real world dataset, an attempt was made to locate such images in available autonomous vehicle public datasets.
+The data that looked most promising was Ford V2 Log 1 and V3 Log 1 from the FordAV dataset (\cite{agarwal2020ford}), both described as "freeway, overpass, bridge, cloudy". The goal was the set to label a sample of the cloudy images with Amazon Mechanical Turk and 50 images were uniformly drawn from each log, plus 5 images with rain added with the Automold library using the RainyImagesDissertationPlot.ipynb script. The expectation being the 5 extra images be labelled as "Rain". The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
+% rainy files created with automold/RainyImagesDissertationPlot.ipynb
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
+\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications. On the top left are images supplied as "Good example" of rain. The lower of the two being an image modified with the Automold library to add rain. After the job was submitter, the image was labelled by a Mechanical Turk worker as "No Rain".}
+\label{fig:MechTurkCreateJob}
+\end{figure}
+Labelling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
+The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
+There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
+The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
+The images were labelled by one Mechanical Turk worker and results made available in a json encoded file (dataset/mechanical-turk/2020-11-21\_22 45 37.json). In case more than one worker is assigned to a same task, a confidence score is also provided in the results. Results showed no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain" by the worker. Figure \ref{fig:MechTurkLabeledImages} shows one page of the SageMaker Ground Truth completed job, detailing 4 labelled images on the Labeling Job Summary page. A side-effect of the labelling job being Automold rain where not seen by a human as such. The implication is further discussed in \ref{Discussion}.
+\begin{figure}[h!]
+\centering
+\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
+\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
+\label{fig:MechTurkLabeledImages}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % PRODUCING A SELF-DRIVING MODEL
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % The story we are telling:
@@ -29,8 +95,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SYNTHETIC DATASETS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% \section{Synthetic datasets}
 
 \subsection{Generated Track}
 Figure \ref{fig:GeneratedTrackPlusHist} shows a normalized histogram of 45410 steering angles obtained in 10 recorded sessions (data directory dataset/unity/smallLoop) for the small\_ looping\_ circuit track seen on the right. The circuit is the same as the Generated Track circuit, while the landscape in the latter excludes trees, bushes and tall grass. The simulator records at a, computational resources allowing, maximum rate of 60 fps (frames per second). The observed average on the track was approximately 24 fps, representing in this case 31m32s of recorded data in approximately 19 laps. The 24 fps average was obtained by recording ("Auto Drive w Rec" option) for one lap, taking approximately 1m41s seconds and generating 2455 frames. The simulator registered fps rates higher than average on straight sections and lower than average on curved sections. This is assumed to be due to computational overheads imposed on the physics engine in the curved sections, resulting in less frames being processed and recorded. The maximum steering angle is set in the simulator with respect to a car. In this case it is plus or minus 25 degrees. The normalized value, in the range of -1 to 1 is recorded. Values displayed in the histogram are multiplied by the maximum steering angle, referred to in this study as the \textit{normalization constant}. The data shows a high bias towards positive steering angles because the simulated vehicle drives clockwise around the track. From the starting line on the top left, there are two right turns, followed by a left turn, followed by two right turns.
@@ -147,31 +211,32 @@ Figure \ref{fig:SkewCleanup} shows from left to right, an overlay of all plots o
 \end{figure}
 The presence of outliers is believed to have caused issues with the nvidia\_ baseline model from runs \ref{app_res:15} to \ref{app_res:31}. The next issue was found to be the ratio used to crop images presented to both "problematic" networks. Run 55 (\ref{app_res:55}) provides analisys. Figure \ref{fig:nvidia1x1_nvidia2x3_crops_results} shows on the left, the crop (pre-processed image) presented to nvidia1 and sanity models. The actual crop values were determined by the imported augmentation library, which had crop values set to "frame" the "part of interest" in images (320x160) generated by the Udacity sim. The crop turned out to work for the nvidia1 and sanity models with images (160x120) generated by the SDSandbox sim, which is a "fluke": by removing 60 pixels from the top and 25 pixels from the bottom of SDSandbox images, the result was an image that seems to best frame the road. The issue was corrected by using the third crop, from left to right and a working nvidia2 model was generated in run 62 (\ref{app_res:62}). Crop values are set in script conf.py, adapted for this project.
 
-\begin{figure}[ht]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generated Road top crops
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/nvidia1x1_nvidia2x3_crops.png}
- \caption{Left to right, nvidia1 network crop, nvidia2 network crops at top crop set to 70, 81 and 91 pixels respectively)}
+ \caption{Left to right, nvidia1 network crop, nvidia2 network crops at top crop set to 70, 81 and 91 pixels left to right. The 81 pixel top crop was used for the nvidia2 network}
  \label{fig:nvidia1x1_nvidia2x3_crops_results} % duplicate image
 \end{figure}
 
+Figure \ref{fig:run-93-94-generated-road-res} shows a randomly Generated Road used for runs 93, 94 and 95, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on the right hand image. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Generated Road, sim on left and detail on right
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Figure \ref{fig:run-93-94-generated-road} shows a randomly Generated Road used for runs 93, 94 and 95, where the first few hundred frames go to near the top left of the circuit (long right 180 degree turn) shown in detail on the right hand image. The predicted steering angles shown in Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad} for the well performing nvidia2 20201207192948\_ nvidia2.h5 model, show the majority of values in the positive range, as the simulated vehicle follows the road and takes a right turn to do so.
-
-\begin{figure}[ht]
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/run-93-94-generated-road.png}
  \caption{The randomly generated Generated Road circuit used in runs 93 and 94. Left image is a view of the simulator as presented on computer desktop, the right image is the augmented detail showing the Generated Road circuit, the same inset on left image.}
- \label{fig:run-93-94-generated-road} 
+ \label{fig:run-93-94-generated-road-res} 
 \end{figure}
 
-Figure \ref{fig:20201207192948_nvidia2_dry_genRoad_full} showing steering angles and normalized histogram plots. Run 95 (16m14s duration) was much longer than run 94 (1m11s duration) which seems also to be suggested in the distributions shown in the related histograms, as more data is present (about 800 data points in run 94 and 11000 data points in run 95), so is the distribution smoother.
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_dry_genRoad_full.png}
- \caption{Steering angle and normalized histogram plots of the 20201207192948\_ nvidia2.h5 model driving the full length of Generated Track presented in figure \ref{fig:run-93-94-generated-road} }
- \label{fig:20201207192948_nvidia2_dry_genRoad_full} 
-\end{figure}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ADDING RAIN
@@ -198,7 +263,7 @@ Two additional command line parameters, \textit{rain} and \textit{slant} were ad
 \section{Evaluation of self-driving cars using CNNs in the rain}
 
 Two types of predictions were run, realtime and simulator log synthetic dataset predictions. Realtime is done with the SDSandbox framework, that is, the Unity simulator is started, tcpflow is set to log, and the prediction script run, i.e. the same sequence shown in Figure \ref{fig:SimTCPPred}. Synthetic dataset predictions were run using the steerlib.py script, written for this project. 
-In the first type (realtime) there is no "ground truth", whereas in the second type (dataset predictions) there is a ground truth, as the dataset consists of labelled (steering angle values) images, that is, each image has an assigned steering angle set when the data was logged, which can be compared \textit{a posteriori} to a predicted value.
+In the first type (realtime) there is no "ground truth", in the second type (dataset predictions) there is, as the dataset consists of labelled (steering angle values) images, that is, each image has an assigned steering angle set when the data was logged, which can be compared \textit{a posteriori} to a predicted value.
 The outputs that generated $g_s$ scores, plots and Table \ref{table:goodness-of-steer} rows are left as comments in the steerlib.py script, in the final project commit 86937130. To simulate the effect of added reflections, the sky in the Unity simulator was set to black and different Unity intensity multipliers (1, 4 and 8) were used.  
 Using the procedure described in \ref{res:adding-rain-section}, 32 realtime predictions were run for the best performing nvidia2 and nvidia1 models.
 
@@ -370,18 +435,13 @@ The general shape of the negative and positive peaks for the best nvidia2 models
 % \label{fig:youtube20201207192948_nvidia2torrential20%mult_8_h5} 
 %\end{figure}
 
-Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows 3 stills taken for corresponding videos of network nvidia2 20201207192948\_ nvidia2.h5 (best performing model in the rain), for runs 83 (\ref{app_res:83}), 86 (\ref{app_res:86}) and 89 (\ref{app_res:89}), containing from left to right, the acquired image as produced by the Unity3D game engine (SDSandbox), the same image with added light rain and the processed image as presented to the network, which then predicts a steering angle. The first row for intensity multiply 1, the second for 4 and the third for 8. There are no lane markings in the last row, suggesting the network has learned about road boundaries and is able to generalise, given the image being presented (no lane markings) had never been seen before.
+Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} in appendix \ref{AppendixD} shows three rows of stills, generated in runs 83 (\ref{app_res:83}), 86 (\ref{app_res:86}) and 89 (\ref{app_res:89}  for light rain and intensity multipliers 1, 4 and 8 respectively, The data generated was used to plot the orange lines in figures  \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2}, 
+\ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2} and 
+\ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2} for the best performing nvidia2 model. The sequence highlights the effect of preprocessing, when noise has been applied in equal measure to images generated with different intensity multipliers, where in the first row (intensity multiplier 1), the road markings are still visible, in the second row (intensity multiplier 4) the road markings are hardly visible and the reflection in the middle of the lane is generating a continuous vertical stripe on the network image, and in the third row, where the reflection on the road is such, road markings are no longer visible.
 
-Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows three rows of video  stills for the corresponding multiplier 4, light rain steering angle predictions plotted in Figure  \ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2} for the best performing nvidia2 model. The 
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/20201207192948_nvidia2_mult_1_4_8_light.png}
- \caption{Different rain types with Unity intensity multipliers 1, 4 and 8 for light rain, recorded with the best performing 20201207192948\_ nvidia2.h5 model}
- \label{fig:20201207192948_nvidia2_mult_1_4_8_light}
-\end{figure}
-
-
+This concluded the 32 recorded realtime runs in the rain for the best performing models. One more video was generated with Kazam, showing 4 concurrent predictions on the same Generated Track using built in SDSandbox functionality. Figure  \ref{fig:2948x3_1932x1_genTrack}  shows a still from video \url{https://youtu.be/ayESXH9zZdM}.
+Bottom left is best nvidia2 20201207192948\_ nvidia2.h5 model running predictions for no rain, bottom right is 20201207192948\_ nvidia2.h5 light rain zero slant. Top left is best nvidia1   
+20201207091932\_ nvidia1.h5 model, light rain zero slant (crashes on third right turn), top right is 20201207192948\_ nvidia2.h5 torrential rain -+20 degree slant. This provides a qualitative analysis of how well the models are steering, where the bottom left nvidia1 in no rain is noticeably the smoothest steering model.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% SYNTHETIC DATASET PREDICTIONS
@@ -389,9 +449,9 @@ Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows three rows of vid
 
 \subsection{Synthetic dataset predictions}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
 % RESULTS TABLE
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
 
 % Table generated with steerlib.py
 \begin{table}[]
@@ -459,20 +519,17 @@ ID & Keras model file name & Model & Rain Type & Slant & $g_s$ \\ \hline
 %   compare to genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles.png
 \end{tabular}
 \end{center}
-\caption{Goodness-of-Steer $g_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track and one stretch of Generated Road. Asterisks in \textit{gos} column indicate dry weather. Smiley face :) in Model column indicate best (lowest) $g_s$ score. Sad face :( in Model column indicates worst (highest) $g_s$ scores. The logs used to generate the data used to compute the $g_s$ scores were generated with Unity intensity multiplier 1 and Skybox-Material set to Default-Skybox, the default sunny dry weather.}
+\caption{Goodness-of-Steer $g_s$ results for best performing nvidia2 and nvidia1, plus "sanity" and nvidia\_ baseline for comparison, obtained from one lap of Generated Track (logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020, rows 1 to 16) and one stretch of Generated Road (logs\_ Fri\_ Jul\_ 10\_ 09\_ 16\_ 18\_ 2020, rows 17 to 32). Asterisks in $g_s$ column indicate dry weather. Smiley face :) in Model column indicate best (lowest) $g_s$ score. Sad face :( in Model column indicates worst (highest) $g_s$ scores. The logs containing labelled image data used to compute the $g_s$ scores were generated with Unity intensity multiplier 1 and Skybox-Material set to Default-Skybox, the default sunny dry weather.}
 \label{table:goodness-of-steer}
 \end{table}
 
-Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results for four networks and 2 SDSandbox track logs, that is, the results were generated by running predictions on synthetic datasets, which contain ground truth steering values, like shown in Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}. 
+Table \ref{table:goodness-of-steer} shows Goodness-of-Steer results obtained for 32 sets of predictions, for four networks and two SDSandbox track logs, that is, the results were generated by running predictions on synthetic datasets, which contain ground truth steering values, like plotted in Figure \ref{fig:genTrackOneLap_logs_Wed_Nov_25_23_39_22_2020_ground_truth_steering_angles}. It is important to stress these are not realtime predictions, and the Unity simulator was not running in this case.
 
-The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data was generated with steerlib.py script. The track logs are for Generated Track (one lap) and Generated Road (one stretch). There are 32 rows, each sequence of four (1-4, 5-8 and so on) representing one model subject to sunny weather followed by 3 types of rain. 
+The networks are the best performing nvidia2 (obtained in run 62 - \ref{app_res:62}), the second best performing nvidia1 (obtained in run 49 - \ref{app_res:49}), "sanity check" (obtained in run 36 - \ref{app_res:36}) and nvidia\_ baseline (obtained in run 68 - \ref{app_res:68}). Table data and steering angle plots was generated with steerlib.py script written for this project. The track logs are for Generated Track (one lap) and Generated Road (one stretch). There are 32 rows, each sequence of four (1-4, 5-8 and so on) representing one model subject to sunny weather followed by 3 types of rain predicting steering angles for one log. 
 
-Rows 1, 2, 3 and 4 reflect plots "no rain", "light rain", "heavy rain slant +-10" and "torrential rain slant +-20" in Figure \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2} (with corresponding lap videos recorded from tcpflow log data in runs \ref{app_res:82}, \ref{app_res:83}, \ref{app_res:84} and  \ref{app_res:85}), where row ID 1 is the closest to ground truth plot. 
-
-
-
-
-Once the best models were narrowed down to nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}), a number of test runs were conducted to generate outputs for evaluation. 
+nvidia2 predicted steering angle values used to generate $g_s$ scores in rows 1, 2, 3 and 4, for the Generated Track log are plotted in Figure  \ref{fig:sa_Generated_Track_20201207192948_nvidia2.h5}. The "no rain" predictions in row 1 (orange line on the plot), which has the lowest overall (1.68) $g_s$ score, is clearly the closest to the ground truth blue line, while the predictions for images containing light, heavy and torrential rain are tightly overlapped (green, red an violet lines, $g_s$ scores 2.12, 2.17, 2.30 respectively) are understeering on all turns (slightly above right turn ground truth plot in right turn sections and below ground truth plot in the left turn section. The understeering aspect was also noted in realtime predictions with respect to rainy predictions compared to best-run dry weather predictions as shown in Figures \ref{fig:sa_GeneratedTrackintensitymultiplier1_20201207192948_nvidia2}, 
+\ref{fig:sa_GeneratedTrackintensitymultiplier4_20201207192948_nvidia2} and 
+\ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207192948_nvidia2}.
 
 
 % NB All 6 Generated Track rain/multiplier plots generated with code from commit 610939215 (result_plots.py) 
@@ -485,102 +542,58 @@ Once the best models were narrowed down to nvidia1 (\ref{app_res:49}) and nvidia
 % \label{fig:} 
 %\end{figure}
 
-
 % Plots generated with steerlib.py, commit 8693713
-\begin{figure}[ht]
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA2 PLOTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207192948_nvidia2.h5.png}
- \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia2 in rows 1, 2, 3 and 4 in table \ref{table:goodness-of-steer}}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering angle predictions used to generate $g_s$ values for model nvidia2 in rows 1, 2, 3 and 4 in table \ref{table:goodness-of-steer}}
  \label{fig:sa_Generated_Track_20201207192948_nvidia2.h5} 
 \end{figure}
 
-\begin{figure}[ht]
+For the best nvidia1 model, predicted steering angle values used to generated $g_s$ values in rows 5, 6 and 7 and 8 are plotted in Figure \ref{fig:sa_Generated_Track_20201207091932_nvidia1.h5}. The "no rain" orange plot corresponding to row 5 shows some understeering, with the orange plot not following the ground truth blue plot as closely as the corresponding nvidia2 plot in Figure \ref{fig:sa_Generated_Track_20201207192948_nvidia2.h5} . This is reflected in the slighty higher 1.82 $g_s$ score in comparison to corresponding nvidia2 result in row 1. Predictions for rain follow the close overlap observed for the nvidia2 models, the $g_s$ scores for nvidia1 rain predictions are better than the corresponding nvidia2 values. The distinguishing feature being the closer predictions to the ground truth for the left turn section. This is consistent with the nvidia1 realtime plots in Figure  \ref{fig:sa_GeneratedTrackintensitymultiplier8_20201207091932_nvidia1}, where the nvidia1 model steering angle plot in the closest to the profile of the left turn taken by the model predicing steering in dry weather (blue line), compared to all other equivalent realtime plots.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA1 PLOTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207091932_nvidia1.h5.png}
- \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia1 in rows 5, 6, 7  and 8 in table \ref{table:goodness-of-steer}}
+ \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering angle predictions used to generate $g_s$ values for model nvidia1 in rows 5, 6, 7 and 8 in table \ref{table:goodness-of-steer}}
  \label{fig:sa_Generated_Track_20201207091932_nvidia1.h5} 
 \end{figure}
 
-\begin{figure}[ht]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA_BASELINE PLOTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Rows 9, 10, 11 and 12 represent data generated from the \textit{nvidia2\_ baseline} model, this is the 20201207201157\_ nvidia\_ baseline.h5 trained on run 68 (\ref{app_res:68}), commit b1af57c, and is the same architecture as nvidia1, the only difference being it was trained with a 0.00001 learning rate, while the other 3 models tested were trained with 0.0001 learning rate. This nvidia\_ baseline model was erroneously trained with nvidia1 geometry. This means that at inference time, the nvidia1 geometry must be used. When the steerlib.py script (commit 8693713) was run to generate the plots, the incorrect parameter \textit{nvidia2\_ baseline} typo was passed to the Augmentation library, the model geometry was not found and nvidia1 geometry was used by default. So the nvidia2\_ baseline model should be interpreted in this context as nvidia1 trained with 0.00001 learning rate over 5 epochs. The plots show in addition to previous observations on close overlaps of steering angle predictions for rain, and no rain plot following ground truth more closely than rainy predictions, the general trend in this plot is severe understeering on left and right curves, the steering angle predictions rarely being negative values, this is reflected on the worst $g_s$ scores for steering angle predictions in the rain for Generated Track log and could be attributed to the learning rate used when training the model.
+
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201207201157_nvidia_baseline.h5.png}
  \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model nvidia\_ baseline in rows 9, 10, 11  and 12 in table \ref{table:goodness-of-steer}}
  \label{fig:sa_Generated_Track_20201207201157_nvidia_baseline.h5} 
 \end{figure}
 
-\begin{figure}[ht]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% SANITY PLOTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+sanity predicted steering angles for Generated Track log used to generate $g_s$ scores in rows 13, 14, 15 and 16 are plotted in figure \ref{fig:sa_Generated_Track_20201120171015_sanity.h5} 
+This model, unlike the previous 3 trained on genTrack data, was trained on the log\_ sample dataset (small\_ looping\_ course, run \ref{app_res:36}), which is the same as the Generated Track course with the addition of trees, bushes, mounts and foliage. The "no rain" plot shows the model oversteering on right turns and understeering on the left turn, reflected in the worst overall $g_s$ score (5.03) for Generated Track log "no rain" predictions, though the closely overlapped rainy predictions achieve better scores (3.11, 3.07 and 3.00) than nvidia2\_ baseline (3.12, 3.17 and 3.39) suggesting the lower learning rate value used for the nvidia2\_ baseline model may be the cause.
+
+\begin{figure}[h!]
  \centering 
  \includegraphics[width=\textwidth]{Figures/sa_Generated_Track_20201120171015_sanity.h5.png}
  \caption{Plots of SDSandbox log logs\_ Wed\_ Nov\_ 25\_ 23\_ 39\_ 22\_ 2020 ground truth plus steering data predictions used to generate gos values for model sanity in rows 13, 14,15  and 16 in table \ref{table:goodness-of-steer}}
  \label{fig:sa_Generated_Track_20201120171015_sanity.h5} 
 \end{figure}
 
-\section{To be added}
-
-Figure  \ref{fig:2948x3_1932x1_genTrack}  shows a still from video \url{https://youtu.be/ayESXH9zZdM} Model.
-Bottom left is 20201207192948\_ nvidia2.h5 with no rain, bottom right 20201207192948\_ nvidia2.h5 light rain zero slant. Top left is 20201207091932\_ nvidia1.h5 light rain zero slant , top right is 20201207192948\_ nvidia2.h5 torrential rain -+20 degree slant.
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[width=\textwidth]{Figures/2948x3_1932x1_genTrack.png}
- \caption{2 models (20201207192948\_ nvidia2.h5 x3, 20201207091932\_ nvidia1.h5 x1) going around the generated Track}
- \label{fig:2948x3_1932x1_genTrack} 
-\end{figure}
-
-
-
-\section{Datasets}
-
-The following training unity datasets were generated:
-\begin{verbatim}
-Directory           Number of files Comment
-smallLoopingCourse/ 34443           from small_looping_course
-warehouse/          41126           From Warehouse course
-smallLoop/          45422           From small_looping_course
-roboRacingLeague/   12778           From "Robot Racing League" course
-log_sample          25791           From small_looping_course
-genRoad             280727          From "Generated Road" course
-\end{verbatim}
-
-
-Following the list of data deliverables (\ref{Deliverables-Datasets}) the Udacity data consisting of two files 
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OUTPUTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Outputs}
-Since this dissertation's topic first took shape (\ref{corr_with_super}) a number of outputs were generated, not all recorded or saved. With respect to outputs that were recorded and saved, this project generated five classes of outputs: 1. models, 2. videos, 3. tcpflow logs, 4. synthetic datasets and 5. code. A number of "Runs" were recorded in \ref{res:training_and_testing_log}. A run may or may not generate a model, may or may not generate a video and may or may not generate a tcpflow log. A model may be run several times, as were the best nvidia1 (\ref{app_res:49}) and nvidia2 (\ref{app_res:62}) models, tested with differente levels of rain and light intensity multipliers.
-A compilation of saved models, videos and tcpflow logs, shown in \ref{app_res:outputs} lists 73 models, 61 published (YouTube) videos and 30 tcpflow logs at the time of compilation.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Mechanical Turk
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Locating rainy sections with Mechanical Turk}
-\label{res:mech-turk}
-To investigate the effect of rain in self-driving CNNs in a real world dataset, an attempt was made to locate such images in available autonomous vehicle public datasets.
-The data that looked most promising was Ford V2 Log 1 and V3 Log 1 from the FordAV dataset (\cite{agarwal2020ford}), both described as "freeway, overpass, bridge, cloudy". The goal was the set to label a sample of the cloudy images with Amazon Mechanical Turk and 50 images were uniformly drawn from each log, plus 5 images with rain added with the Automold library using the RainyImagesDissertationPlot.ipynb script. The expectation being the 5 extra images be labelled as "Rain". The 105 images were then added to a SageMaker Ground Truth job. The platform works as a wrapper around Mechanical Turk as it facilitates the creation of user interfaces (Figure \ref{fig:MechTurkCreateJob})
-% rainy files created with automold/RainyImagesDissertationPlot.ipynb
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkCreateJob.png}
-\caption{The SageMaker Ground Truth user interface template with two labels ("Rain", "No Rain"), the image to be labeled and examples of correct and incorrect classifications. On the top left are images supplied as "Good example" of rain. The lower of the two being an image modified with the Automold library to add rain. After the job was submitter, the image was labelled by a Mechanical Turk worker as "No Rain".}
-\label{fig:MechTurkCreateJob}
-\end{figure}
-Labelling tasks are classified as low, medium and high complexity. The prices range from \$0.012 for a low complexity task, with a 5 second estimate to complete, to \$1.20 for a high complexity task with a 3.5 minute estimate to complete.
-The task can be configured with an output for time taken by a worker on a single task, the lowest time interval being one minute.
-There is also an option to assign more than one worker per dataset object, on account that it can help increase the accuracy of the data labels.
-The task was created with the most basic options of one worker, a \$0.012 price per task, a one minute timeout and remained live for 12 hours. 
-The images were labelled by one Mechanical Turk worker and results made available in a json encoded file (dataset/mechanical-turk/2020-11-21\_22 45 37.json). In case more than one worker is assigned to a same task, a confidence score is also provided in the results. Results showed no images had been labeled as "Rain". The assumption then being there are no sections containing rain in the dataset. The Automold library added rain images were also labeled as "No Rain" by the worker. Figure \ref{fig:MechTurkLabeledImages} shows one page of the SageMaker Ground Truth completed job, detailing 4 labelled images on the Labeling Job Summary page. A side-effect of the labelling job being Automold rain where not seen by a human as such. The implication is further discussed in \ref{Discussion}.
-\begin{figure}[h!]
-\centering
-\includegraphics[width=10cm]{Figures/MechTurkLabeledImages.png}
-\caption{The SageMaker Ground Truth labeled images detail on Labeling Job Summary page}
-\label{fig:MechTurkLabeledImages}
-\end{figure}
+No plots were generated for rows 17 to 32 because given the number of images (19679), the plotted lines would have been much thicker and not made good material for qualitative analysis (see Figure  \ref{fig:20201207192948_nvidia2_dry_genRoad_full}). Given there are several right and left turns, in the Generated Road log used for predictions to obtain this set of $g_s$ scores, the higher score (worse) values seem justified as there are more steering adjustments to be made along the path compared to the Generated Track circuit. The overall trend being, nvidia2 had the best overall (2.99) score, nvidia2\_ baseline had the worst overall (5.51) score, the sanity model had the best overall rainy prediction scores (3.06, 3.05 and 3.02) and nvidia2\_ baseline had the corresponding worst overall (4.97, 4.98 and 5.05), making nvidia2\_ baseline the overall worst performing network for the Generated Road log, noting the learning rate used for this model was different. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

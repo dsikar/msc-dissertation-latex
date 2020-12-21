@@ -109,3 +109,106 @@ We gathered 10 laps of data on the Robot Racing League track, with maximum speed
 \begin{verbatim}
 ./Assets/Scripts/Logger.cs
 \end{verbatim}
+
+
+% Best performing NVIDIA model
+
+Figure \ref{fig:20201207192948_nvidia2_mult_1_4_8_light} shows 3 stills taken for corresponding videos of network nvidia2 20201207192948\_ nvidia2.h5 (best performing model in the rain), for runs 83 (\ref{app_res:83}), 86 (\ref{app_res:86}) and 89 (\ref{app_res:89}), containing from left to right, the acquired image as produced by the Unity3D game engine (SDSandbox), the same image with added light rain and the processed image as presented to the network, which then predicts a steering angle. The first row for intensity multiply 1, the second for 4 and the third for 8. There are no lane markings in the last row, suggesting the network has learned about road boundaries and is able to generalise, given the image being presented (no lane markings) had never been seen before.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% RESULTS REMOVED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Discuss:
+\begin{itemize}
+    \item[--] Validity
+    \item[--] Scope
+    \item[--] Generalisability
+    \item[--] Implications
+    \item[--] Recommendations
+\end{itemize}
+Havoc created by outliers in genRoad. 20201206211122\_ nvidia1.h5 performs well on genRoad (where is was trained) but not well on genTrack. Models trained on genTrack also do well on genRoad. Why?
+TODO On previous note, add Run 95 - over 16 minute drive \url{https://youtu.be/z9nILq9dQfI}  
+Discuss how results in Table \ref{table:goodness-of-steer} fail to indicate numerically that nvidia2 was better than nvidia1 in the rain. A windowing approach may be required, to identify "spikes" to quantify a "crash" likelyhood. The quantity does confirm what has been observed through qualitative analysis, that nvidia2 is a "smoother" drive.  
+TODO Add observation on Why
+TODO Add note on base data causing model to misbehave
+TODO Add How Outliers messed up training
+Todo add The code used to generate the model was not logged at the time. Some forensics conducted in \ref{app_res:36}
+Todo Add Run 3 - one output, bad result.
+TODO Video not recorded for ground truth in figures 1.12 through 1.14, left tcpflow log in /tmp folder, deleted after reboot.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVALUATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+his section discussed the evaluation benchmarks, here we discuss the evaluation environment (Unity 3D game engine) and how it was used to both generate data and evaluate the models.
+We have so far a goodness of steer metric. Additionally, it would be good to have some form of noise measure, to quantify how much the image has been changed by random noise, i.e. rain.
+
+
+
+To generated predictions \textit{on-the-fly}, the simulator is run in \textit{Auto Drive w Rec} mode. Once activated, the sends frames over the network using the OpenAI Gym (\cite{brockman2016openai} (TODO FURTHER DISCUSS PLATFORM) framework which sends packets over the network. The packets are sent from simulator using TCP (\cite{rfc793}), include packets \textbf{DESCRIBE PACKETS}.  
+\textbf{DESCRIBE HANDSHAKING} \textbf{DESCRIBE TCP} 
+\textbf{DESCRIBE GRAPH}
+Figure \ref{fig:PredSteeringAnglestcpflowNvidia1} shows a plot of predicted and simulator steering angles. The prediction is for a single image frame sent over the network. As the simulation begins, frames are sent over the network and in this case, captured with tcpflow (\cite{garfinkel2013passive}. A log file was produced. The log file was processed (\cite{JUPYTERNOTEBOOKINAPPENDIX} and created plot. This was for one lap of the \textit{Generated Track}, similar to the track shown in Figure \ref{fig:GeneratedTrackPlusHist}. The actual processing frame rate is approximately 11fps. The y axis is flipped so the plot relates to the path taken by simulated vehicle, the first drop indicating the first right turn, the rise and sharp drop indicating the sharp right turn at the opposite end of the starting line.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[width=\textwidth]{Figures/PredSteeringAnglestcpflowNvidia1.png}
+ \caption{Predicted (blue) and ground-truth simulator (orange) steering angles. The simulator steering angle values in this case are obtained from data packets sent over the TCP network.}
+ \label{fig:PredSteeringAnglestcpflowNvidia1}
+\end{figure}
+
+Taking this technique one step further, a video can be created using the image sent by simulator, next to the processed image presented to network. Together with the steering angle that would be used by simulator with the steering angle produced by prediction engine (predict\_client.py) which is used by the simulator.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVALUATIONS ARCHIVED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+TODO - future work
+addressing data imbalance
+Binning as an alternative to deep regression models for ResNet, LeNet and VGG net. 
+\subsection{Using deep classification models for self-driving CNNs} % Binning/Quantization
+Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.
+\subsection{Data balancing}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On running training on multiple development environments
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Training models on multiple environments created portability issues because of different version of Python, Keras and Tensorflow, where a model trained on Camber (City cloud service) not running locally. The same was not observed on Intel DevCloud 
+
+TODO - Development environments - need to run same versions of python, keras and tensorflow. Care in setting up environment (potentially virtual) must be taken to ensure models can be run acrsso different machines.
+\section{Dropped datasets}
+Some effort was expended into downloading datasets and understanding how to extract steering angles from data provided. This drive, together with the expectation of trialing, in addition to variations of DriveNet, ResNet, VGGNet and InceptionNet proved too ambitious.   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ALEXNET - NOT READILY IMPLEMENTED IN KERAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geometry could be attained. Original Alexnet paper details, as an example, the first kernel dimension as being 11x11 with a stride of 4, with resulting feature maps of size 55x55 in the first convolution layer, the code implementation details were not given. Using the Keras library there was a trade-off between keeping the kernel or the feature map size. To obtain feature maps of 55x55, a kernel of size 8x8 was used, having an effect of the number of trainable parameters. 
+Also, the first two fully connected layers with 2048 units each let to compilation errors in Keras (compilation errors left as comments in models.py). The lesson learnt was that network topologies are not readily transferable across libraries, and the description was not sufficient to implement the model in Keras.  
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% DRIVENET - NOT READILY IMPLEMENTED IN KERAS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+The same was observed with DriveNet. One co-author (\ref{urs_muller1}) was very helpful in sharing implementation details not described in the paper. The resulting Keras model failed to produce usable results and had to be modified further, reducing the size of network, as were TawnNet and NaokiNet by their respective authors.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the importance of human readable and self documenting naming conventions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The naming conventions used in throughout this project, for data directories, models, tcpflow logs, etc, could have benefited from some time invested in searching for a more human-readable and self-documenting scheme, as well as code documentation. An effort was made to this end while the research work was being carried out. Attempts to improve experiment documentation can be seen in \ref{res:training_and_testing_log} where the level of detail and layout increases over time. Still it was laborious sometimes to recall an experiment setup and results, which could be addressed with additional planning.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reflections on data imbalance
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TRAINING ENVIRONMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On cloud environments being slower that local environments
+Training environments Camber and Intel DevCloud, although being of a higher specification than the local workstation, proved to be much slower, on account of the shared resources. Jobs ran quicker locally, so over time, Camber and DevCloud were no longer used.
+
+

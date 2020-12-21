@@ -60,13 +60,13 @@ The self-driving system for AVs can be distinguished by two approaches: the mult
 %% End to end approach
 and the end to end approach (\cite{bojarski2016end}), relying on images alone. 
 
-Although CNNs have been successfully used to solve problems applied to Computer Vision, the robustness of such architectures has been increasingly scrutinised. \cite{Su_2019} proposed an algorithm where a deep neural network, when presented with a images (in this case images from the \cite{CIFAR_10} dataset) modified with a single pixel change, is capable of "fooling the network, such that an incorrect label is predicted with a high confidence value.  
+Although CNNs have been successfully used to solve problems applied to Computer Vision, the robustness of such architectures has been increasingly scrutinised. \cite{Su_2019} proposed an algorithm where a deep neural network, when presented with a images (in this case images from the \cite{CIFAR_10} dataset) modified with a single pixel change, is capable of "fooling the network", such that an incorrect label is predicted with a high confidence value.  
 
 
 %% In the context of overfitting:
-\cite{zhang2017understanding} debated the need to rethink generalization, by demonstrating how traditional benchmarking approaches fail to explain why large neural networks generalize well in practice. By randomizing target labels, the experiments show that state-of-the-art convolutional neural networks for image classification trained with SGD (stochastic gradient descent) are large enough to fit a random labelling of the training data. This is achieved with a simple two-layer neural network, which presents a "perfect finite sample expressivity" as soon as the number of parameters exceeds the number of data points as usually is the case in practice with CNNs.  
+\cite{zhang2017understanding} debated the need to rethink generalization, by demonstrating how traditional benchmarking approaches fail to explain why large neural networks generalize well in practice. By randomizing target labels, the experiments show that state-of-the-art convolutional neural networks for image classification trained with SGD (stochastic gradient descent) are large enough to fit a random labelling of the training data. This is achieved with a simple two-layer neural network, which presents a "perfect finite sample expressivity" once the number of parameters is greater than the number of data points as often is the case with CNNs.  
 This poses a challenge for self-driving cars, specially if relying only on images. Since testing real life scenarios is not practical in this study, two options are examined: using public self-driving datasets containing images labelled with steering angles, and using game engines (\cite{cowan2014survey}), which are capable of generating labeled datasets and realistic environments where the autonomous vehicle may be tested.
-The research question is \textit{do images containing rain-like patterns affect self-driving CNNs trained to output steering predictions}? 
+The research question is \textit{how do images containing rain-like patterns affect self-driving CNNs trained to output steering predictions}? 
 
 %-----------------------------------
 %	AIMS AND OBJECTIVES
@@ -103,10 +103,8 @@ Autonomous vehicles and robotics increasingly rely on computer vision and in som
 
 % Chammas - 130 words, no references
 
-The work plan is to survey the literature for current trends in AV CNNs. Followed by researching required tools and datasets to create a development environment for training and testing. Then existing CNN self-driving models will be replicated and modified. Once results are produced a performance metric will assess individual models producing the metrics required to complete the report. 
-The methods include the use of game engines to generate data and eare required are a game engine able to simulate select datasets and tools: a game engine and data augmentation library. then develop self-driving CNN models, then  determine model evaluation with a selected metric. And evaluate models quantitavely with the selected metric, and also qualitatively when using the game engine, by observing the self-driving vehicle around a simulated track and noting any oversterring and crashes.
-
-
+The work plan is to survey the literature for related work and current trends in self-driving CNNs. Followed by researching required tools, datasets and data augmentation techniques. Next task is to create a development environment for training and testing. Then research existing CNN self-driving models that can be replicated and modified. 
+Models must also be evaluated qualitatively by using the game engine, observing the self-driving vehicle around a simulated track and noting any oversterring and crashes. Once quantitative and qualitative analyses are completed, the process should generated figures required to complete the report. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %	Changes in Methods and Work Plan
@@ -158,8 +156,7 @@ The remaining report is structured as follows:
     \item[--] Appendix \ref{AppendixA-methods} details methods used 
     \item[--] Appendix \ref{AppendixB} contains network architectures used
     \item[--] Appendix \ref{AppendixC-deliverables}  presents tables containing \textit{deliverables} first put forward to project supervisor 
-    \item[--] Appendix E contains training logs and notes on gathering results
-    \item[--] Appendix F contains a list of outputs generated by this project
-    \item[--] Appendix G contains listings for original and modified (with attribution) codes used in this project
+    \item[--] Appendix \ref{AppendixD} contains training logs and notes on gathering results
+    \item[--] Appendix \ref{app:source_code_listing} contains listings for original and modified (with attribution) codes used in this project
     \item[--] This document in pdf format and a readme.txt file are submitted in the project submission area. readme.txt file lists SharePoint links for trained models, dataset, source code for training, testing, driving simulator and source code audit files.
 \end{itemize}

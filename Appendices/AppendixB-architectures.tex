@@ -91,11 +91,78 @@ _________________________________________________________________
 \end{verbatim}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% NVIDIA_BASELINE 20201207201157\_ nvidia\_ baseline.h5
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{NVIDIA 0201207201157\_ nvidia\_ baseline.h5}
+\label{0201207201157_nvidia_baseline}
+This is the same as nvidia1
+
+\begin{verbatim}
+commit b1af57c
+
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+img_in (InputLayer)          [(None, 120, 160, 3)]     0         
+_________________________________________________________________
+lambda (Lambda)              (None, 120, 160, 3)       0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 58, 78, 24)        1824      
+_________________________________________________________________
+dropout (Dropout)            (None, 58, 78, 24)        0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 27, 37, 32)        19232     
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 27, 37, 32)        0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 12, 17, 64)        51264     
+_________________________________________________________________
+dropout_2 (Dropout)          (None, 12, 17, 64)        0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 10, 15, 64)        36928     
+_________________________________________________________________
+dropout_3 (Dropout)          (None, 10, 15, 64)        0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 8, 13, 64)         36928     
+_________________________________________________________________
+dropout_4 (Dropout)          (None, 8, 13, 64)         0         
+_________________________________________________________________
+flattened (Flatten)          (None, 6656)              0         
+_________________________________________________________________
+dense_2 (Dense)              (None, 100)               665700    
+_________________________________________________________________
+dense_3 (Dense)              (None, 50)                5050      
+_________________________________________________________________
+steering (Dense)             (None, 2)                 102       
+=================================================================
+Total params: 817,028
+Trainable params: 817,028
+Non-trainable params: 0
+_________________________________________________________________
+[(None, 120, 160, 3)]
+(None, 120, 160, 3)
+(None, 58, 78, 24)
+(None, 58, 78, 24)
+(None, 27, 37, 32)
+(None, 27, 37, 32)
+(None, 12, 17, 64)
+(None, 12, 17, 64)
+(None, 10, 15, 64)
+(None, 10, 15, 64)
+(None, 8, 13, 64)
+(None, 8, 13, 64)
+(None, 6656)
+(None, 100)
+(None, 50)
+(None, 2)
+
+\end{verbatim}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % NVIDIA1 - Commit 55cb00b
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NVIDIA1 architecture}
 \label{arc:nvidia1}
-The network architecture is as shown, with a total of 817,028 trainable parameters. The design is exactly as used by \cite{SDSandboxSim}.
+The TawmNet network architecture is as shown, with a total of 817,028 trainable parameters. The design is exactly as used by \cite{SDSandboxSim}.
 \begin{verbatim}
 >>> import models
 >>> mymodel = models.nvidia_model1(2)
@@ -163,6 +230,7 @@ _________________________________________________________________
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{NVIDIA2 Architecture}
 \label{arc:nvidia2}
+The modified NaokiNet architecture, with dropout layers after TawnNet, and the second convolutional layer number of feature maps changed from 36 to 32.
 \begin{verbatim}
 >>> import models
 >>> mymodel = models.nvidia_model2(2)

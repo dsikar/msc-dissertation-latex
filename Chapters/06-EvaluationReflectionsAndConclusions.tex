@@ -5,81 +5,72 @@
 
 %This chapter should evaluate the project work as a whole. Here the original choice of objectives, the literature examined, the methods used, the planning, etc. are all reviewed to see what has been achieved by undertaking the project. There may be a summary of general conclusions drawn from the work done, highlighting the particular contribution of your project. You should also consider the implications of these conclusions. Discuss any proposals that you might make for further work, having discovered what you now know. It is also important to include a reflective section covering what you have learned from the project process. What would you do differently if you were to start again, knowing what you now know? Your report MUST include adequate Evaluation, Reflections and Conclusions to gain a passing grade.  
 
-On
-TBC - TODO. Some points to reflect:
-\begin{itemize}
-    \item[--] What this project demonstrated
-    \item[--] What were the limitations
-    \item[--] What have I learnt
-    \item[--] What are the contributions
-    \item[--] What would I have done differently - narrowed the scope for sure.
-    \item[--] Here would be a good place, perhaps, to discuss "Understanding deep learning requires rethinking generalization", Zhang ICLR 2017, on deep models fitting random data (noise) perfectly. 
-    \item[--] 
-    \item[--] Future work - add reflections to road. Experiment was limited to adding rain-like effects. With a better understanding of the game engine, it could be possible to add reflections to road, etc, and generate then another set of results and evaluation.
-\end{itemize}
-TODO - future work
-addressing data imbalance
-Binning as an alternative to deep regression models for ResNet, LeNet and VGG net. 
-\subsection{Using deep classification models for self-driving CNNs} % Binning/Quantization
-Describe this approach, if we get that far, to use an alternative to regression models, whereby we may bin the outputs. This could potentially simplify the model. Also, depending on track, we could have narrower bins around zero degrees, i.e. finer control and wider bins away from zero degrees, i.e. coarser control. Or vice-versa - experimentation required.
-\subsection{Data balancing}
+%On
+%TBC - TODO. Some points to reflect:
+%\begin{itemize}
+%    \item[--] What this project demonstrated
+%    \item[--] What were the limitations
+%    \item[--] What have I learnt
+%    \item[--] What are the contributions
+%    \item[--] What would I have done differently - narrowed the scope for %sure.
+%    \item[--] Here would be a good place, perhaps, to discuss "Understanding %deep learning requires rethinking generalization", Zhang ICLR 2017, on deep models fitting random data (noise) perfectly. 
+%    \item[--] 
+%    \item[--] Future work - add reflections to road. Experiment was limited to adding rain-like effects. With a better understanding of the game engine, it could be possible to add reflections to road, etc, and generate then another set of results and evaluation.
+%\end{itemize}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% On transforming deep regression problems into deep classification problems
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Future work}
-\subsection{Attaining deep regression with deep classification}
-Although CNNs are not well understood, they are heavily used. A lot of effort has gone into creating models originally designed for image classification. Future work could determine if alternative deep models (ResNet, LeNet, VGGNet) could be used for self-driving. These models have been applied successfully to multi-class classification problems. Assuming the network design somehow is optimized for this type of task, it would be interesting to transform regression problems into multi-class classification problems to make optimal use of such networks. This could be attained by quantizing (assigning a continuous value with a defined range to a discrete value) and binning the outputs, subject to the quantized values having acceptable steering precision, in the case of a self-driving car, the minimum acceptable steering change. The network output would become discrete, and the leveraged network as a classifier, which was the original intent. Perhaps such scheme could also produce usable results for other computer vision applications relying on regression models.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% On running training on multiple development environments
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Training models on multiple environments created portability issues because of different version of Python, Keras and Tensorflow, where a model trained on Camber (City cloud service) not running locally. The same was not observed on Intel DevCloud 
-
-TODO - Development environments - need to run same versions of python, keras and tensorflow. Care in setting up environment (potentially virtual) must be taken to ensure models can be run acrsso different machines.
-\section{Dropped datasets}
-Some effort was expended into downloading datasets and understanding how to extract steering angles from data provided. This drive, together with the expectation of trialing, in addition to variations of DriveNet, ResNet, VGGNet and InceptionNet proved too ambitious.   
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% ALEXNET - NOT READILY IMPLEMENTED IN KERAS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-TODO Add how AlexNet kernel sizes had to be changed in Keras so feature map geometry could be attained. Original Alexnet paper details, as an example, the first kernel dimension as being 11x11 with a stride of 4, with resulting feature maps of size 55x55 in the first convolution layer, the code implementation details were not given. Using the Keras library there was a trade-off between keeping the kernel or the feature map size. To obtain feature maps of 55x55, a kernel of size 8x8 was used, having an effect of the number of trainable parameters. 
-Also, the first two fully connected layers with 2048 units each let to compilation errors in Keras (compilation errors left as comments in models.py). The lesson learnt was that network topologies are not readily transferable across libraries, and the description was not sufficient to implement the model in Keras.  
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% DRIVENET - NOT READILY IMPLEMENTED IN KERAS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The same was observed with DriveNet. One co-author (\ref{urs_muller1}) was very helpful in sharing implementation details not described in the paper. The resulting Keras model failed to produce usable results and had to be modified further, reducing the size of network, as were TawnNet and NaokiNet by their respective authors.
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EVALUATION
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+The choice of objectives, tools and techniques enabled and demonstrated the evaluation of self-driving CNNs in the rain. From that perspective, the overall aims of this project were achieved. 
+The main contribution was to create, from pre-existing tools that were successfully integrated and extended, an environment readily available for anyone researching similar topics related to the effect of noise on CNNs, using game engines. 
+The general conclusion is rain-like image noise does affect self-driving CNN performance, and the choice of network architecture and image geometry is important to minimise performance degradation. Aspects of network design that help to deal with such noise were successfully identified by careful network design scrutiny. The effect of network architecture, especially geometry of the last convolutional layer feature maps was established, and the impact such design choice has on the quality of self-driving in the rain, generating smoother or jerkier steering patterns, demonstrated. 
+This achievement did provide some explainability about network design with respect to predictions.
+A metric for quantitative analysis was proposed and proved partially consistent with qualitative analysis. An improved scheme was then proposed.
+Network training times and network sizes were investigated, and ensemble models suggested as future work.
+Experiments were conducted, documented and outputs carefully annotated. Care was also taken in producing visual displays, be it still or moving images, to help inform decisions. Cross-referencing consistency was a prime concern throughout, especially with respect to the results and discussion. Those are the positive outcomes. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % On the necessity to understand camera properties
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Another aspect lacking in this project was a study of camera characteristics that determine geometric properties of the acquired image, demonstrated here to impact network performance on the image size level. Important factors not considered include frame of reference, world frame, camera frame, image plane, image frame, intrinsic parameters and extrinsic parameters (\cite{Sala2006}).
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% On the importance of human readable and self documenting naming conventions
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-The naming conventions used in throughout this project, for data directories, models, tcpflow logs, etc, could have benefited from some time invested in searching for a more human-readable and self-documenting scheme, as well as code documentation. An effort was made to this end while the research work was being carried out. Attempts to improve experiment documentation can be seen in \ref{res:training_and_testing_log} where the level of detail and layout increases over time. Still it was laborious sometimes to recall an experiment setup and results, which could be addressed with additional planning.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Reflections on change of Work Plan
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{Work Plan changes}
-The work plan originally set out in appendix \ref{app:rpmi} was changed and an estimate of the revisions are shown in Figure \ref{fig:Revised-work-breakdown-structure}. In hindsight, the original plan seems to reflect a \textit{waterfall} (\cite{balaji2012waterfall}) software development model, where all requirements are defined at the outset, the work then separated into logical blocks and sequenced following a delivery schedule. In practice, many (as opposed to the originally expected few) areas were found to overlap such as selecting (and creating) toolsets, replicating existing and creating alternative models, augmenting data and evaluating models, while creating metrics. The end of October and beginning of November 2020 task overlap reflect the busiest research period, during which a working model, qualitative evaluation toolset and a quantitative evaluation metric were obtained. The work followed what could be described as an \textit{agile} process, with short \textit{sprints} and concurrent changes reflected across several tasks. This is not meant as criticism or praise of any software development models. The work plan (a project proposal requirement) was essential is conceptualising and structuring the effort needed to complete this project.
+One aspect that was not accounted for originally, and lacking in this project was a study of camera characteristics that determine geometric properties of the acquired image, demonstrated here to impact network performance on the image size level alone. Important factors not considered include frame of reference, world frame, camera frame, image plane, image frame, intrinsic parameters and extrinsic parameters (\cite{Sala2006}).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % On the list of delivered "deliverables"
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-From the original 92 deliverables \textit{deliverables} outlined in \ref{AppendixC-deliverables} this project managed to deliver D1, D2 and D4 datasets. D3 was not attempted (as over time came the awareness that it may not be good practice to mix datasets, later confirmed with understanding of image geometry and its impact on network architecture). All simulator testing tracks S1, S2 and S3. Model N1 (PilotNet), plus deliverables' IDs 13 through 16. Completing a total of 11 out of 92. A total closer to the original goal would have been achieved, had the AlexNet, VGGNet, InceptionNet/GoogleLeNet and ResNet models been adapted for self-driving, which in hindsight does not seem realistic, hence the original goal was overambitious.
+From the original 92 deliverables \textit{deliverables} outlined in \ref{AppendixC-deliverables} this project managed to deliver D1, D2 and D4 datasets. D3 was not attempted (as over time came the awareness that it may not be good practice to mix datasets, later confirmed with understanding of image geometry and its impact on network architecture. All simulator testing tracks S1, S2 and S3. Model N1 (PilotNet), plus deliverable IDs 13 through 16. Completing a total of 11 out of 92. A total closer to the original goal would have been achieved, had the AlexNet, VGGNet, InceptionNet/GoogleLeNet and ResNet models been adapted for self-driving, which in hindsight does not seem realistic, hence the original goal was overambitious.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On the importance of human readable and self documenting naming conventions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The naming conventions used in throughout this project, for data directories, models, tcpflow logs, etc, could have benefited from some time invested in devising a more human-readable and self-documenting scheme, as well as code documentation. An effort was made to this end while the research work was being carried out. Attempts to improve experiment documentation can be seen in \ref{res:training_and_testing_log} where the level of detail and layout increase over time. Still it was laborious sometimes to recall an experiment's setup and results, which could be addressed with additional planning.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% On transforming deep regression problems into deep classification problems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\section{Future work}
+%\subsection{Attaining deep regression with deep classification}
+Although CNNs are not well understood, they are heavily used. A lot of effort has gone into creating models originally designed for image classification. Future work could determine if alternative deep models (ResNet, LeNet, VGGNet) could be used for self-driving. These models have been applied successfully to multi-class classification problems. Assuming the network design somehow is optimized for this type of task, it would be interesting to transform regression problems into multi-class classification problems to make optimal use of such networks. This could be attained by quantizing (assigning a continuous value within a defined range to a discrete value) and binning the outputs, subject to the quantized values having acceptable steering precision, in the case of a self-driving car, the minimum acceptable steering change. The network output would become discrete, and the network still leveraged as a classifier - the original intent. Perhaps such scheme could also produce usable results for other computer vision applications relying on regression models and wishing to use state-of-the-art classification models.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Reflections on change of Work Plan
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The work plan originally set out in appendix \ref{app:rpmi} was changed and an estimate of the revisions are shown in Figure \ref{fig:Revised-work-breakdown-structure}. In hindsight, the original plan seems to reflect a \textit{waterfall} (\cite{balaji2012waterfall}) software development model, where all requirements are defined at the outset, the work then separated into logical blocks and sequenced following a delivery schedule. In practice, many (as opposed to the originally expected few) areas were found to overlap such as selecting (and creating) toolsets, replicating existing and creating alternative models, augmenting data and evaluating models, while creating metrics. The end of October and beginning of November 2020 task overlap reflect the busiest research period, when a working model, qualitative evaluation toolset and a quantitative evaluation metric were obtained. The work followed what could be described as an \textit{agile} process, with short \textit{sprints} and concurrent changes reflected across several tasks. Still, the work plan was essential is conceptualising and structuring the effort needed to complete this project.
+Ultimately the contributions in explaining network design and self-driving, and evaluation provided in this study could help make self-driving vehicles relying on CNNs in the rain safer. 
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Machine Learning, AI and social responsibility
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Ultimately the evaluation provided in this study could help to make self-driving vehicles (relying on CNNs in the rain) safer, which can be interpreted as a positive outcome. The issue of artificial intelligence and social responsibility (\cite{saveliev2020artificial}) perhaps should also be considered, as developments in self-driving AI may reduce both demand for drivers and wages.
+% moved to context
+%The issue of artificial intelligence and social responsibility (\cite{saveliev2020artificial}) perhaps should also be considered, as developments in self-driving AI may reduce both demand for drivers and wages.
 
 %The absence of good quality labelled datasets (maybe change this w.r.t. Mech Turk and ISLSVRC - "the presence of a good quality" labelled dataset engered a number of landmark computer vision CNN architectures, more obvious and less citations required) has been cited (TODO citation needed) as a hindrance to the development of good models (TODO need to insert in CONTEXT section "the term model hereafter, refers to a either a neural network architeture, or a trained model capable of making predictions given an input). It is ironic that the availability of good quality labelled models, such as Imagenet, led to the improvement in image classification models, which in turn may curb the need to use Mechanical Turk. This could perhaps form part of the wider discussion on automated workforce replacing human workforce and the social implications therein.  
 

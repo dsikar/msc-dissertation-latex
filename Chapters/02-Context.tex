@@ -27,48 +27,107 @@
 % Public self driving datasets, large, but aimged at pipeline models
 
 % What is end to end learning?
-The properties of multilayer feedforward neural networks as universal function approximators has been studied extensively, especially in the 1980's . \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available. while (\cite{cybenko1989approximation}) demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function with arbitrary precision providing that
-no constraints are placed on the number of nodes or the size of the weights. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than a deterministic relation between input and target. (\cite{hornik1989multilayer}) state their results do not address the issue of how many units are needed to attain a  given degree of approximation.  
-%% cybenko alternative entry
-% backpropagation
-Stochastic Gradient Descent (SGD) has become the standard for training deep neural networks
-% training neural networks and the vanishing gradient problem
 
-One of the main difficulties in training deep neural networks in the vanishing gradient problem, when, during the training phase, gradients become excessively large or small such that the network ceases to learn. This is also known as the degradation problem. 
+%%%%%%%%%%%%%%%%%%%%
+% RELATED WORK
+%%%%%%%%%%%%%%%%%%%%
 
 \section{Related Work}
-To be added, something surely must be happening in the field.
-Work relating to digital noise:
-Removing rain from images, vastly studied, i.e.
-% https://arxiv.org/pdf/1909.08326.pdf
+
 Adverse weather affecting sensor data including cameras used by AVs was surveyed by \cite{ZangAdverseWetherAVSurvey8666747}.  
 \cite{ClearingSkiesDeepNNRainRemoval7893758}
-\cite{Cord2014DetectingUR} "Advanced driver assistance systems (ADASs) based on video cameras are becoming pervasive in today's automotive industry. However, while most of these systems perform nicely in clear weather conditions, their performances fail drastically in adverse weather and particularly in the rain. We present two novel approaches that aim to detect unfocused raindrops on a car windshield using only images from an in-vehicle camera. Based on the photometric properties of raindrops, the algorithms rely on image processing techniques to highlight them. The results will be used to improve ADAS behavior under rainy conditions. Both approaches are compared with each other and the techniques from the literature."
-\section{Quantifying noise}
-\cite{yoneda2019automated} "There is a possibility that the recognition performance of the object is degraded due to the degradation of image quality. When installing a camera in the front of the vehicle, raindrops can be removed by installing the camera within the movable range of the wiper. However, when a camera is installed on the side or outside of the vehicle to capture images in all directions,the effects of raindrops are inevitable. Therefore, a camera installation that takes into account raindrops and a mechanism for removing them are necessary. In addition, researches on the recognition of rain-drops in the captured image have been reported".  
-\cite{kurihata2005rainy} "We propose a weather recognition method from in-vehicle camera images that uses a
-subspace method to judge rainy weather by detecting raindrops on the windshield."
-Eigendrops" represent the principal components extracted from raindrop images in the
-learning stage. Then the method detects raindrops by template matching. In experiments
-using actual video sequences, our method showed good detection ability of raindrops and
-promising results for rainfall judgment from detection results."  
+\cite{Cord2014DetectingUR}, determining that video-camera based ADASs (Advanced driver assistance systems) are becoming ever present in the automotive sector. The trade off being good performance in good weather \textit{versus} bad performance in bad weather, particularly in the rain. The suggested approach is to detect unfocused raindrops on the vehicle's windscreen, using in-vehicle camera images. Then analyse raindrop photo metric properties and rely on image processing to highlight the rain drops. This technique is claimed to improve ADAS behaviour in the rain.  
   
- \cite{webster2015improved} "The presence of raindrop induced image distortion has a significant negative impact on the
-performance of a wide range of all-weather visual sensing applications including within the
-increasingly import contexts of visual surveillance and vehicle autonomy. A key part of this
-problem is robust raindrop detection such that the potential for performance degradation in
-effected image regions can be identified. Here we address the problem of raindrop detection
-in colour video imagery using an extended feature descriptor comprising localised shape …"  
-  
-\cite{garg2007vision} "The visual effects of rain are complex. Rain produces sharp intensity changes in images and
-videos that can severely impair the performance of outdoor vision systems. In this paper, we
-provide a comprehensive analysis of the visual effects of rain and the various factors that …"  
-  
-\cite{garg2005does}
+\cite{yoneda2019automated} acknowledge the possibility of object recognition performance degradation due to image quality degradation, and suggest careful positioning of camera inside the vehicle within windscreen wiper range. It is also acknowledged that this may not be a possibility if the camera is place on the side or outside of the vehicle to capture images in every direction, the raindrops then being inevitable, concluding that when camera installation is performed, raindrops and a mechanism for removal are required. Research on rain-drop recognition in the captured image is reported.
 
-"Rain produces sharp intensity fluctuations in images and videos, which degrade the
-performance of outdoor vision systems. These intensity fluctuations depend on various
-factors, such as the camera parameters, the properties of rain, and the brightness of the …"
+\cite{kurihata2005rainy} suggest a method for weather recognition with images being captured from in-vehicle camera able to use a subspace method to asses rain by detecting rain drops on the windshield.
+\textit{Eigendrops} represent the a form of PCA (principal component analysis), extracting from components from raindrop images in the learning stage. Then template matching is used to detect rain drops. The authors claim the method showed good results with video sequences containing raindrops and promising detection results for rainfall judgement 
+  
+\cite{webster2015improved} state image containing raindrops are prone to distortion as rain has a significant negative performance impact in a wide range of sensing applications based on visual sensing and used in all weather conditions including surveillance and vehicle autonomy. The problem is framed as "robust raindrop detection" as a means of identifying the potential for performance degradation in affected image regions. Raindrop detection is colour video is performed using "extended feature descriptor comprising localised shape".
+  
+\cite{garg2007vision} state rain produces complex visual effects such as sharp intensity changes, that can severely compromise performance of outdoor vision systems, providing a comprehensive analysis of visual effects of rain and various related factors such as camera parameters, rain properties, brightness.
+  
+Related work was therefore found studying the  effect of rain on sensors specifically, applicable to multi-sensor fusion models (see next section). All literature surveyed frame the problem in terms being solved with a manual feature extraction solution, in other works, no mention is made of CNNs. No literature related to the effect of rain on CNNs was found.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Self driving systems
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Self-driving systems}
+The "Dave" system, \cite{lecun2004dave}, was a proof-of-concept, model scale vehicle that used end-to-end learning for obstacle avoidance, based solely on two onboard cameras equipped with analogue video transmitter and a remote computer to process the image data and send back steering control signals via radio. On the remote computer, YUV images (\cite{maller2020}) from left and right cameras were presented to a network trained to output steering angles. Hours of binocular video images, labelled with a steering angle provided by a human driver, who avoided any obstacles found to be in path, were used to train the network.
+
+Figure \ref{fig:bojarski-net}
+% bojarski
+shows a diagram representing a CNN predicting a steering angle from a single  front-facing camera. The NVIDIA PilotNet (\cite{bojarski2016end}) was able to learn to drive on local roads with or without road markings, and also operate in areas with unclear markings such as parking lots. Like Dave, this is another example of end-to-end learning, with no intermediate criteria such as lane detection. The authors state such criteria is devised solely to simplify human understanding, but does not necessary translate into system performance. Features are instead extracted automatically by convolutional layers on the network, the fully connected layers then performing the classification or regression task as needed.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=1]{Figures/bojarski-nvidia.png}
+ \caption{Diagram of a trained network with a single centre camera input and a steering command output}
+ \label{fig:bojarski-net}
+\end{figure}
+
+One weakness of convolutional neural networks is the perceived lack of robustness. Figure \ref{fig:one-pixel-attack} shows examples of a \textit{one-pixel attack} (\cite{Su_2019}). The attackers did have a deep knowledge of the network architecture being exploited, still in this classification task setting it is an undesirable outcome.
+
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=1]{Figures/one-pixel-attack.png}
+ \caption{One-pixel  attacks  created  with the algorithm proposed by \cite{Su_2019} that  successfully  fooled  three  types  of deep neural networks trained  on  CIFAR-10 (\cite{CIFAR_10}) dataset. The modified pixel is white, the original  class  labels  are   black while  the  target  class  labels  and  the corresponding confidence are blue}
+ \label{fig:one-pixel-attack}
+\end{figure}
+
+Another scheme used for self-driving cars is the multisensor (\cite{Grigorescu_2020} and \cite{Yurtsever_2020}) approach shown in Figure \ref{fig:grigorescu-pipeline}, where a number of number of input configurations can potentially be used, with of without deep learning, that is with the help of a multilayer neural network with a least one hidden layer. The approach may use classical "rules based" programming to determine steering and motion.
+
+\begin{figure}[ht]
+ \centering 
+ \includegraphics[scale=0.85]{Figures/grigorescu-pipeline.png}
+ \caption{Diagrams showing the multisensor pipeline approach (a) and the end to end approach (b) as described by \cite{Grigorescu_2020}}
+ \label{fig:grigorescu-pipeline}
+\end{figure}
+
+
+The introduction of any AI-controlled hardware into public spaces also raises a number of societal issues like safety, liability, privacy, cybersecurity, and industry (\cite{Taeihagh_2018}).
+Other issues include the impact on demand for a human workforce, wages and employment (\cite{acemoglu2018artificial}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Netowrk Training
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Network Training}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Properties of  multilayer feedforward neural networks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The properties of multilayer feedforward neural networks as universal function approximators has been studied extensively, especially in the 1980's. \cite{hornik1989multilayer} rigorously established that standard multilayer feedforward networks with as few as one hidden layer can approximate specific functions provided sufficiently many hidden units are available, though the issue of how many are required is not addressed. \cite{cybenko1989approximation} demonstrated analytically that a feedforward neural network with one hidden layer and any continuous sigmoidal nonlinearity can approximate any function with arbitrary precision provided that
+no constraints are placed on the number of nodes or the size of the weights. As such, failures in applications can be attributed to inadequate learning, inadequate numbers of hidden units, or the presence of a  stochastic rather than a deterministic relation between input and target.
+Training will therefore fail due to inadequate learning or hidden unit number choices, or the existence of a stochastic, non-deterministic, relation between input and target. 
+
+The goal is to find optimal parameters (weights and biases) and biases for a arbitrary size multilayer, or deep network, because as the depth or width increases, so do the number of parameters.  
+
+Changes in network parameter distribution during training lead to a changes in network activation distributions, this is known as Internal Covariate Shift (\cite{ioffe2015batch, 7005077}). \cite{lecun1998gradient}; \cite{wiesler2011convergence}, suggest a long known method to address the issue by linearly transforming input values to have zero mean and unit variance. To achieve this, the pixel values (maximum value 255) are divided by 255 and have 0.5 subtracted, such that transformed values will have "whitened" zero mean and unit variance. This is done repeatedly throughout the training. By fixing the distribution of the inputs, training speed is expected to improve.
+Networks trained which such inputs must also be presented with whitened inputs at inference (prediction) time.
+
+The inputs are affected by weights and biases in all the previous layers, changes in the inputs during training will lead to saturation, also known as vanishing gradients (weights and biases becoming very large or small), the effect increasing with network depth (deep networks) . Several schemes have been used to address this saturated regime: adequate parameter initialization (\cite{glorot2010understanding}, \cite{saxe2013exact}), small learning rates
+and Rectified Linear Units (\cite{nair2010rectified}).
+
+The large search space for optimal network parameters can be addressed by a number of optimizers for example error backpropagation (\cite{rumelhart1986learning}) with Stochastic Gradient Descent that can lead to better results in large datasets where there is repetition. \cite{lecun2012efficient} suggests that examples (inputs) should be shuffled to attain maximum information content but points out this will not apply to data with outliers.
+
+Since more data is better for network training, data augmentation can be used to increase the amount of data available to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself. It can help to make the network generalise and avoid overfitting, that is, doing a good job in predicting examples that have been seen but not doing so well with unseen examples.
+"Hyperparameter", a non-trainable parameter, choices can also impact accuracy. Kernel size, stride padding, activation and loss functions, and optimizers are hyperparameters than can be adjusted for best network performance.
+
+A typical multi-class classifier CNN will have a softmax activation function in the final layer and a cross-entropy loss function. a typical regression model will have a linear activation function in the final layer and a mean squared error loss function.
+To transform a deep classification model into a deep regression model, the number of class outputs is replaced by the number of required continuous outputs, the softmax activation is replaced by a linear activation and the cross-entropy loss is replace by mean squared error loss.
+
+Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angle labels will be close to zero (car driving straight). So some form of undersampling of majority classes (if viewing steering angle ranges, for instance, as would be achieved by binning) may help to address the issue.
+%%%%%%%%%%%%%%%%%%%%
+% DAVE
+%%%%%%%%%%%%%%%%%%%%
+%Dave (\cite{lecun2004dave})
+%Autonomous off-road vehicle control using end-to-end learning
+
+
 
 % on calculating light intensity of RGB value
 
@@ -110,8 +169,8 @@ factors, such as the camera parameters, the properties of rain, and the brightne
 %% 10. Ford Multi-AV Seasonal Dataset
 % \cite{agarwal2020ford}
 %% 11. Udacity
-Maybe a bit on how synthetic datasets are used in other domains e.g. https://arxiv.org/pdf/1910.02550.pdf "ClearGrasp:
-3D Shape Estimation of Transparent Objects for Manipulation" use of Blender. See section "Learning from synthetic data"
+%Maybe a bit on how synthetic datasets are used in other domains e.g. https://arxiv.org/pdf/1910.02550.pdf "ClearGrasp:
+%3D Shape Estimation of Transparent Objects for Manipulation" use of Blender. See section "Learning from synthetic data"
 
 %% Identifying rainy data segments - Amazon Sagemaker 
 % 19. \cite{joshi2020amazon}
@@ -149,189 +208,19 @@ Maybe a bit on how synthetic datasets are used in other domains e.g. https://arx
 %% Public datasets
 %Kaggle (\cite{kaggle_2020} contains over 50,000 public datasets and 400,000 public jupyter notebooks (\cite{JupyterNotebook2020}), an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text. Uses include: data cleaning and transformation, numerical simulation, statistical modeling, data visualization and machine learning.
 
-Imagenet is an example of the availability of a computer vision datasets. Public datasets exist for a number of tasks applied to computer vision, such as  
-human action and activity recognition (\cite{chaquet2013survey}), agriculture (\cite{lu2020survey}) and hand pose estimation (\cite{li2019survey}).
-Intel DevCloud (\cite{IntelDevCloud2020}).
+%Imagenet is an example of the availability of a computer vision datasets. Public datasets exist for a number of tasks applied to computer vision, such as  
+
+%Intel DevCloud (\cite{IntelDevCloud2020}).
 
 %-----------------------------------
 %	BACKGROUND
 %-----------------------------------
 
 % 
-(Fig. \ref{fig:grigorescu-pipeline} as described by \cite{Grigorescu_2020} and \cite{Yurtsever_2020}
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=0.85]{Figures/grigorescu-pipeline.png}
- \caption{Diagrams showing the multisensor pipeline approach (a) and the end to end approach (b) as described by \cite{Grigorescu_2020}}
- \label{fig:grigorescu-pipeline}
-\end{figure}
-
-
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/bojarski-nvidia.png}
- \caption{Diagram of a trained network with a single centre camera input and a steering command output}
- \label{fig:bojarski-net}
-\end{figure}
-
-%% One pixel attacks
-
- (Fig. \ref{fig:one-pixel-attack}.
- 
-\begin{figure}[ht]
- \centering 
- \includegraphics[scale=1]{Figures/one-pixel-attack.png}
- \caption{One-pixel  attacks  created  with the algorithm proposed by \cite{Su_2019} that  successfully  fooled  three  types  of deep neural networks trained  on  CIFAR-10 (\cite{CIFAR_10}) dataset. The modified pixel is white, the original  class  labels  are   black while  the  target  class  labels  and  the corresponding confidence are blue}
- \label{fig:one-pixel-attack}
-\end{figure}
 
 % fusion and end to end approach
 
-(Fig. \ref{fig:grigorescu-pipeline} 
-
-% bojarski
-and training a CNN to map raw pixels from three front-facing camera directly to steering commands.
 
 
 
-% A discussion of the proliferation of public datasets applied to machine learning, competitions, code repositiories, libraries is in order to contextualise the availability of data and tools in the context of our research
 
-%-----------------------------------
-%	End to End Learning
-%-----------------------------------
-
-\section{End to End Learning}
-
-The  ImageNet Large-Scale Visual Recognition Challenge (ILSVRC) (Russakovsky et al., 2014) played an important part in the development of deep neural networks for image recognition. With the exception of DriveNet (NVIDIA end-to-end self-driving ConvNet architecture), all remaining four (AlexNet, GoogleLeNet, VGG and ResNet) were winning entries in the ILSVRC.  
-
-% Interesting compact discussion on various applications of CCN and computer vision and end to end learning with several applications
-
-% https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6539483/ pg
-
-%-----------------------------------
-%	End to End Learning
-%-----------------------------------
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CLASS IMBALANCE - GROUP WITH DATASETS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-Class imbalance (\cite{batista2004study}) has an effect on model's accuracy. A heavily outnumbered class may be difficult to learn. Rare events lead to the creation of imbalanced learning scenarios (\cite{krawczyk2016learning}). In the case of self-driving car data, the expectation is that most of steering angle labels will be close to zero (car driving straight). So some form of undersampling of majority classes (if viewing steering angle ranges, for instance, as would be achieved by binning) may help to address the issue. An alternative is to oversample augmented 
-% need to bring this in after the concept of augmentation has been explained
-minority classes.
-
-
-\section{Deep Learning applied to autonomous vehicles}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Issues related to self-driving cars
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The introduction of any AI-controlled hardware into public spaces also raises a number of societal issues like safety, liability, privacy, cybersecurity, and industry (\cite{Taeihagh_2018}).
-Other issues include the impact on demand for a human workforce, wages and employment (\cite{acemoglu2018artificial}).
-\subsection{Modular pipeline}
-
-\subsection{End to end learning}
-
-\subsection{Network Training}
-
-\cite{ioffe2015batch, 7005077}
-define Internal Covariate Shift as the change in the
-distribution of network activations due to the change in
-network parameters during training. To improve the training, we seek to reduce the internal covariate shift. By
-fixing the distribution of the layer inputs x as the training
-progresses, we expect to improve the training speed. I
-"It has
-been long known (LeCun et al., 1998b; Wiesler \& Ney,
-2011) that the network training converges faster if its inputs are whitened – i.e., linearly transformed to have zero means and unit variances, and decorrelated. "
-However, since x is affected by
-W, b and the parameters of all the layers below, changes
-to those parameters during training will likely move many
-dimensions of x into the saturated regime of the nonlinearity and slow down the convergence. This effect is
-amplified as the network depth increases.
- In practice,
-the saturation problem and the resulting vanishing gradients are usually addressed by using Rectified Linear Units
-(Nair \& Hinton, 2010) ReLU(x) = max(x, 0), careful
-initialization (Bengio \& Glorot, 2010; Saxe et al., 2013),
-and small learning rates. If, however, we could ensure
-that the distribution of nonlinearity inputs remains more
-stable as the network trains, then the optimizer would be
-less likely to get stuck in the saturated regime, and the
-training would accelerate.
-
-\cite{lecun2012efficient}
-Lecun points out:
-Stochastic learning is usually much faster than batch learning, results in better solutions, particularly on large redundant datasets. The idea being since there is a lot of repetition (similar frames is dataset). SGD also works well because nonlinear networks usually have multiple local minima of different depths. The noise present in the updates can results jumping into the basin of another, possibly deeper, local minimum. Networks learn the fastest from the most unexpected sample, so examples should be chosen with the maximum information content by means of shuffling the training set, however care must be taken not to apply this technique with data that contains outliers
-
-In the case of "In Bengio et al.’s paper [6], the analysis of the problem of gradient decays
-is generalized to parameterized dynamical systems (hence including second
-order and other recurrent architectures)" \cite{hochreiter2001gradient}
-
-%-----------------------------------
-%	DATASETS
-%-----------------------------------
-\section{Public Datasets}
-
-TODOS
-
-\begin{itemize}
-    \item Itemize / create table of datasets - see surveys
-    \item Discuss importance of public datasets
-    \item References
-\end{itemize}
-
-Advances in computer vision brought about by the Large Scale 
-Explain:  
-\begin{itemize}
-    \item Convolution
-    \item pre-processing
-    \item Kernel/filter size
-    \item Stride
-    \item padding
-    \item activation function
-    \item Loss function
-    \item optimisers
-    \item Back-propagation
-    \item Overfitting    
-    % on this topic, a lot to cite, from Paul Werbos' PhD thesis "Beyond Regression: New Tools for Prediction and Analysis in the Behavioural Sciences, through Rummelhart et al. and LeCunn et al.
-\end{itemize}
-
-% contextualize data inbalance, make reference to methods.
-TODO explain inference time
-TOD explain behavioral learning/cloning
-
-\subsection{Digital Images}
-Digital images are stored as a square multidimensional matrix. A 100x100 colour images (with values from Red, Green and Blue) is represented as a matrix of dimensions $n x m x c$, where n is the width, m is the height and c is the depth (number of colour channels of the image. Black and white images have c = 1, where the pixel value is either on or off (TBC). Greyscale images also have one channel.
-
-Maybe cite goodfellow once and do a joblot on items.  
-
-\subsection{Convolution}
-Much confusion exists between dot product and convolution, pick up bits in Methods.ConvNets-Discussion.tex
-
-\subsection{Deep Regression Models}
-Explain the process of transforming these models (except NVIDIA) into regression models, maybe cite \cite{lathuilire2018comprehensive} or papers cited therein.
-
-Paper is referred to by this discussion: 
-% https://stats.stackexchange.com/questions/335836/cnn-architectures-for-regression
-A somewhat more succinct definition of the procedure:  
-% https://stats.stackexchange.com/questions/456126/could-resnet-curve-be-used-for-a-regression-problem-e-g-housing-price-predicti
-Just to make it clear, a regression problem is one whose target is continuous and not discrete. In this sense you can make any Neural Network that is primarily used for classification a regressor, with minimal changes. Namely it needs to end with 1 neuron, no activation function and a proper loss function (e.g. mean squared error). For example, object detection is in its core a regression problem because you are trying to predict coordinates. Any ResNet could be used for these problems. 
-  
-TODO Add data augmentation - Data augmentation can be used to reduce overfitting, by increasing the amount of data available to train the model (\cite{perez2017effectiveness}). This is achieved by drawing additional data from the training data itself.  
-  
-TODO explain what is meant by "deep" 
-TODO maybe add, in the context of simulated 3D environments used to train deep models, in this case, a deep reinforcement learning model.
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% OpenAI Gym
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{OpenAI Gym}
-Although OpenAI Gym (\cite{brockman2016openai)} was developed for Reinforcement Learning (\cite{sutton2018reinforcement}), it is used in SDSandbox gym\_ donkeycar module, specifically the 
-pseudorandom number generator and spaces modules. TCP communication between simulator and prediction engine.
-
-\section{Leftovers}
-Add to some part, probably related work:  
-  
-\cite{wang2019survey} point out that images containing rain patterns  might  impair  the  performance of image processing tasks and survey various methods for rain removal.  
-\cite{gonzalez2018} "Restoration attempts to recover an image that has been degraded by using a priori knowledge of the degradation phenomenon. Thus, restoration techniques are oriented toward modeling the degradation and applying the inverse process in order to recover the original image."
-
-TODO Add a reminder on GPU as it is mentioned further along.
